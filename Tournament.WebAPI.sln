@@ -9,9 +9,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{D604B78B-3427-4230-836F-779BBBC768A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tournaments.Domain", "Tournaments.Domain\Tournaments.Domain.csproj", "{2DC6B611-41BD-4E96-8A28-0CB5C8089F2B}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2DC6B611-41BD-4E96-8A28-0CB5C8089F2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DC6B611-41BD-4E96-8A28-0CB5C8089F2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DC6B611-41BD-4E96-8A28-0CB5C8089F2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DC6B611-41BD-4E96-8A28-0CB5C8089F2B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2DC6B611-41BD-4E96-8A28-0CB5C8089F2B} = {963EB931-EE6F-4424-9A5F-A75DDB36B7D0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ACE2434A-E162-41B2-9512-67465470C803}
