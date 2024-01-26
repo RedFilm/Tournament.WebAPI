@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tournaments.Domain", "Tourn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tournaments.Persistence", "Tournaments.Persistence\Tournaments.Persistence.csproj", "{64425FEA-C6DF-4660-B236-55105B302FA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tournaments.API", "Tournaments.API\Tournaments.API.csproj", "{EE0437F4-C9A8-44B1-95C3-0E19FE7C5360}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{64425FEA-C6DF-4660-B236-55105B302FA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64425FEA-C6DF-4660-B236-55105B302FA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64425FEA-C6DF-4660-B236-55105B302FA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE0437F4-C9A8-44B1-95C3-0E19FE7C5360}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE0437F4-C9A8-44B1-95C3-0E19FE7C5360}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE0437F4-C9A8-44B1-95C3-0E19FE7C5360}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE0437F4-C9A8-44B1-95C3-0E19FE7C5360}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -34,6 +40,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{2DC6B611-41BD-4E96-8A28-0CB5C8089F2B} = {963EB931-EE6F-4424-9A5F-A75DDB36B7D0}
 		{64425FEA-C6DF-4660-B236-55105B302FA7} = {A905FFF5-55C4-4C01-8C56-C6EC99E4F741}
+		{EE0437F4-C9A8-44B1-95C3-0E19FE7C5360} = {D604B78B-3427-4230-836F-779BBBC768A0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ACE2434A-E162-41B2-9512-67465470C803}
