@@ -10,7 +10,10 @@ namespace Tournaments.Persistence.Extensions
 		{
 			services.AddIdentity<AppUser, IdentityRole>(options =>
 			{
-				options.Password.RequireDigit = true;
+				options.Password.RequiredLength = 3;
+				options.Password.RequireNonAlphanumeric = false;
+				options.Password.RequireUppercase = false;
+				options.Password.RequireLowercase = false;
 			})
 				.AddEntityFrameworkStores<TournamentDbContext>();
 
