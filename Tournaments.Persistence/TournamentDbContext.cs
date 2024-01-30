@@ -14,10 +14,8 @@ namespace Tournaments.Persistence
 		public DbSet<Tournament> Tournaments { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder builder)
-		{ 
-			builder.ApplyConfiguration(new AppUserConfiguration());
-			builder.ApplyConfiguration(new TeamConfiguration());
-			builder.ApplyConfiguration(new TournamentTeamConfiguration());
+		{
+			builder.ApplyConfigurationsFromAssembly(typeof(AppUserConfiguration).Assembly);
 
 			base.OnModelCreating(builder);
 		}
