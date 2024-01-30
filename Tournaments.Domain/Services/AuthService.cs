@@ -12,14 +12,14 @@ namespace Tournaments.Domain.Services
 {
 	public class AuthService : IAuthService
 	{
-		private UserManager<AppUser> _usrMngr;
-		private SignInManager<AppUser> _snMngr;
-		private JwtOptions jwtOptions;
+		private readonly UserManager<AppUser> _userManager;
+		private readonly SignInManager<AppUser> _signinManager;
+		private readonly JwtOptions jwtOptions;
 
-		public AuthService(UserManager<AppUser> usrMngr, SignInManager<AppUser> snMngr, IOptions<JwtOptions> options)
+		public AuthService(UserManager<AppUser> userManager, SignInManager<AppUser> signinManager, IOptions<JwtOptions> options)
 		{
-			_usrMngr = usrMngr;
-			_snMngr = snMngr;
+			_userManager = userManager;
+			_signinManager = signinManager;
 			jwtOptions = options.Value;
 		}
 		public async Task<bool> Register(LoginViewModel vm)
@@ -30,18 +30,18 @@ namespace Tournaments.Domain.Services
 				Email = vm.Email
 			};
 
-			var result = await _usrMngr.CreateAsync(user, vm.Password);
+			var result = await _userManager.CreateAsync(user, vm.Password);
 
 			return result.Succeeded;
 		}
 		public async Task<bool> Login(LoginViewModel vm)
 		{
-			var user = await _usrMngr.FindByNameAsync(vm.UserName);
+			var user = await _userManager.FindByNameAsync(vm.UserName);
 
-			if (user == null)
-				return await Task.FromResult(false);
+			if (user is null)
+				return false;
 
-			var result = await _snMngr.PasswordSignInAsync(user, vm.Password, false, false);
+			var result = await _signinManager.PasswordSignInAsync(user, vm.Password, false, false);
 
 			return result.Succeeded;
 		}
@@ -51,7 +51,7 @@ namespace Tournaments.Domain.Services
 			var claims = new List<Claim>()
 			{
 				new Claim(ClaimTypes.Email, vm.Email),
-				new Claim(ClaimTypes.Role, "Admin")
+				new Claim(ClaimTypes.Role, "User")
 			};
 
 			var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key));
@@ -59,14 +59,14 @@ namespace Tournaments.Domain.Services
 			var signingCredentials = new SigningCredentials(
 				secretKey, SecurityAlgorithms.HmacSha512Signature);
 
-			var securiryToken = new JwtSecurityToken(
+			var securityToken = new JwtSecurityToken(
 				claims: claims,
 				expires: DateTime.UtcNow.AddMinutes(60),
 				issuer: jwtOptions.Issuer,
 				audience: jwtOptions.Audience,
 				signingCredentials: signingCredentials);
 
-			var tokenString = new JwtSecurityTokenHandler().WriteToken(securiryToken);
+			var tokenString = new JwtSecurityTokenHandler().WriteToken(securityToken);
 
 			return tokenString;
 		}

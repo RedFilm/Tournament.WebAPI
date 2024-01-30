@@ -9,7 +9,7 @@ namespace Tournaments.Persistence.Repositories
 {
 	public class TournamentRepository : ITournamentRepository
 	{
-		private TournamentDbContext _context;
+		private readonly TournamentDbContext _context;
 
 		public TournamentRepository(TournamentDbContext context)
         {
@@ -18,7 +18,7 @@ namespace Tournaments.Persistence.Repositories
 
         public async Task<bool> AddTournamentAsync(TournamentViewModel vm)
 		{
-			if (vm == null)
+			if (vm is null)
 				return false;
 
 			var tournament = new Tournament()
@@ -35,46 +35,42 @@ namespace Tournaments.Persistence.Repositories
 				TournamentEndDate = vm.TournamentEndDate
 			};			
 
-			_context.Tournaments.Add(tournament);
+			await _context.Tournaments.AddAsync(tournament);
 			var result = await _context.SaveChangesAsync();
 
-			if(result > 0)
-				return true;
-			return false;
+			return result > 0;
 		}
 
 		public async Task<bool> DeleteTournamentAsync(int id)
 		{
-			var tournament = _context.Tournaments.FirstOrDefault(x => x.Id == id);
+			var tournament = await _context.Tournaments.FirstOrDefaultAsync(x => x.Id == id);
 
-			if (tournament == null) 
+			if (tournament is null) 
 				return false;
 
 			_context.Tournaments.Remove(tournament);
-			var result = await _context.SaveChangesAsync(); 
+			var result = await _context.SaveChangesAsync();
 
-			if (result > 0)
-				return true;
-			return false;
+			return result > 0;
 		}
 
-		public Tournament GetTournament(int id)
+		public async Task<Tournament?> GetTournamentAsync(int id)
 		{
-			var tournament = _context.Tournaments.FirstOrDefault(x => x.Id == id);
+			var tournament = await _context.Tournaments.FirstOrDefaultAsync(x => x.Id == id);
 
 			return tournament;
 		}
 
 		public async Task<IEnumerable<Tournament>> GetTournamentsAsync()
 		{
-			var tournaments = _context.Tournaments.AsNoTracking().ToList();
+			var tournaments = await _context.Tournaments.AsNoTracking().ToListAsync();
 
 			return tournaments;
 		}
 
 		public async Task<bool> UpdateTournamentAsync(TournamentViewModel vm)
 		{
-			if (vm == null)
+			if (vm is null)
 				return false;
 
 			var tournament = new Tournament()
@@ -95,9 +91,7 @@ namespace Tournaments.Persistence.Repositories
 			_context.Tournaments.Update(tournament);
 			var result = await _context.SaveChangesAsync();
 
-			if (result > 0)
-				return true;
-			return false;
+			return result > 0;
 		}
 	}
 }

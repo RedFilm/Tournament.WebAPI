@@ -5,7 +5,7 @@ namespace Tournaments.Domain.Interfaces.Repositories
 {
     public interface ITournamentRepository
     {
-        Tournament GetTournament(int id);
+        Task<Tournament?> GetTournamentAsync(int id);
         Task<IEnumerable<Tournament>> GetTournamentsAsync();
 
         Task<bool> AddTournamentAsync(TournamentViewModel tournament);

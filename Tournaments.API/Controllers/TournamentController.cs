@@ -19,7 +19,7 @@ namespace Tournaments.API.Controllers
 		[HttpGet("GetTournament/{id}")]
 		public async Task<IActionResult> GetTournament(int id)
 		{
-			var result = _tournamentRepository.GetTournament(id);
+			var result = _tournamentRepository.GetTournamentAsync(id);
 
 			if(result != null)
 				return Ok(result);
