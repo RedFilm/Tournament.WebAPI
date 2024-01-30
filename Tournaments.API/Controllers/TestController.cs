@@ -5,8 +5,13 @@ namespace Tournaments.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	[Authorize(Roles = "Admin")]
+	[Authorize]
 	public class TestController : ControllerBase
 	{
+		[HttpGet("AuthorizedOnly")]
+		public ActionResult AuthorizedOnly()
+		{
+			return Ok("you've been authorized!");
+		}
 	}
 }

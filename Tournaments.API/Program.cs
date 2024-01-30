@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Services;
 using Tournaments.Persistence.Extensions;
+using Tournaments.Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddCustomIdentity();
 builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<ITournamentRepository, TournamentRepository>();
 
 builder.Services.AddAuthentication(options =>
 {
