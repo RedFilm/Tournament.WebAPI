@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Tournaments.Domain.Options;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Services;
 using Tournaments.Persistence.Extensions;
 using Tournaments.Persistence.Repositories;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,8 @@ builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddCustomIdentity();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<ITournamentRepository, TournamentRepository>();
+//builder.Services.Configure<ConnectionStringOptions>(builder.Configuration.GetSection("ConnectionStrings"));
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
 
 builder.Services.AddAuthentication(options =>
 {
@@ -43,6 +47,7 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
+var jwtOptions = app.Services.GetRequiredService<IOptions<JwtOptions>>().Value;
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

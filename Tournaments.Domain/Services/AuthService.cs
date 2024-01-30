@@ -3,9 +3,10 @@ using System.Security.Claims;
 using Tournaments.Domain.Models;
 using System.IdentityModel.Tokens.Jwt;
 using Tournaments.Domain.ViewModels;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.Extensions.Options;
+using Tournaments.Domain.Options;
 
 namespace Tournaments.Domain.Services
 {
@@ -13,13 +14,13 @@ namespace Tournaments.Domain.Services
 	{
 		private UserManager<AppUser> _usrMngr;
 		private SignInManager<AppUser> _snMngr;
-		private IConfiguration _config;
+		private JwtOptions jwtOptions;
 
-		public AuthService(UserManager<AppUser> usrMngr, SignInManager<AppUser> snMngr, IConfiguration config)
+		public AuthService(UserManager<AppUser> usrMngr, SignInManager<AppUser> snMngr, IOptions<JwtOptions> options)
 		{
 			_usrMngr = usrMngr;
 			_snMngr = snMngr;
-			_config = config;
+			jwtOptions = options.Value;
 		}
 		public async Task<bool> Register(LoginViewModel vm)
 		{
@@ -53,7 +54,7 @@ namespace Tournaments.Domain.Services
 				new Claim(ClaimTypes.Role, "Admin")
 			};
 
-			var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("Jwt:Key").Value));
+			var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key));
 
 			var signingCredentials = new SigningCredentials(
 				secretKey, SecurityAlgorithms.HmacSha512Signature);
@@ -61,8 +62,8 @@ namespace Tournaments.Domain.Services
 			var securiryToken = new JwtSecurityToken(
 				claims: claims,
 				expires: DateTime.UtcNow.AddMinutes(60),
-				issuer: _config.GetSection("Jwt:Issuer").Value,
-				audience: _config.GetSection("Jwt:Audience").Value,
+				issuer: jwtOptions.Issuer,
+				audience: jwtOptions.Audience,
 				signingCredentials: signingCredentials);
 
 			var tokenString = new JwtSecurityTokenHandler().WriteToken(securiryToken);
