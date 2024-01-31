@@ -1,4 +1,4 @@
-﻿namespace Tournaments.Domain.Models
+﻿namespace Tournaments.Domain.Entities
 {
 	public class Tournament
 	{

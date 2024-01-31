@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-using Tournaments.Domain.Models;
+using Tournaments.Domain.Entities;
 using System.IdentityModel.Tokens.Jwt;
-using Tournaments.Domain.ViewModels;
+using Tournaments.Domain.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Options;

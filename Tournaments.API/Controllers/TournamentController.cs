@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Models;
-using Tournaments.Domain.ViewModels;
 
 namespace Tournaments.API.Controllers
 {

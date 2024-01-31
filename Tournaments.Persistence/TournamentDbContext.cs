@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Tournaments.Domain.Models;
+using Tournaments.Domain.Entities;
 using Tournaments.Persistence.EntityTypeConfigurations;
 
 namespace Tournaments.Persistence

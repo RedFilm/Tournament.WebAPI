@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Tournaments.Domain.Models;
+using Tournaments.Domain.Entities;
 
 namespace Tournaments.Persistence.EntityTypeConfigurations
 {

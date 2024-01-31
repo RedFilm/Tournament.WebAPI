@@ -1,6 +1,6 @@
 ﻿using Tournaments.Domain.Statuses;
 
-namespace Tournaments.Domain.Models
+namespace Tournaments.Domain.Entities
 {
 	public class TournamentTeam
 	{

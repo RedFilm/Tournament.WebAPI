@@ -1,4 +1,4 @@
-﻿using Tournaments.Domain.ViewModels;
+﻿using Tournaments.Domain.Models;
 
 namespace Tournaments.Domain.Services
 {

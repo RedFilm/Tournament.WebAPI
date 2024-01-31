@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics.CodeAnalysis;
-using Tournaments.Domain.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using Tournaments.Domain.Services;
-using Tournaments.Domain.ViewModels;
+using Tournaments.Domain.Models;
 
 namespace Tournaments.API.Controllers
 {

@@ -1,4 +1,4 @@
-﻿namespace Tournaments.Domain.ViewModels
+﻿namespace Tournaments.Domain.Models
 {
 	public class LoginViewModel
 	{

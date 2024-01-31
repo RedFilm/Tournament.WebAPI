@@ -1,5 +1,5 @@
-﻿using Tournaments.Domain.Models;
-using Tournaments.Domain.ViewModels;
+﻿using Tournaments.Domain.Entities;
+using Tournaments.Domain.Models;
 
 namespace Tournaments.Domain.Interfaces.Repositories
 {

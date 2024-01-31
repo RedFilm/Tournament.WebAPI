@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Tournaments.Domain.Models;
+using Tournaments.Domain.Entities;
 
 namespace Tournaments.Persistence.Extensions
 {

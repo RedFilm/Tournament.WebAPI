@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
-using System;
 using Tournaments.Domain.Interfaces.Repositories;
+using Tournaments.Domain.Entities;
 using Tournaments.Domain.Models;
-using Tournaments.Domain.ViewModels;
 
 namespace Tournaments.Persistence.Repositories
 {
