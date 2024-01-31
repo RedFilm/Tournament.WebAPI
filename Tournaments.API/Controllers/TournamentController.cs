@@ -8,7 +8,7 @@ namespace Tournaments.API.Controllers
 	[ApiController]
 	public class TournamentController : ControllerBase
 	{
-		private ITournamentRepository _tournamentRepository;
+		private readonly ITournamentRepository _tournamentRepository;
 
 		public TournamentController(ITournamentRepository tournamentRepository)
         {
@@ -30,18 +30,13 @@ namespace Tournaments.API.Controllers
 		{
 			var result = await _tournamentRepository.GetTournamentsAsync();
 
-			if (result != null)
-				return Ok(result);
-			return BadRequest();
+			return Ok(result);
 		}
 
 		[HttpPost("CreateTournament")]
-		public async Task<IActionResult> CreateTournament(TournamentModel tournament)
+		public async Task<IActionResult> CreateTournament(TournamentModel model)
 		{
-			if(!ModelState.IsValid)
-				return BadRequest();
-
-			var result = await _tournamentRepository.AddTournamentAsync(tournament);
+			var result = await _tournamentRepository.AddTournamentAsync(model);
 
 			if(result)
 				return Ok();
@@ -49,9 +44,9 @@ namespace Tournaments.API.Controllers
 		}
 
 		[HttpPut("UpdateTournament")]
-		public async Task<IActionResult> UpdateTournament(TournamentModel vm)
+		public async Task<IActionResult> UpdateTournament(TournamentModel model)
 		{
-			var result = await _tournamentRepository.UpdateTournamentAsync(vm);
+			var result = await _tournamentRepository.UpdateTournamentAsync(model);
 
 			if (result)
 				return Ok();

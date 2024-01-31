@@ -14,23 +14,23 @@ namespace Tournaments.Persistence.Repositories
             _context =	context;
         }
 
-        public async Task<bool> AddTournamentAsync(TournamentModel vm)
+        public async Task<bool> AddTournamentAsync(TournamentModel model)
 		{
-			if (vm is null)
+			if (model is null)
 				return false;
 
 			var tournament = new Tournament()
 			{
-				OrganizerId = vm.OrganizerId,
-				PrizePool = vm.PrizePool,
-				MaxParticipantCount = vm.MaxParticipantCount,
-				TournamentName = vm.TournamentName,
-				GameName = vm.GameName,
-				TournamentDescription = vm.TournamentDescription,
-				RegistrationStartDate = vm.RegistrationStartDate,
-				RegistrationEndDate = vm.RegistrationEndDate,
-				TournamentStartDate = vm.TournamentStartDate,
-				TournamentEndDate = vm.TournamentEndDate
+				OrganizerId = model.OrganizerId,
+				PrizePool = model.PrizePool,
+				MaxParticipantCount = model.MaxParticipantCount,
+				TournamentName = model.TournamentName,
+				GameName = model.GameName,
+				TournamentDescription = model.TournamentDescription,
+				RegistrationStartDate = model.RegistrationStartDate,
+				RegistrationEndDate = model.RegistrationEndDate,
+				TournamentStartDate = model.TournamentStartDate,
+				TournamentEndDate = model.TournamentEndDate
 			};			
 
 			await _context.Tournaments.AddAsync(tournament);
@@ -66,24 +66,24 @@ namespace Tournaments.Persistence.Repositories
 			return tournaments;
 		}
 
-		public async Task<bool> UpdateTournamentAsync(TournamentModel vm)
+		public async Task<bool> UpdateTournamentAsync(TournamentModel model)
 		{
-			if (vm is null)
+			if (model is null)
 				return false;
 
 			var tournament = new Tournament()
 			{
-				Id = vm.Id,
-				OrganizerId = vm.OrganizerId,
-				PrizePool = vm.PrizePool,
-				MaxParticipantCount = vm.MaxParticipantCount,
-				TournamentName = vm.TournamentName,
-				GameName = vm.GameName,
-				TournamentDescription = vm.TournamentDescription,
-				RegistrationStartDate = vm.RegistrationStartDate,
-				RegistrationEndDate = vm.RegistrationEndDate,
-				TournamentStartDate = vm.TournamentStartDate,
-				TournamentEndDate = vm.TournamentEndDate
+				Id = model.Id,
+				OrganizerId = model.OrganizerId,
+				PrizePool = model.PrizePool,
+				MaxParticipantCount = model.MaxParticipantCount,
+				TournamentName = model.TournamentName,
+				GameName = model.GameName,
+				TournamentDescription = model.TournamentDescription,
+				RegistrationStartDate = model.RegistrationStartDate,
+				RegistrationEndDate = model.RegistrationEndDate,
+				TournamentStartDate = model.TournamentStartDate,
+				TournamentEndDate = model.TournamentEndDate
 			};
 
 			_context.Tournaments.Update(tournament);

@@ -22,35 +22,35 @@ namespace Tournaments.Domain.Services
 			_signinManager = signinManager;
 			jwtOptions = options.Value;
 		}
-		public async Task<bool> Register(LoginModel vm)
+		public async Task<bool> Register(LoginModel model)
 		{
 			var user = new AppUser()
 			{
-				UserName = vm.UserName,
-				Email = vm.Email
+				UserName = model.UserName,
+				Email = model.Email
 			};
 
-			var result = await _userManager.CreateAsync(user, vm.Password);
+			var result = await _userManager.CreateAsync(user, model.Password);
 
 			return result.Succeeded;
 		}
-		public async Task<bool> Login(LoginModel vm)
+		public async Task<bool> Login(LoginModel model)
 		{
-			var user = await _userManager.FindByNameAsync(vm.UserName);
+			var user = await _userManager.FindByNameAsync(model.UserName);
 
 			if (user is null)
 				return false;
 
-			var result = await _signinManager.PasswordSignInAsync(user, vm.Password, false, false);
+			var result = await _signinManager.PasswordSignInAsync(user, model.Password, false, false);
 
 			return result.Succeeded;
 		}
 
-		public string GenerateToken(LoginModel vm)
+		public string GenerateToken(LoginModel model)
 		{
 			var claims = new List<Claim>()
 			{
-				new Claim(ClaimTypes.Email, vm.Email),
+				new Claim(ClaimTypes.Email, model.Email),
 				new Claim(ClaimTypes.Role, "User")
 			};
 

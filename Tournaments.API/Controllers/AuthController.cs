@@ -8,35 +8,30 @@ namespace Tournaments.API.Controllers
 	[ApiController]
 	public class AuthController : ControllerBase
 	{
-		private IAuthService _authService;
+		private readonly IAuthService _authService;
 
 		public AuthController(IAuthService authService)
         {
             _authService = authService;
         }
-        [HttpPost("Login")]
-		public async Task<IActionResult> Login(LoginModel vm)
-		{
-			if (!ModelState.IsValid)
-				return BadRequest(ModelState);
 
-			var result = await _authService.Login(vm);
+        [HttpPost("Login")]
+		public async Task<IActionResult> Login(LoginModel model)
+		{
+			var result = await _authService.Login(model);
 
 			if (result)
 			{
-				var jwtToken = _authService.GenerateToken(vm);
+				var jwtToken = _authService.GenerateToken(model);
 				return Ok(jwtToken);
 			}
 			return BadRequest("Something went wrong");
 		}
 
 		[HttpPost("Register")]
-		public async Task<IActionResult> Register(LoginModel vm)
+		public async Task<IActionResult> Register(LoginModel model)
 		{
-			if (!ModelState.IsValid)
-				return BadRequest(ModelState);
-
-			var result = await _authService.Register(vm);
+			var result = await _authService.Register(model);
 
 			if(result)
 				return Ok("Done");
