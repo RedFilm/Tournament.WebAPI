@@ -15,7 +15,7 @@ namespace Tournaments.API.Controllers
             _authService = authService;
         }
         [HttpPost("Login")]
-		public async Task<IActionResult> Login(LoginViewModel vm)
+		public async Task<IActionResult> Login(LoginModel vm)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
@@ -31,7 +31,7 @@ namespace Tournaments.API.Controllers
 		}
 
 		[HttpPost("Register")]
-		public async Task<IActionResult> Register(LoginViewModel vm)
+		public async Task<IActionResult> Register(LoginModel vm)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);

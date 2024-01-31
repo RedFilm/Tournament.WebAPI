@@ -36,7 +36,7 @@ namespace Tournaments.API.Controllers
 		}
 
 		[HttpPost("CreateTournament")]
-		public async Task<IActionResult> CreateTournament(TournamentViewModel tournament)
+		public async Task<IActionResult> CreateTournament(TournamentModel tournament)
 		{
 			if(!ModelState.IsValid)
 				return BadRequest();
@@ -49,7 +49,7 @@ namespace Tournaments.API.Controllers
 		}
 
 		[HttpPut("UpdateTournament")]
-		public async Task<IActionResult> UpdateTournament(TournamentViewModel vm)
+		public async Task<IActionResult> UpdateTournament(TournamentModel vm)
 		{
 			var result = await _tournamentRepository.UpdateTournamentAsync(vm);
 

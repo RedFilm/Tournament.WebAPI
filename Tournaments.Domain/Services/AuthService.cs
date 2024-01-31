@@ -22,7 +22,7 @@ namespace Tournaments.Domain.Services
 			_signinManager = signinManager;
 			jwtOptions = options.Value;
 		}
-		public async Task<bool> Register(LoginViewModel vm)
+		public async Task<bool> Register(LoginModel vm)
 		{
 			var user = new AppUser()
 			{
@@ -34,7 +34,7 @@ namespace Tournaments.Domain.Services
 
 			return result.Succeeded;
 		}
-		public async Task<bool> Login(LoginViewModel vm)
+		public async Task<bool> Login(LoginModel vm)
 		{
 			var user = await _userManager.FindByNameAsync(vm.UserName);
 
@@ -46,7 +46,7 @@ namespace Tournaments.Domain.Services
 			return result.Succeeded;
 		}
 
-		public string GenerateToken(LoginViewModel vm)
+		public string GenerateToken(LoginModel vm)
 		{
 			var claims = new List<Claim>()
 			{

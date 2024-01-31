@@ -14,7 +14,7 @@ namespace Tournaments.Persistence.Repositories
             _context =	context;
         }
 
-        public async Task<bool> AddTournamentAsync(TournamentViewModel vm)
+        public async Task<bool> AddTournamentAsync(TournamentModel vm)
 		{
 			if (vm is null)
 				return false;
@@ -66,7 +66,7 @@ namespace Tournaments.Persistence.Repositories
 			return tournaments;
 		}
 
-		public async Task<bool> UpdateTournamentAsync(TournamentViewModel vm)
+		public async Task<bool> UpdateTournamentAsync(TournamentModel vm)
 		{
 			if (vm is null)
 				return false;

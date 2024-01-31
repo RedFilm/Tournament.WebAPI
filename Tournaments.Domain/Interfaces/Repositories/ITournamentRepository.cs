@@ -8,8 +8,8 @@ namespace Tournaments.Domain.Interfaces.Repositories
         Task<Tournament?> GetTournamentAsync(int id);
         Task<IEnumerable<Tournament>> GetTournamentsAsync();
 
-        Task<bool> AddTournamentAsync(TournamentViewModel tournament);
-        Task<bool> UpdateTournamentAsync(TournamentViewModel tournament);
+        Task<bool> AddTournamentAsync(TournamentModel tournament);
+        Task<bool> UpdateTournamentAsync(TournamentModel tournament);
         Task<bool> DeleteTournamentAsync(int id);
     }
 }

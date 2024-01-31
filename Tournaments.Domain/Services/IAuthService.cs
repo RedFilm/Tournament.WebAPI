@@ -4,8 +4,8 @@ namespace Tournaments.Domain.Services
 {
 	public interface IAuthService
 	{
-		Task<bool> Login(LoginViewModel vm);
-		Task<bool> Register(LoginViewModel vm);
-		string GenerateToken(LoginViewModel vm);
+		Task<bool> Login(LoginModel vm);
+		Task<bool> Register(LoginModel vm);
+		string GenerateToken(LoginModel vm);
 	}
 }

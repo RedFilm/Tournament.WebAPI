@@ -1,15 +1,17 @@
-﻿namespace Tournaments.Domain.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Tournaments.Domain.Models
 {
-	public class TournamentViewModel
+	public class TournamentModel
 	{
 		public int Id { get; set; }
-		public string OrganizerId { get; set; }
+		public string OrganizerId { get; set; } = null!;
 
 		public int PrizePool { get; set; }
 		public int MaxParticipantCount { get; set; }
-		public string TournamentName { get; set; }
-		public string GameName { get; set; }
-		public string TournamentDescription { get; set; }
+		public string TournamentName { get; set; } = null!;
+		public string GameName { get; set; } = null!;
+		public string TournamentDescription { get; set; } = null!;
 
 		public DateTime RegistrationStartDate { get; set; }
 		public DateTime RegistrationEndDate { get; set; }
