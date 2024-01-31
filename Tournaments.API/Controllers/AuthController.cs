@@ -29,7 +29,7 @@ namespace Tournaments.API.Controllers
 		}
 
 		[HttpPost("Register")]
-		public async Task<IActionResult> Register(LoginModel model)
+		public async Task<IActionResult> Register(RegisterModel model)
 		{
 			var result = await _authService.Register(model);
 

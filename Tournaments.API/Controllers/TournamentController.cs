@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Models;
 
@@ -20,7 +21,7 @@ namespace Tournaments.API.Controllers
 		{
 			var result = await _tournamentRepository.GetTournamentAsync(id);
 
-			if(result != null)
+			if (result is not null)
 				return Ok(result);
 			return BadRequest();
 		}

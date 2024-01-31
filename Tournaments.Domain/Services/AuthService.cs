@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Tournaments.Domain.Options;
+using AutoMapper;
 
 namespace Tournaments.Domain.Services
 {
@@ -15,20 +16,21 @@ namespace Tournaments.Domain.Services
 		private readonly UserManager<AppUser> _userManager;
 		private readonly SignInManager<AppUser> _signinManager;
 		private readonly JwtOptions jwtOptions;
+		private readonly IMapper _mapper;
 
-		public AuthService(UserManager<AppUser> userManager, SignInManager<AppUser> signinManager, IOptions<JwtOptions> options)
+		public AuthService(UserManager<AppUser> userManager, 
+			SignInManager<AppUser> signinManager, 
+			IOptions<JwtOptions> options,
+			IMapper mapper)
 		{
 			_userManager = userManager;
 			_signinManager = signinManager;
 			jwtOptions = options.Value;
+			_mapper = mapper;
 		}
-		public async Task<bool> Register(LoginModel model)
+		public async Task<bool> Register(RegisterModel model)
 		{
-			var user = new AppUser()
-			{
-				UserName = model.UserName,
-				Email = model.Email
-			};
+			var user = _mapper.Map<AppUser>(model);
 
 			var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -48,9 +50,12 @@ namespace Tournaments.Domain.Services
 
 		public string GenerateToken(LoginModel model)
 		{
+			var userId = _userManager.FindByNameAsync(model.UserName);
+			
 			var claims = new List<Claim>()
 			{
-				new Claim(ClaimTypes.Email, model.Email),
+				new Claim(ClaimTypes.NameIdentifier, userId.ToString()!),
+				new Claim(ClaimTypes.Name, model.UserName),
 				new Claim(ClaimTypes.Role, "User")
 			};
 

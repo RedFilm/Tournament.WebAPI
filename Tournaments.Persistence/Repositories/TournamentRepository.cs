@@ -2,16 +2,19 @@
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Entities;
 using Tournaments.Domain.Models;
+using AutoMapper;
 
 namespace Tournaments.Persistence.Repositories
 {
 	public class TournamentRepository : ITournamentRepository
 	{
 		private readonly TournamentDbContext _context;
+		private readonly IMapper _mapper;
 
-		public TournamentRepository(TournamentDbContext context)
+		public TournamentRepository(TournamentDbContext context, IMapper mapper)
         {
             _context =	context;
+			_mapper = mapper;
         }
 
         public async Task<bool> AddTournamentAsync(TournamentModel model)
@@ -19,19 +22,7 @@ namespace Tournaments.Persistence.Repositories
 			if (model is null)
 				return false;
 
-			var tournament = new Tournament()
-			{
-				OrganizerId = model.OrganizerId,
-				PrizePool = model.PrizePool,
-				MaxParticipantCount = model.MaxParticipantCount,
-				TournamentName = model.TournamentName,
-				GameName = model.GameName,
-				TournamentDescription = model.TournamentDescription,
-				RegistrationStartDate = model.RegistrationStartDate,
-				RegistrationEndDate = model.RegistrationEndDate,
-				TournamentStartDate = model.TournamentStartDate,
-				TournamentEndDate = model.TournamentEndDate
-			};			
+			var tournament = _mapper.Map<Tournament>(model);			
 
 			await _context.Tournaments.AddAsync(tournament);
 			var result = await _context.SaveChangesAsync();
@@ -71,20 +62,7 @@ namespace Tournaments.Persistence.Repositories
 			if (model is null)
 				return false;
 
-			var tournament = new Tournament()
-			{
-				Id = model.Id,
-				OrganizerId = model.OrganizerId,
-				PrizePool = model.PrizePool,
-				MaxParticipantCount = model.MaxParticipantCount,
-				TournamentName = model.TournamentName,
-				GameName = model.GameName,
-				TournamentDescription = model.TournamentDescription,
-				RegistrationStartDate = model.RegistrationStartDate,
-				RegistrationEndDate = model.RegistrationEndDate,
-				TournamentStartDate = model.TournamentStartDate,
-				TournamentEndDate = model.TournamentEndDate
-			};
+			var tournament = _mapper.Map<Tournament>(model);
 
 			_context.Tournaments.Update(tournament);
 			var result = await _context.SaveChangesAsync();
