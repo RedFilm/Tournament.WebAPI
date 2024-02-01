@@ -8,7 +8,7 @@ namespace Tournaments.Persistence.Extensions
 	{
 		public static IServiceCollection AddCustomIdentity(this IServiceCollection services)
 		{
-			services.AddIdentity<AppUser, IdentityRole>(options =>
+			services.AddIdentity<AppUser, IdentityRole<long>>(options =>
 			{
 				options.Password.RequiredLength = 3;
 				options.Password.RequireNonAlphanumeric = false;

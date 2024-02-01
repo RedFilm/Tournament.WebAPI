@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Tournaments.Domain.Entities;
 using Tournaments.Persistence.EntityTypeConfigurations;
 
 namespace Tournaments.Persistence
 {
-	public class TournamentDbContext : IdentityDbContext<AppUser>
+	public class TournamentDbContext : IdentityDbContext<AppUser, IdentityRole<long>, long>
 	{
 		public TournamentDbContext(DbContextOptions<TournamentDbContext> options)
 			: base(options) { }

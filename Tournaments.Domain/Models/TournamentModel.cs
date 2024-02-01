@@ -5,7 +5,7 @@ namespace Tournaments.Domain.Models
 	public class TournamentModel
 	{
 		public int Id { get; set; }
-		public string OrganizerId { get; set; } = null!;
+		public long OrganizerId { get; set; }
 
 		public int PrizePool { get; set; }
 		public int MaxParticipantCount { get; set; }

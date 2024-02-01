@@ -2,9 +2,9 @@
 {
 	public class Tournament
 	{
-        public int Id { get; set; }
+        public long Id { get; set; }
 
-        public string OrganizerId { get; set; } = null!;
+        public long OrganizerId { get; set; }
 		public AppUser Organizer { get; set; } = null!;
 
         public List<TournamentTeam> TournamentTeams { get; set; } = null!;
