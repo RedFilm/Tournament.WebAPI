@@ -19,9 +19,9 @@ builder.Services.AddCustomIdentity();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<ITournamentRepository, TournamentRepository>();
 builder.Services.AddAutoMapper(typeof(TournamentProfile).Assembly);
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.ConfigurationPath));
 
-var jwtOptions = builder.Configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
+var jwtOptions = builder.Configuration.GetSection(JwtOptions.ConfigurationPath).Get<JwtOptions>();
 
 if (jwtOptions is not null)
 	builder.Services.AddJwtAuthentication(jwtOptions);
