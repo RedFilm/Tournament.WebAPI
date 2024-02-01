@@ -17,7 +17,7 @@ namespace Tournaments.Persistence.Repositories
 			_mapper = mapper;
         }
 
-        public async Task<bool> AddTournamentAsync(TournamentModel model)
+        public async Task<bool> AddTournamentAsync(TournamentModel? model)
 		{
 			if (model is null)
 				return false;
@@ -57,7 +57,7 @@ namespace Tournaments.Persistence.Repositories
 			return tournaments;
 		}
 
-		public async Task<bool> UpdateTournamentAsync(TournamentModel model)
+		public async Task<bool> UpdateTournamentAsync(TournamentModel? model)
 		{
 			if (model is null)
 				return false;
