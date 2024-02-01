@@ -17,7 +17,8 @@ namespace Tournaments.Persistence.Repositories
 			_mapper = mapper;
         }
 
-        public async Task<bool> AddTournamentAsync(TournamentModel? model)
+		/// <inheritdoc />
+		public async Task<bool> AddTournamentAsync(TournamentModel? model)
 		{
 			if (model is null)
 				return false;
@@ -30,6 +31,7 @@ namespace Tournaments.Persistence.Repositories
 			return result > 0;
 		}
 
+		/// <inheritdoc />
 		public async Task<bool> DeleteTournamentAsync(int id)
 		{
 			var tournament = await _context.Tournaments.FirstOrDefaultAsync(x => x.Id == id);
@@ -43,13 +45,15 @@ namespace Tournaments.Persistence.Repositories
 			return result > 0;
 		}
 
+		/// <inheritdoc />
 		public async Task<Tournament?> GetTournamentAsync(int id)
 		{
 			var tournament = await _context.Tournaments.FirstOrDefaultAsync(x => x.Id == id);
 
 			return tournament;
 		}
-
+		
+		/// <inheritdoc />
 		public async Task<IEnumerable<Tournament>> GetTournamentsAsync()
 		{
 			var tournaments = await _context.Tournaments.AsNoTracking().ToListAsync();
@@ -57,6 +61,7 @@ namespace Tournaments.Persistence.Repositories
 			return tournaments;
 		}
 
+		/// <inheritdoc />
 		public async Task<bool> UpdateTournamentAsync(TournamentModel? model)
 		{
 			if (model is null)

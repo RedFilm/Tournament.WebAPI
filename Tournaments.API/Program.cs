@@ -23,7 +23,7 @@ builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(J
 
 var jwtOptions = builder.Configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
 
-if(jwtOptions is not null)
+if (jwtOptions is not null)
 	builder.Services.AddJwtAuthentication(jwtOptions);
 
 var app = builder.Build();
