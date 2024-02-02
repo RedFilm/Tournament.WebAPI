@@ -18,11 +18,8 @@ namespace Tournaments.Persistence.Repositories
         }
 
 		/// <inheritdoc />
-		public async Task<bool> AddTournamentAsync(TournamentModel? model)
+		public async Task<bool> AddTournamentAsync(TournamentModel model)
 		{
-			if (model is null)
-				return false;
-
 			var tournament = _mapper.Map<Tournament>(model);			
 
 			await _context.Tournaments.AddAsync(tournament);
@@ -62,11 +59,8 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
-		public async Task<bool> UpdateTournamentAsync(TournamentModel? model)
+		public async Task<bool> UpdateTournamentAsync(TournamentModel model)
 		{
-			if (model is null)
-				return false;
-
 			var tournament = _mapper.Map<Tournament>(model);
 
 			_context.Tournaments.Update(tournament);
