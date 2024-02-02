@@ -3,6 +3,7 @@ using Tournaments.Domain.Services;
 using Tournaments.Domain.Models;
 using FluentValidation;
 using Tournaments.Domain.Validators;
+using FluentValidation.Results;
 
 namespace Tournaments.API.Controllers
 {
@@ -24,6 +25,9 @@ namespace Tournaments.API.Controllers
         }
 
         [HttpPost("Login")]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<IActionResult> Login(LoginModel model)
 		{
 			var validationResult = _loginValidator.Validate(model);
@@ -46,6 +50,9 @@ namespace Tournaments.API.Controllers
 		}
 
 		[HttpPost("Register")]
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationResult))]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public async Task<IActionResult> Register(RegisterModel model)
 		{
 			var validationResult = _registerValidator.Validate(model);
