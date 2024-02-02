@@ -12,8 +12,8 @@ using Tournaments.Persistence;
 namespace Tournaments.Persistence.Migrations
 {
     [DbContext(typeof(TournamentDbContext))]
-    [Migration("20240126193626_Init")]
-    partial class Init
+    [Migration("20240202175428_ChangeUserIdType")]
+    partial class ChangeUserIdType
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,11 @@ namespace Tournaments.Persistence.Migrations
 
             modelBuilder.Entity("AppUserTeam", b =>
                 {
-                    b.Property<string>("PlayersId")
-                        .HasColumnType("text");
+                    b.Property<long>("PlayersId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("TeamsId")
-                        .HasColumnType("integer");
+                    b.Property<long>("TeamsId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("PlayersId", "TeamsId");
 
@@ -40,10 +40,13 @@ namespace Tournaments.Persistence.Migrations
                     b.ToTable("PlayerTeam", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<long>", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -66,7 +69,7 @@ namespace Tournaments.Persistence.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -80,9 +83,8 @@ namespace Tournaments.Persistence.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("text");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -91,7 +93,7 @@ namespace Tournaments.Persistence.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<long>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -105,9 +107,8 @@ namespace Tournaments.Persistence.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -116,7 +117,7 @@ namespace Tournaments.Persistence.Migrations
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text");
@@ -127,9 +128,8 @@ namespace Tournaments.Persistence.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -138,13 +138,13 @@ namespace Tournaments.Persistence.Migrations
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<long>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("text");
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -153,10 +153,10 @@ namespace Tournaments.Persistence.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text");
@@ -172,10 +172,13 @@ namespace Tournaments.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Tournaments.Domain.Models.AppUser", b =>
+            modelBuilder.Entity("Tournaments.Domain.Entities.AppUser", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
@@ -239,19 +242,16 @@ namespace Tournaments.Persistence.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Tournaments.Domain.Models.Team", b =>
+            modelBuilder.Entity("Tournaments.Domain.Entities.Team", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("ParticipantCount")
-                        .HasColumnType("integer");
 
                     b.Property<string>("TeamName")
                         .IsRequired()
@@ -262,13 +262,13 @@ namespace Tournaments.Persistence.Migrations
                     b.ToTable("Teams");
                 });
 
-            modelBuilder.Entity("Tournaments.Domain.Models.Tournament", b =>
+            modelBuilder.Entity("Tournaments.Domain.Entities.Tournament", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("GameName")
                         .IsRequired()
@@ -277,9 +277,8 @@ namespace Tournaments.Persistence.Migrations
                     b.Property<int>("MaxParticipantCount")
                         .HasColumnType("integer");
 
-                    b.Property<string>("OrganizerId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<long>("OrganizerId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("PrizePool")
                         .HasColumnType("integer");
@@ -311,13 +310,13 @@ namespace Tournaments.Persistence.Migrations
                     b.ToTable("Tournaments");
                 });
 
-            modelBuilder.Entity("Tournaments.Domain.Models.TournamentTeam", b =>
+            modelBuilder.Entity("Tournaments.Domain.Entities.TournamentTeam", b =>
                 {
-                    b.Property<int>("TournamentId")
-                        .HasColumnType("integer");
+                    b.Property<long>("TournamentId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("TeamId")
-                        .HasColumnType("integer");
+                    b.Property<long>("TeamId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -331,73 +330,73 @@ namespace Tournaments.Persistence.Migrations
 
             modelBuilder.Entity("AppUserTeam", b =>
                 {
-                    b.HasOne("Tournaments.Domain.Models.AppUser", null)
+                    b.HasOne("Tournaments.Domain.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("PlayersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tournaments.Domain.Models.Team", null)
+                    b.HasOne("Tournaments.Domain.Entities.Team", null)
                         .WithMany()
                         .HasForeignKey("TeamsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<long>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<long>", b =>
                 {
-                    b.HasOne("Tournaments.Domain.Models.AppUser", null)
+                    b.HasOne("Tournaments.Domain.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
                 {
-                    b.HasOne("Tournaments.Domain.Models.AppUser", null)
+                    b.HasOne("Tournaments.Domain.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<long>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<long>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tournaments.Domain.Models.AppUser", null)
+                    b.HasOne("Tournaments.Domain.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
                 {
-                    b.HasOne("Tournaments.Domain.Models.AppUser", null)
+                    b.HasOne("Tournaments.Domain.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Tournaments.Domain.Models.Tournament", b =>
+            modelBuilder.Entity("Tournaments.Domain.Entities.Tournament", b =>
                 {
-                    b.HasOne("Tournaments.Domain.Models.AppUser", "Organizer")
+                    b.HasOne("Tournaments.Domain.Entities.AppUser", "Organizer")
                         .WithMany("Tournaments")
                         .HasForeignKey("OrganizerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -406,15 +405,15 @@ namespace Tournaments.Persistence.Migrations
                     b.Navigation("Organizer");
                 });
 
-            modelBuilder.Entity("Tournaments.Domain.Models.TournamentTeam", b =>
+            modelBuilder.Entity("Tournaments.Domain.Entities.TournamentTeam", b =>
                 {
-                    b.HasOne("Tournaments.Domain.Models.Team", "Team")
+                    b.HasOne("Tournaments.Domain.Entities.Team", "Team")
                         .WithMany("TournamentTeams")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tournaments.Domain.Models.Tournament", "Tournament")
+                    b.HasOne("Tournaments.Domain.Entities.Tournament", "Tournament")
                         .WithMany("TournamentTeams")
                         .HasForeignKey("TournamentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -425,17 +424,17 @@ namespace Tournaments.Persistence.Migrations
                     b.Navigation("Tournament");
                 });
 
-            modelBuilder.Entity("Tournaments.Domain.Models.AppUser", b =>
+            modelBuilder.Entity("Tournaments.Domain.Entities.AppUser", b =>
                 {
                     b.Navigation("Tournaments");
                 });
 
-            modelBuilder.Entity("Tournaments.Domain.Models.Team", b =>
+            modelBuilder.Entity("Tournaments.Domain.Entities.Team", b =>
                 {
                     b.Navigation("TournamentTeams");
                 });
 
-            modelBuilder.Entity("Tournaments.Domain.Models.Tournament", b =>
+            modelBuilder.Entity("Tournaments.Domain.Entities.Tournament", b =>
                 {
                     b.Navigation("TournamentTeams");
                 });

@@ -36,16 +36,16 @@ namespace Tournaments.Domain.Services
 
 			return result.Succeeded;
 		}
-		public async Task<bool> Login(LoginModel model)
+		public async Task<AuthenticationResult> Login(LoginModel model)
 		{
 			var user = await _userManager.FindByNameAsync(model.UserName);
 
 			if (user is null)
-				return false;
+				return new AuthenticationResult { Success = false, NotFound = true};
 
 			var result = await _signinManager.PasswordSignInAsync(user, model.Password, false, false);
 
-			return result.Succeeded;
+			return new AuthenticationResult { Success = result.Succeeded, NotFound = false };
 		}
 
 		public string GenerateToken(LoginModel model)

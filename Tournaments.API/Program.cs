@@ -5,6 +5,11 @@ using Tournaments.Persistence.Extensions;
 using Tournaments.Persistence.Repositories;
 using Tournaments.API.Extensions;
 using Tournaments.Domain.Mapping;
+using FluentValidation.AspNetCore;
+using Tournaments.Domain.Models;
+using Tournaments.Domain.Validators;
+using System.Reflection;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +23,9 @@ builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddCustomIdentity();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<ITournamentRepository, TournamentRepository>();
+builder.Services.AddValidatorsFromAssemblyContaining<LoginModelValidator>();
 builder.Services.AddAutoMapper(typeof(TournamentProfile).Assembly);
+
 builder.Services.ConfigureAndValidate<JwtOptions>(builder.Configuration.Bind)
 		.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.ConfigurationPath));
 

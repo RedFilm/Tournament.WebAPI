@@ -23,7 +23,7 @@ namespace Tournaments.API.Controllers
 
 			if (result is not null)
 				return Ok(result);
-			return BadRequest();
+			return NotFound();
 		}
 
 		[HttpGet("GetTournaments")]
@@ -40,7 +40,7 @@ namespace Tournaments.API.Controllers
 			var result = await _tournamentRepository.AddTournamentAsync(model);
 
 			if(result)
-				return Ok();
+				return Created();
 			return BadRequest("Something went wrong");
 		}
 

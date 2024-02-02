@@ -9,7 +9,7 @@ namespace Tournaments.Domain.Services
 		/// </summary>
 		/// <param name="model">Model that contains user name and password</param>
 		/// <returns>Result of authenticating. True if user successfully authenticated.</returns>
-		Task<bool> Login(LoginModel model);
+		Task<AuthenticationResult> Login(LoginModel model);
 
 		/// <summary>
 		/// Register the user.
