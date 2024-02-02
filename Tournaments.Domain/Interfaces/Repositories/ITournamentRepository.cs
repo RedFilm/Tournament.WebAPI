@@ -9,7 +9,7 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// Asynchronously gets tournament from the database by id.
 		/// </summary>
 		/// <param name="id">Tournament id</param>
-		/// <returns>Tournament entity from the database wich contains the this id</returns>
+		/// <returns>Tournament entity from the database which has this id</returns>
 		Task<Tournament?> GetTournamentAsync(int id);
 
 		/// <summary>
