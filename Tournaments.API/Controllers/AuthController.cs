@@ -25,7 +25,7 @@ namespace Tournaments.API.Controllers
         }
 
         [HttpPost("Login")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(String))]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<IActionResult> Login(LoginModel model)
@@ -51,7 +51,7 @@ namespace Tournaments.API.Controllers
 
 		[HttpPost("Register")]
 		[ProducesResponseType(StatusCodes.Status201Created)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationResult))]
+		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IEnumerable<ValidationFailure>))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public async Task<IActionResult> Register(RegisterModel model)
 		{
