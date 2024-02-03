@@ -12,7 +12,7 @@ namespace Tournaments.Domain.Validators
 			RuleFor(registerModel => registerModel.Email).NotEmpty().EmailAddress().MaximumLength(256);
 			RuleFor(registerModel => registerModel.Password).NotEmpty().MinimumLength(3);
 			RuleFor(registerModel => registerModel.PhoneNumber).Length(11)
-				.Matches(new Regex(@"(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}"));
+				.Matches(new Regex(@"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$"));
 		}
     }
 }
