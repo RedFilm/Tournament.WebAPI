@@ -25,7 +25,7 @@ namespace Tournaments.API.Controllers
         }
 
         [HttpPost("Login")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(String))]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticationResultModel))]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<IActionResult> Login(LoginModel model)
@@ -37,16 +37,7 @@ namespace Tournaments.API.Controllers
 
 			var result = await _authService.LoginAsync(model);
 
-			if (result.NotFound)
-				return NotFound();
-
-			if (result.Success)
-			{
-				var jwtToken = _authService.GenerateToken(model);
-				return Ok(jwtToken);
-			}
-
-			return BadRequest();
+			return Ok(result);
 		}
 
 		[HttpPost("Register")]
@@ -60,11 +51,9 @@ namespace Tournaments.API.Controllers
 			if (!validationResult.IsValid)
 				return BadRequest(validationResult.Errors);
 
-			var result = await _authService.RegisterAsync(model);
+			await _authService.RegisterAsync(model);
 
-			if(result)
-				return Created();
-			return StatusCode(500, "Couldn't register");
+			return Created();
 		}
 	}
 }

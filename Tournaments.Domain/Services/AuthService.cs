@@ -8,10 +8,11 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using Tournaments.Domain.Options;
 using AutoMapper;
+using Tournaments.Domain.Exceptions;
 
 namespace Tournaments.Domain.Services
 {
-	public class AuthService : IAuthService
+    public class AuthService : IAuthService
 	{
 		private readonly UserManager<AppUser> _userManager;
 		private readonly SignInManager<AppUser> _signinManager;
@@ -34,21 +35,29 @@ namespace Tournaments.Domain.Services
 
 			var result = await _userManager.CreateAsync(user, model.Password);
 
+			if (!result.Succeeded)
+				throw new RegisterFailedException("Register failed" ,result);
+
 			return result.Succeeded;
 		}
-		public async Task<AuthenticationResult> LoginAsync(LoginModel model)
+		public async Task<AuthenticationResultModel> LoginAsync(LoginModel model)
 		{
 			var user = await _userManager.FindByNameAsync(model.UserName);
 
 			if (user is null)
-				return new AuthenticationResult { Success = false, NotFound = true};
+				throw new NotFoundException("User not found");
 
 			var result = await _signinManager.PasswordSignInAsync(user, model.Password, false, false);
 
-			return new AuthenticationResult { Success = result.Succeeded, NotFound = false };
+			if (!result.Succeeded)
+				throw new AuthenticationFailedException("Authentication failed", result);
+
+			var jwtToken = GenerateToken(model);
+
+			return new AuthenticationResultModel { Token = jwtToken};
 		}
 
-		public string GenerateToken(LoginModel model)
+		private string GenerateToken(LoginModel model)
 		{
 			var userId = _userManager.FindByNameAsync(model.UserName);
 			
