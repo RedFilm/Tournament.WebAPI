@@ -9,14 +9,14 @@ namespace Tournaments.Domain.Services
 		/// </summary>
 		/// <param name="model">Model that contains user name and password</param>
 		/// <returns>Result of authenticating. True if user successfully authenticated.</returns>
-		Task<AuthenticationResult> Login(LoginModel model);
+		Task<AuthenticationResult> LoginAsync(LoginModel model);
 
 		/// <summary>
 		/// Register the user.
 		/// </summary>
 		/// <param name="model">Model that contain user name, email, password, birthday and phone number.</param>
 		/// <returns>Result of registring. True if user successfully registred.</returns>
-		Task<bool> Register(RegisterModel model);
+		Task<bool> RegisterAsync(RegisterModel model);
 
 		/// <summary>
 		/// Generate JWT token to authenticated user by Id, UserName and Role

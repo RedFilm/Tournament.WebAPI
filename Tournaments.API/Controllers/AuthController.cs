@@ -30,15 +30,15 @@ namespace Tournaments.API.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<IActionResult> Login(LoginModel model)
 		{
-			var validationResult = _loginValidator.Validate(model);
+			var validationResult = await _loginValidator.ValidateAsync(model);
 
 			if (!validationResult.IsValid)
 				return BadRequest(validationResult.Errors);
 
-			var result = await _authService.Login(model);
+			var result = await _authService.LoginAsync(model);
 
 			if (result.NotFound)
-				return NotFound("User doesn't exist");
+				return NotFound();
 
 			if (result.Success)
 			{
@@ -46,7 +46,7 @@ namespace Tournaments.API.Controllers
 				return Ok(jwtToken);
 			}
 
-			return BadRequest("Something went wrong");
+			return BadRequest();
 		}
 
 		[HttpPost("Register")]
@@ -55,12 +55,12 @@ namespace Tournaments.API.Controllers
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public async Task<IActionResult> Register(RegisterModel model)
 		{
-			var validationResult = _registerValidator.Validate(model);
+			var validationResult = await _registerValidator.ValidateAsync(model);
 
 			if (!validationResult.IsValid)
 				return BadRequest(validationResult.Errors);
 
-			var result = await _authService.Register(model);
+			var result = await _authService.RegisterAsync(model);
 
 			if(result)
 				return Created();

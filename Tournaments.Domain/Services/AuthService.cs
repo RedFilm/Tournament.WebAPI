@@ -28,7 +28,7 @@ namespace Tournaments.Domain.Services
 			jwtOptions = options.Value;
 			_mapper = mapper;
 		}
-		public async Task<bool> Register(RegisterModel model)
+		public async Task<bool> RegisterAsync(RegisterModel model)
 		{
 			var user = _mapper.Map<AppUser>(model);
 
@@ -36,7 +36,7 @@ namespace Tournaments.Domain.Services
 
 			return result.Succeeded;
 		}
-		public async Task<AuthenticationResult> Login(LoginModel model)
+		public async Task<AuthenticationResult> LoginAsync(LoginModel model)
 		{
 			var user = await _userManager.FindByNameAsync(model.UserName);
 

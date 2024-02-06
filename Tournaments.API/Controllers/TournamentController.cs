@@ -37,7 +37,7 @@ namespace Tournaments.API.Controllers
 		}
 
 		[HttpGet("GetTournaments")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Tournament>))]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Tournament>))]
 		public async Task<IActionResult> GetTournaments()
 		{
 			var result = await _tournamentRepository.GetTournamentsAsync();
@@ -51,7 +51,7 @@ namespace Tournaments.API.Controllers
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public async Task<IActionResult> CreateTournament(TournamentModel model)
 		{
-			var validationResult = _touranmentValidator.Validate(model);
+			var validationResult = await _touranmentValidator.ValidateAsync(model);
 
 			if (!validationResult.IsValid)
 				return BadRequest(validationResult);
@@ -70,7 +70,7 @@ namespace Tournaments.API.Controllers
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public async Task<IActionResult> UpdateTournament(TournamentModel model)
 		{
-			var validationResult = _touranmentValidator.Validate(model);
+			var validationResult = await _touranmentValidator.ValidateAsync(model);
 
 			if (!validationResult.IsValid)
 				return BadRequest(validationResult);
@@ -91,7 +91,7 @@ namespace Tournaments.API.Controllers
 			var result = await _tournamentRepository.DeleteTournamentAsync(id);
 
 			if (result)
-				return Ok("Removed");
+				return Ok();
 
 			return NoContent();
 		}
