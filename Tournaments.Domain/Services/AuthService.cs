@@ -52,18 +52,18 @@ namespace Tournaments.Domain.Services
 			if (!result.Succeeded)
 				throw new AuthenticationFailedException("Authentication failed", result);
 
-			var jwtToken = GenerateToken(model);
+			var jwtToken = GenerateTokenAsync(model);
 
-			return new AuthenticationResultModel { Token = jwtToken};
+			return new AuthenticationResultModel { Token = jwtToken.Result};
 		}
 
-		private string GenerateToken(LoginModel model)
+		private async Task<string> GenerateTokenAsync(LoginModel model)
 		{
-			var userId = _userManager.FindByNameAsync(model.UserName);
+			var user = await _userManager.FindByNameAsync(model.UserName);
 			
 			var claims = new List<Claim>()
 			{
-				new Claim(ClaimTypes.NameIdentifier, userId.ToString()!),
+				new Claim(ClaimTypes.NameIdentifier, user!.Id.ToString()),
 				new Claim(ClaimTypes.Name, model.UserName),
 				new Claim(ClaimTypes.Role, "User")
 			};
