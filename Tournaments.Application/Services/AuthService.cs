@@ -9,8 +9,9 @@ using Microsoft.Extensions.Options;
 using Tournaments.Domain.Options;
 using AutoMapper;
 using Tournaments.Domain.Exceptions;
+using Tournaments.Domain.Interfaces.Services;
 
-namespace Tournaments.Domain.Services
+namespace Tournaments.Application.Services
 {
     public class AuthService : IAuthService
 	{

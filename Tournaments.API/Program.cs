@@ -1,6 +1,6 @@
 using Tournaments.Domain.Options;
 using Tournaments.Domain.Interfaces.Repositories;
-using Tournaments.Domain.Services;
+using Tournaments.Application.Services;
 using Tournaments.Persistence.Extensions;
 using Tournaments.Persistence.Repositories;
 using Tournaments.API.Extensions;
@@ -10,6 +10,7 @@ using Tournaments.Domain.Models;
 using Tournaments.Domain.Validators;
 using System.Reflection;
 using FluentValidation;
+using Tournaments.Domain.Interfaces.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddCustomIdentity();
 builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<ITournamentService, TournamentService>();
 builder.Services.AddTransient<ITournamentRepository, TournamentRepository>();
 builder.Services.AddValidatorsFromAssemblyContaining<LoginModelValidator>();
 builder.Services.AddAutoMapper(typeof(TournamentProfile).Assembly);
@@ -40,6 +42,7 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+app.UseExceptionHandlerMiddleware();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

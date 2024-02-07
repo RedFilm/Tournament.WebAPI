@@ -9,19 +9,15 @@ namespace Tournaments.Persistence.Repositories
 	public class TournamentRepository : ITournamentRepository
 	{
 		private readonly TournamentDbContext _context;
-		private readonly IMapper _mapper;
 
-		public TournamentRepository(TournamentDbContext context, IMapper mapper)
+		public TournamentRepository(TournamentDbContext context)
         {
             _context =	context;
-			_mapper = mapper;
         }
 
 		/// <inheritdoc />
-		public async Task<bool> AddTournamentAsync(TournamentModel model)
+		public async Task<bool> AddTournamentAsync(Tournament tournament)
 		{
-			var tournament = _mapper.Map<Tournament>(model);			
-
 			await _context.Tournaments.AddAsync(tournament);
 			var result = await _context.SaveChangesAsync();
 
@@ -46,7 +42,6 @@ namespace Tournaments.Persistence.Repositories
 		public async Task<Tournament?> GetTournamentAsync(int id)
 		{
 			var tournament = await _context.Tournaments.FirstOrDefaultAsync(x => x.Id == id);
-
 			return tournament;
 		}
 		
@@ -54,15 +49,12 @@ namespace Tournaments.Persistence.Repositories
 		public async Task<IEnumerable<Tournament>> GetTournamentsAsync()
 		{
 			var tournaments = await _context.Tournaments.AsNoTracking().ToListAsync();
-
 			return tournaments;
 		}
 
 		/// <inheritdoc />
-		public async Task<bool> UpdateTournamentAsync(TournamentModel model)
+		public async Task<bool> UpdateTournamentAsync(Tournament tournament, long tournamentId)
 		{
-			var tournament = _mapper.Map<Tournament>(model);
-
 			_context.Tournaments.Update(tournament);
 			var result = await _context.SaveChangesAsync();
 

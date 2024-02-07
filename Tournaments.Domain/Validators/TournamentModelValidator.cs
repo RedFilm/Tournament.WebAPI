@@ -8,7 +8,6 @@ namespace Tournaments.Domain.Validators
         public TournamentModelValidator()
         {
 			RuleFor(tournament => tournament.OrganizerId).NotEmpty();
-			RuleFor(tournament => tournament.PrizePool).NotEmpty().GreaterThanOrEqualTo(0);
 			RuleFor(tournament => tournament.MaxParticipantCount).NotEmpty().GreaterThanOrEqualTo(0);
 			RuleFor(tournament => tournament.TournamentName).NotEmpty().MaximumLength(30);
 			RuleFor(tournament => tournament.GameName).NotEmpty().MaximumLength(30);

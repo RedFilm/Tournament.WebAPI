@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Tournaments.Domain.Entities;
 using Tournaments.Domain.Interfaces.Repositories;
+using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
 using Tournaments.Domain.Validators;
 
@@ -13,12 +14,12 @@ namespace Tournaments.API.Controllers
 	[ApiController]
 	public class TournamentController : ControllerBase
 	{
-		private readonly ITournamentRepository _tournamentRepository;
+		private readonly ITournamentService _tournamentSevice;
 		private readonly IValidator<TournamentModel> _touranmentValidator;
 
-		public TournamentController(ITournamentRepository tournamentRepository, IValidator<TournamentModel> touranmentValidator)
+		public TournamentController(ITournamentService tournamentService, IValidator<TournamentModel> touranmentValidator)
         {
-            _tournamentRepository = tournamentRepository;
+            _tournamentSevice = tournamentService;
 			_touranmentValidator = touranmentValidator;
 
 		}
@@ -26,23 +27,20 @@ namespace Tournaments.API.Controllers
 		[HttpGet("GetTournament/{id}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Tournament))]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> GetTournament(int id)
+		public async Task<TournamentModel> GetTournament(int id)
 		{
-			var result = await _tournamentRepository.GetTournamentAsync(id);
+			var tournamentModel = await _tournamentSevice.GetTournamentByIdAsync(id);
 
-			if (result is not null)
-				return Ok(result);
-
-			return NotFound();
+			return tournamentModel!;
 		}
 
 		[HttpGet("GetTournaments")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Tournament>))]
-		public async Task<IActionResult> GetTournaments()
+		public async Task<IEnumerable<TournamentModel>> GetTournaments()
 		{
-			var result = await _tournamentRepository.GetTournamentsAsync();
+			var tournamentModels = await _tournamentSevice.GetTournamentsAsync();
 
-			return Ok(result);
+			return tournamentModels;
 		}
 
 		[HttpPost("CreateTournament")]
@@ -56,7 +54,7 @@ namespace Tournaments.API.Controllers
 			if (!validationResult.IsValid)
 				return BadRequest(validationResult);
 
-			var result = await _tournamentRepository.AddTournamentAsync(model);
+			var result = await _tournamentSevice.AddTournamentAsync(model);
 
 			if (result)
 				return Created();
@@ -68,14 +66,14 @@ namespace Tournaments.API.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationResult))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> UpdateTournament(TournamentModel model)
+		public async Task<IActionResult> UpdateTournament(TournamentModel model, long tournamentId)
 		{
 			var validationResult = await _touranmentValidator.ValidateAsync(model);
 
 			if (!validationResult.IsValid)
 				return BadRequest(validationResult);
 
-			var result = await _tournamentRepository.UpdateTournamentAsync(model);
+			var result = await _tournamentSevice.UpdateTournamentAsync(model, tournamentId);
 
 			if (result)
 				return Ok();
@@ -88,7 +86,7 @@ namespace Tournaments.API.Controllers
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		public async Task<IActionResult> DeleteTournament(int id)
 		{
-			var result = await _tournamentRepository.DeleteTournamentAsync(id);
+			var result = await _tournamentSevice.DeleteTournamentAsync(id);
 
 			if (result)
 				return Ok();

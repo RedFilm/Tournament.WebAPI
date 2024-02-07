@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Tournaments.Domain.Services;
 using Tournaments.Domain.Models;
 using FluentValidation;
-using Tournaments.Domain.Validators;
 using FluentValidation.Results;
+using Tournaments.Domain.Interfaces.Services;
 
 namespace Tournaments.API.Controllers
 {

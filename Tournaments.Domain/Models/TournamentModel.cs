@@ -4,7 +4,6 @@ namespace Tournaments.Domain.Models
 {
 	public class TournamentModel
 	{
-		public int Id { get; set; }
 		public long OrganizerId { get; set; }
 
 		public int PrizePool { get; set; }
