@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Tournaments.Domain.Exceptions.BaseExceptions;
 
 namespace Tournaments.Domain.Exceptions
 {
-	public class RegisterFailedException : Exception
+    public class RegisterFailedException : ExceptionWithStatusCode
 	{
-        public IdentityResult IdentityResult { get; }
-        public RegisterFailedException(string message, IdentityResult identityResult)
-            : base (message)
+        public RegisterFailedException(string message) : base (message)
         {
-            IdentityResult = identityResult;
+
         }
-    }
+
+		public override int StatusCode => StatusCodes.Status400BadRequest;
+	}
 }

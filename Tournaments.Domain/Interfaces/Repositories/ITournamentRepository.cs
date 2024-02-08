@@ -31,7 +31,7 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// <param name="tournament">Tournament entity</param>
 		/// <param name="tournamentId">Tournament entity id</param>
 		/// <returns>Result of adding. True if entity successfully updated in the database.</returns>
-		Task<bool> UpdateTournamentAsync(Tournament tournament, long tournamentId);
+		Task<bool> UpdateTournamentAsync(Tournament tournament);
 
 		/// <summary>
 		/// Asynchronously remove tournament from the database by id.

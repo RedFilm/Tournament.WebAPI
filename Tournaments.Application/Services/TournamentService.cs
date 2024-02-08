@@ -18,17 +18,21 @@ namespace Tournaments.Application.Services
             _mapper = mapper;
 			_tournamentRepository = tournamentRepository;
         }
+
         public async Task<bool> AddTournamentAsync(TournamentModel tournamentModel)
 		{
 			var tournament = _mapper.Map<Tournament>(tournamentModel);
 
-			var result = await _tournamentRepository.AddTournamentAsync(tournament);
-			return result;	
+			return await _tournamentRepository.AddTournamentAsync(tournament);	
 		}
 
 		public async Task<bool> DeleteTournamentAsync(int id)
 		{
 			var result = await _tournamentRepository.DeleteTournamentAsync(id);
+
+			if (!result)
+				throw new NoContentException("Tournament's already been removed");
+
 			return result;
 		}
 
@@ -46,11 +50,8 @@ namespace Tournaments.Application.Services
 		public async Task<IEnumerable<TournamentModel>> GetTournamentsAsync()
 		{
 			var tournaments = await _tournamentRepository.GetTournamentsAsync();
-			var tournamentModels = new List<TournamentModel>();
 
-			foreach (var tournament in tournaments)
-				tournamentModels.Add(_mapper.Map<TournamentModel>(tournament));
-			return tournamentModels;
+			return _mapper.Map<IEnumerable<TournamentModel>>(tournaments);
 		}
 
 		public async Task<bool> UpdateTournamentAsync(TournamentModel tournamentModel, long tournamentId)
@@ -58,7 +59,7 @@ namespace Tournaments.Application.Services
 			var tournament = _mapper.Map<Tournament>(tournamentModel);
 			tournament.Id = tournamentId;
 
-			var result = await _tournamentRepository.UpdateTournamentAsync(tournament, tournamentId);
+			var result = await _tournamentRepository.UpdateTournamentAsync(tournament);
 			return result;
 		}
 	}

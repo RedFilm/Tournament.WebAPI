@@ -1,13 +1,13 @@
 ﻿using System.Net;
-using System;
-using System.Security.Authentication;
-using Tournaments.Domain.Exceptions;
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
+using Tournaments.Domain.Models;
+using FluentValidation;
+using Tournaments.API.Extensions;
+using Tournaments.Domain.Exceptions.BaseExceptions;
 
 namespace Tournaments.API.Middlewares
 {
-	public class ExceptionHandlerMiddleware
+    public class ExceptionHandlerMiddleware
 	{
 		private readonly RequestDelegate _next;
 
@@ -22,144 +22,36 @@ namespace Tournaments.API.Middlewares
 			{
 				await _next.Invoke(context);
 			}
-			catch (AuthenticationFailedException ex)
+			catch (ValidationException exception)
 			{
-				context.Response.ContentType = "application/json";
-				var statusCode = StatusCodes.Status400BadRequest;
-
-				var result = JsonConvert.SerializeObject(new
-				{
-					StatusCode = statusCode,
-					ErrorMessage = ex.Message,
-					Details = ex.SignInResult
-				});
-
-				context.Response.StatusCode = statusCode;
-				await context.Response.WriteAsync(result);
+				await HandleExceptionAsync(context,
+					StatusCodes.Status400BadRequest,
+					exception.GetModel());
 			}
-			catch (RegisterFailedException ex)
+			catch (ExceptionWithStatusCode exception)
 			{
-				context.Response.ContentType = "application/json";
-				var statusCode = StatusCodes.Status400BadRequest;
-
-				var result = JsonConvert.SerializeObject(new
-				{
-					StatusCode = statusCode,
-					ErrorMessage = ex.Message,
-					Details = ex.IdentityResult
-				});
-
-				context.Response.StatusCode = statusCode;
-				await context.Response.WriteAsync(result);
+				await HandleExceptionAsync(context,
+					exception.StatusCode,
+					exception.GetModel());
 			}
-			catch (NotFoundException ex)
+			catch (Exception exception)
 			{
-				context.Response.ContentType = "application/json";
-				var statusCode = StatusCodes.Status404NotFound;
-
-				var result = JsonConvert.SerializeObject(new
-				{
-					StatusCode = statusCode,
-					ErrorMessage = ex.Message,
-				});
-
-				context.Response.StatusCode = statusCode;
-				await context.Response.WriteAsync(result);
+				await HandleExceptionAsync(context,
+					StatusCodes.Status500InternalServerError,
+					exception.GetModel());
 			}
-			catch (BadRequestException ex)
-			{
-				context.Response.ContentType = "application/json";
-				var statusCode = StatusCodes.Status400BadRequest;
+		}
 
-				var result = JsonConvert.SerializeObject(new
-				{
-					StatusCode = statusCode,
-					ErrorMessage = ex.Message
-				});
+		private async Task HandleExceptionAsync(HttpContext context,
+			int statusCode,
+			ExceptionResponseModel responseModel)
+		{
+			context.Response.StatusCode = statusCode;
+			context.Response.ContentType = "application/json";
 
-				context.Response.StatusCode = statusCode;
-				await context.Response.WriteAsync(result);
-			}
-			catch (Exception ex)
-			{
-				context.Response.ContentType = "application/json";
-				var statusCode = StatusCodes.Status500InternalServerError;
+			var response = JsonConvert.SerializeObject(responseModel);
 
-				var result = JsonConvert.SerializeObject(new
-				{
-					StatusCode = statusCode,
-					ErrorMessage = ex.Message
-				});
-
-				context.Response.StatusCode = statusCode;
-				await context.Response.WriteAsync(result);
-			}
-
-			//public async Task Invoke(HttpContext context)
-			//{
-			//	try
-			//	{
-			//		await _next.Invoke(context);
-			//	}
-			//	catch (Exception ex)
-			//	{
-			//		await HandleExceptionAsync(context, ex);
-			//	}
-			//}
-
-			//private async Task HandleExceptionAsync(HttpContext context, Exception exception)
-			//{
-			//	context.Response.ContentType = "application/json";
-			//	var statusCode = GetStatusCode(exception);
-
-			//	var result = JsonConvert.SerializeObject(new
-			//	{
-			//		StatusCode = statusCode,
-			//		ErrorMessage = exception.Message,
-			//		Details = GetDetails(exception)
-			//	});
-
-			//	context.Response.StatusCode = statusCode;
-			//	await context.Response.WriteAsync(result);
-			//}
-
-			//private int GetStatusCode(Exception exception)
-			//{
-			//	if (exception is AuthenticationFailedException)
-			//	{
-			//		return StatusCodes.Status400BadRequest;
-			//	}
-			//	else if (exception is RegisterFailedException)
-			//	{
-			//		return StatusCodes.Status400BadRequest;
-			//	}
-			//	else if (exception is NotFoundException)
-			//	{
-			//		return StatusCodes.Status404NotFound;
-			//	}
-			//	else if (exception is BadRequestException)
-			//	{
-			//		return StatusCodes.Status400BadRequest;
-			//	}
-			//	else
-			//	{
-			//		return StatusCodes.Status500InternalServerError;
-			//	}
-			//}
-
-			//private object GetDetails(Exception exception)
-			//{
-			//	if (exception is AuthenticationFailedException authEx)
-			//	{
-			//		return authEx.SignInResult;
-			//	}
-			//	else if (exception is RegisterFailedException regEx)
-			//	{
-			//		return regEx.IdentityResult.ToString();
-			//	}
-
-			//	return "No details";
-			//}
+			await context.Response.WriteAsync(response);
 		}
 	}
 }

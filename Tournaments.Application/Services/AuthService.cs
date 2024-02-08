@@ -32,12 +32,16 @@ namespace Tournaments.Application.Services
 		}
 		public async Task<bool> RegisterAsync(RegisterModel model)
 		{
+			var existingUser = _userManager.Users.FirstOrDefault(u => u.UserName == model.UserName);
+			if (existingUser is not null)
+				throw new BadRequestException("User with the same username already exists.");
+
 			var user = _mapper.Map<AppUser>(model);
 
 			var result = await _userManager.CreateAsync(user, model.Password);
 
 			if (!result.Succeeded)
-				throw new RegisterFailedException("Register failed" ,result);
+				throw new RegisterFailedException("Register failed");
 
 			return result.Succeeded;
 		}
@@ -51,7 +55,7 @@ namespace Tournaments.Application.Services
 			var result = await _signinManager.PasswordSignInAsync(user, model.Password, false, false);
 
 			if (!result.Succeeded)
-				throw new AuthenticationFailedException("Authentication failed", result);
+				throw new AuthenticationFailedException("Authentication failed");
 
 			var jwtToken = GenerateTokenAsync(model);
 

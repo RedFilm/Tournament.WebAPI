@@ -26,7 +26,7 @@ namespace Tournaments.API.Controllers
 
 		[HttpGet("GetTournament/{id}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Tournament))]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
 		public async Task<TournamentModel> GetTournament(int id)
 		{
 			var tournamentModel = await _tournamentSevice.GetTournamentByIdAsync(id);
@@ -45,54 +45,36 @@ namespace Tournaments.API.Controllers
 
 		[HttpPost("CreateTournament")]
 		[ProducesResponseType(StatusCodes.Status201Created)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationResult))]
-		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
 		public async Task<IActionResult> CreateTournament(TournamentModel model)
 		{
-			var validationResult = await _touranmentValidator.ValidateAsync(model);
+			await _touranmentValidator.ValidateAndThrowAsync(model);
+			await _tournamentSevice.AddTournamentAsync(model);
 
-			if (!validationResult.IsValid)
-				return BadRequest(validationResult);
-
-			var result = await _tournamentSevice.AddTournamentAsync(model);
-
-			if (result)
-				return Created();
-
-			return StatusCode(500, "Internal Server Error");
+			return Created();
 		}
 
 		[HttpPut("UpdateTournament")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationResult))]
-		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
 		public async Task<IActionResult> UpdateTournament(TournamentModel model, long tournamentId)
 		{
-			var validationResult = await _touranmentValidator.ValidateAsync(model);
+			await _touranmentValidator.ValidateAndThrowAsync(model);
+			await _tournamentSevice.UpdateTournamentAsync(model, tournamentId);
 
-			if (!validationResult.IsValid)
-				return BadRequest(validationResult);
-
-			var result = await _tournamentSevice.UpdateTournamentAsync(model, tournamentId);
-
-			if (result)
-				return Ok();
-
-			return StatusCode(500, "Internal Server Error");
+			return Ok();
 		}
 
 		[HttpDelete("DeleteTournament/{id}")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ExceptionResponseModel))]
 		public async Task<IActionResult> DeleteTournament(int id)
 		{
-			var result = await _tournamentSevice.DeleteTournamentAsync(id);
+			await _tournamentSevice.DeleteTournamentAsync(id);
 
-			if (result)
-				return Ok();
-
-			return NoContent();
+			return Ok();
 		}
-
 	}
 }

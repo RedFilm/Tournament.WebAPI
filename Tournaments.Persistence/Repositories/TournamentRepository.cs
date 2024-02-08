@@ -53,7 +53,7 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
-		public async Task<bool> UpdateTournamentAsync(Tournament tournament, long tournamentId)
+		public async Task<bool> UpdateTournamentAsync(Tournament tournament)
 		{
 			_context.Tournaments.Update(tournament);
 			var result = await _context.SaveChangesAsync();

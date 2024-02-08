@@ -25,14 +25,11 @@ namespace Tournaments.API.Controllers
 
         [HttpPost("Login")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticationResultModel))]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
+		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		public async Task<IActionResult> Login(LoginModel model)
 		{
-			var validationResult = await _loginValidator.ValidateAsync(model);
-
-			if (!validationResult.IsValid)
-				return BadRequest(validationResult.Errors);
+			await _loginValidator.ValidateAndThrowAsync(model);
 
 			var result = await _authService.LoginAsync(model);
 
@@ -40,19 +37,16 @@ namespace Tournaments.API.Controllers
 		}
 
 		[HttpPost("Register")]
-		[ProducesResponseType(StatusCodes.Status201Created)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IEnumerable<ValidationFailure>))]
-		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
 		public async Task<IActionResult> Register(RegisterModel model)
 		{
-			var validationResult = await _registerValidator.ValidateAsync(model);
-
-			if (!validationResult.IsValid)
-				return BadRequest(validationResult.Errors);
+			await _registerValidator.ValidateAndThrowAsync(model);
 
 			await _authService.RegisterAsync(model);
 
-			return Created();
+			return Ok();
 		}
 	}
 }
