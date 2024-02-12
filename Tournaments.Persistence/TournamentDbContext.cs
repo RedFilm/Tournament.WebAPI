@@ -13,6 +13,7 @@ namespace Tournaments.Persistence
 
 		public DbSet<Team> Teams { get; set; }
 		public DbSet<Tournament> Tournaments { get; set; }
+		public DbSet<TournamentTeam> TournamentTeams { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
