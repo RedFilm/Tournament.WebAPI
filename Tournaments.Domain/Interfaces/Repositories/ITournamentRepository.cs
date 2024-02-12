@@ -29,8 +29,7 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// Asynchronously update existing tournament in the database.
 		/// </summary>
 		/// <param name="tournament">Tournament entity</param>
-		/// <param name="tournamentId">Tournament entity id</param>
-		/// <returns>Result of adding. True if entity successfully updated in the database.</returns>
+		/// <returns>Result of updating. True if entity successfully updated in the database.</returns>
 		Task<bool> UpdateTournamentAsync(Tournament tournament);
 
 		/// <summary>

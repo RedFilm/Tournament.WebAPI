@@ -13,13 +13,15 @@ namespace Tournaments.Persistence.Repositories
             _context = contect;
         }
 
-        public async Task<bool> AddTeamAsync(Team team)
+		/// <inheritdoc />
+		public async Task<bool> AddTeamAsync(Team team)
 		{
 			await _context.Teams.AddAsync(team);
 
 			return await _context.SaveChangesAsync() > 0;
 		}
 
+		/// <inheritdoc />
 		public async Task<bool> DeleteTeamAsync(long id)
 		{
 			var team = await _context.Teams.FirstOrDefaultAsync(t => t.Id == id);
@@ -32,11 +34,13 @@ namespace Tournaments.Persistence.Repositories
 			return await _context.SaveChangesAsync() > 0;
 		}
 
+		/// <inheritdoc />
 		public async Task<Team?> GetTeamAsync(long id)
 		{
 			return await _context.Teams.FirstOrDefaultAsync(t => t.Id == id) ?? null;
 		}
 
+		/// <inheritdoc />
 		public async Task<IEnumerable<Team>> GetTeamsAsync(long tournamentId)
 		{
 			var tournamentTeams = from tournamentTeam in _context.TournamentTeams
@@ -47,6 +51,7 @@ namespace Tournaments.Persistence.Repositories
 			return await tournamentTeams.ToListAsync();
 		}
 
+		/// <inheritdoc />
 		public async Task<bool> UpdateTeamAsync(Team team)
 		{
 			_context.Teams.Update(team);
