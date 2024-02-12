@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Entities;
-using Tournaments.Domain.Models;
-using AutoMapper;
 
 namespace Tournaments.Persistence.Repositories
 {
@@ -25,7 +23,7 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
-		public async Task<bool> DeleteTournamentAsync(int id)
+		public async Task<bool> DeleteTournamentAsync(long id)
 		{
 			var tournament = await _context.Tournaments.FirstOrDefaultAsync(x => x.Id == id);
 
@@ -39,7 +37,7 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
-		public async Task<Tournament?> GetTournamentAsync(int id)
+		public async Task<Tournament?> GetTournamentAsync(long id)
 		{
 			var tournament = await _context.Tournaments.FirstOrDefaultAsync(x => x.Id == id);
 			return tournament;

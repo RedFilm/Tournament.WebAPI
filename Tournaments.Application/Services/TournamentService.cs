@@ -26,7 +26,7 @@ namespace Tournaments.Application.Services
 			return await _tournamentRepository.AddTournamentAsync(tournament);	
 		}
 
-		public async Task<bool> DeleteTournamentAsync(int id)
+		public async Task<bool> DeleteTournamentAsync(long id)
 		{
 			var result = await _tournamentRepository.DeleteTournamentAsync(id);
 
@@ -36,7 +36,7 @@ namespace Tournaments.Application.Services
 			return result;
 		}
 
-		public async Task<TournamentModel?> GetTournamentByIdAsync(int id)
+		public async Task<TournamentModel?> GetTournamentByIdAsync(long id)
 		{
 			var tournament = await _tournamentRepository.GetTournamentAsync(id);
 

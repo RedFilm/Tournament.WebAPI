@@ -27,7 +27,7 @@ namespace Tournaments.API.Controllers
 		[HttpGet("GetTournament/{id}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Tournament))]
 		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
-		public async Task<TournamentModel> GetTournament(int id)
+		public async Task<TournamentModel> GetTournament(long id)
 		{
 			var tournamentModel = await _tournamentSevice.GetTournamentByIdAsync(id);
 
@@ -70,7 +70,7 @@ namespace Tournaments.API.Controllers
 		[HttpDelete("DeleteTournament/{id}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> DeleteTournament(int id)
+		public async Task<IActionResult> DeleteTournament(long id)
 		{
 			await _tournamentSevice.DeleteTournamentAsync(id);
 

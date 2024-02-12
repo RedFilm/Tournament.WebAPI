@@ -11,7 +11,7 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <param name="id">Tournament id</param>
 		/// <returns>Tournament model which has this id</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<TournamentModel?> GetTournamentByIdAsync(int id);
+		Task<TournamentModel?> GetTournamentByIdAsync(long id);
 
 		/// <summary>
 		/// Asynchronously gets list of all tournament models.
@@ -39,6 +39,6 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// </summary>
 		/// <param name="id">Tournament id</param>
 		/// <returns>Result of removing. True if entity successfully removed from the database.</returns>
-		Task<bool> DeleteTournamentAsync(int id);
+		Task<bool> DeleteTournamentAsync(long id);
 	}
 }

@@ -10,7 +10,7 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// </summary>
 		/// <param name="id">Tournament id</param>
 		/// <returns>Tournament entity from the database which has this id</returns>
-		Task<Tournament?> GetTournamentAsync(int id);
+		Task<Tournament?> GetTournamentAsync(long id);
 
 		/// <summary>
 		/// Asynchronously gets list of all tournaments.
@@ -38,6 +38,6 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// </summary>
 		/// <param name="id">Tournament id</param>
 		/// <returns>Result of removing. True if entity successfully removed from the database.</returns>
-		Task<bool> DeleteTournamentAsync(int id);
+		Task<bool> DeleteTournamentAsync(long id);
     }
 }
