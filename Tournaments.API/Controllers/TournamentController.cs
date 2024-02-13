@@ -59,10 +59,10 @@ namespace Tournaments.API.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> UpdateTournament(TournamentModel model, long tournamentId)
+		public async Task<IActionResult> UpdateTournament(TournamentModel model)
 		{
 			await _touranmentValidator.ValidateAndThrowAsync(model);
-			await _tournamentSevice.UpdateTournamentAsync(model, tournamentId);
+			await _tournamentSevice.UpdateTournamentAsync(model);
 
 			return Ok();
 		}

@@ -1,4 +1,6 @@
-﻿namespace Tournaments.Domain.Entities
+﻿using Tournaments.Domain.Statuses;
+
+namespace Tournaments.Domain.Entities
 {
 	public class Team
 	{
@@ -10,6 +12,7 @@
         public List<TournamentTeam> TournamentTeams { get; set; } = null!;
 
 		public string TeamName { get; set; } = null!;
+        public TournamentTeamStatus Status { get; set; }
         public DateTime CreationDate { get; set; }
     }
 }
