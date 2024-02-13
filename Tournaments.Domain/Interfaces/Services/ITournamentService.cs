@@ -48,6 +48,7 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// </summary>
 		/// <param name="tournamentId">Tournament id</param>
 		/// <returns>IEnumerable of Team models</returns>
+		/// <exception cref="NotFoundException"></exception>
 		Task<IEnumerable<TeamModel>> GetTeamsAsync(long tournamentId);
 	}
 }

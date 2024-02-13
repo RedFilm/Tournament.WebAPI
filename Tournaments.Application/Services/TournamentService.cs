@@ -5,6 +5,7 @@ using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Mapping;
 using Tournaments.Domain.Models;
+using Tournaments.Domain.Statuses;
 
 namespace Tournaments.Application.Services
 {
@@ -36,9 +37,14 @@ namespace Tournaments.Application.Services
 			return result;
 		}
 
-		public Task<IEnumerable<TeamModel>> GetTeamsAsync(long tournamentId)
+		public async Task<IEnumerable<TeamModel>> GetTeamsAsync(long tournamentId)
 		{
-			throw new NotImplementedException();
+			if (await _tournamentRepository.GetTournamentAsync(tournamentId) is null)
+				throw new NotFoundException("Tournament with this id doesn't exist");
+
+			var teams = await _tournamentRepository.GetTeamsAsync(tournamentId);
+
+			return _mapper.Map<IEnumerable<TeamModel>>(teams);
 		}
 
 		public async Task<TournamentModel?> GetTournamentByIdAsync(long id)
