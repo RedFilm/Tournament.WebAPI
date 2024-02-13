@@ -3,6 +3,7 @@
 	public class Team
 	{
         public long Id { get; set; }
+        public long OwnerId { get; set; }
 
         public List<AppUser> Players { get; set; } = null!;
 
