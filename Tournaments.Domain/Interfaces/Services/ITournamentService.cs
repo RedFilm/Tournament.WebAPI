@@ -1,5 +1,6 @@
 ﻿using Tournaments.Domain.Models;
 using Tournaments.Domain.Exceptions;
+using Tournaments.Domain.Entities;
 
 namespace Tournaments.Domain.Interfaces.Services
 {
@@ -30,10 +31,9 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// Asynchronously update existing tournament in the database.
 		/// </summary>
 		/// <param name="tournament">Tournament model</param>
-		/// <param name="tournamentId">Tournament id</param>
 		/// <returns>Result of adding. True if entity successfully updated in the database.</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<bool> UpdateTournamentAsync(TournamentModel tournament, long tournamentId);
+		Task<bool> UpdateTournamentAsync(TournamentModel tournament);
 
 		/// <summary>
 		/// Asynchronously remove tournament from the database by id.
@@ -42,5 +42,12 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <returns>Result of removing. True if entity successfully removed from the database.</returns>
 		/// <exception cref="NoContentException"></exception>
 		Task<bool> DeleteTournamentAsync(long id);
+
+		/// <summary>
+		/// Asynchronously gets a list of all teams participating in the tournament.
+		/// </summary>
+		/// <param name="tournamentId">Tournament id</param>
+		/// <returns>IEnumerable of Team models</returns>
+		Task<IEnumerable<TeamModel>> GetTeamsAsync(long tournamentId);
 	}
 }

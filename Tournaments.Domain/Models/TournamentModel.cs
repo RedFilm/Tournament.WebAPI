@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Tournaments.Domain.Models
+﻿namespace Tournaments.Domain.Models
 {
 	public class TournamentModel
 	{
-		public long OrganizerId { get; set; }
+        public long Id { get; set; }
+        public long OrganizerId { get; set; }
 
 		public int PrizePool { get; set; }
 		public int MaxParticipantCount { get; set; }

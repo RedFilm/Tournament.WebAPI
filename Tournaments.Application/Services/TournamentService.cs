@@ -36,6 +36,11 @@ namespace Tournaments.Application.Services
 			return result;
 		}
 
+		public Task<IEnumerable<TeamModel>> GetTeamsAsync(long tournamentId)
+		{
+			throw new NotImplementedException();
+		}
+
 		public async Task<TournamentModel?> GetTournamentByIdAsync(long id)
 		{
 			var tournament = await _tournamentRepository.GetTournamentAsync(id);
@@ -54,16 +59,14 @@ namespace Tournaments.Application.Services
 			return _mapper.Map<IEnumerable<TournamentModel>>(tournaments);
 		}
 
-		public async Task<bool> UpdateTournamentAsync(TournamentModel tournamentModel, long tournamentId)
+		public async Task<bool> UpdateTournamentAsync(TournamentModel tournamentModel)
 		{
-			if (await _tournamentRepository.GetTournamentAsync(tournamentId) is null)
+			if (await _tournamentRepository.GetTournamentAsync(tournamentModel.Id) is null)
 				throw new NotFoundException("Tournament doesn't exist");
 
 			var tournament = _mapper.Map<Tournament>(tournamentModel);
-			tournament.Id = tournamentId;
 
-			var result = await _tournamentRepository.UpdateTournamentAsync(tournament);
-			return result;
+			return await _tournamentRepository.UpdateTournamentAsync(tournament);
 		}
 	}
 }

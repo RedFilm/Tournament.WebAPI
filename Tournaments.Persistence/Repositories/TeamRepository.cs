@@ -41,14 +41,14 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
-		public async Task<IEnumerable<Team>> GetTeamsAsync(long tournamentId)
+		public async Task<IEnumerable<Tournament?>> GetTournamentsAsync(long teamId)
 		{
-			var tournamentTeams = from tournamentTeam in _context.TournamentTeams
-								  join team in _context.Teams on tournamentTeam.TeamId equals team.Id
-								  where tournamentTeam.TournamentId == tournamentId
-								  select team;
+			var teamTournaments = from tournamentTeam in _context.TournamentTeams
+								  join tournament in _context.Tournaments on tournamentTeam.TeamId equals tournament.Id
+								  where tournamentTeam.TournamentId == teamId
+								  select tournament;
 
-			return await tournamentTeams.ToListAsync();
+			return await teamTournaments.ToListAsync();
 		}
 
 		/// <inheritdoc />

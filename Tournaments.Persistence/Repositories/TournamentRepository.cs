@@ -37,6 +37,17 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
+		public async Task<IEnumerable<Team>> GetTeamsAsync(long tournamentId)
+		{
+			var tournamentTeams = from tournamentTeam in _context.TournamentTeams
+								  join team in _context.Teams on tournamentTeam.TeamId equals team.Id
+								  where tournamentTeam.TournamentId == tournamentId
+								  select team;
+
+			return await tournamentTeams.ToListAsync();
+		}
+
+		/// <inheritdoc />
 		public async Task<Tournament?> GetTournamentAsync(long id)
 		{
 			var tournament = await _context.Tournaments.FirstOrDefaultAsync(x => x.Id == id);
