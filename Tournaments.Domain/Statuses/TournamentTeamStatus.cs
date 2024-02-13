@@ -1,10 +1,9 @@
 ﻿namespace Tournaments.Domain.Statuses
 {
-	// Команда участвует, выбыла, дисквалифицирована.
+	// Команда участвует, выбыла.
 	public enum TournamentTeamStatus
 	{
 		Active,
 		DroppedOut,
-		Disqualified
 	}
 }

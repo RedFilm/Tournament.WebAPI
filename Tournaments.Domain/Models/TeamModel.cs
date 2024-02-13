@@ -1,4 +1,6 @@
-﻿namespace Tournaments.Domain.Models
+﻿using Tournaments.Domain.Statuses;
+
+namespace Tournaments.Domain.Models
 {
 	public class TeamModel
 	{
@@ -6,6 +8,7 @@
         public long OwnerId { get; set; }
 
 		public string TeamName { get; set; } = null!;
-		public DateTime CreationDate { get; set; }
+        public TournamentTeamStatus Status { get; set; }
+        public DateTime CreationDate { get; set; }
 	}
 }
