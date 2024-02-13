@@ -51,7 +51,7 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <param name="playerId">Player id</param>
 		/// <returns>Result adding. True if player successfully added to the team.</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<bool> AddPlayerAsync(long teamId, long playerId);
+		Task<bool> AddPlayerToTeamAsync(long teamId, long playerId);
 
 		/// <summary>
 		/// Asynchronously remove player from team.
@@ -61,7 +61,7 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <returns>Result removing. True if player successfully removed from the team.</returns>
 		/// <exception cref="NotFoundException"></exception>
 		/// <exception cref="NoContentException"></exception>
-		Task<bool> RemovePlayerAsync(long teamId, long playerId);
+		Task<bool> RemovePlayerFromTeamAsync(long teamId, long playerId);
 
 		/// <summary>
 		/// Asynchronously register team for tournament.

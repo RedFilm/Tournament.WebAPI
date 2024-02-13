@@ -14,6 +14,13 @@ namespace Tournaments.Persistence.Repositories
         }
 
 		/// <inheritdoc />
+		public async Task<bool> AddPlayerToTeamAsync(AppUser player, Team team)
+		{
+			team.Players.Add(player);
+			return await _context.SaveChangesAsync() > 0;
+		}
+
+		/// <inheritdoc />
 		public async Task<bool> AddTeamAsync(Team team)
 		{
 			await _context.Teams.AddAsync(team);
@@ -38,6 +45,13 @@ namespace Tournaments.Persistence.Repositories
 		public async Task<Team?> GetTeamAsync(long id)
 		{
 			return await _context.Teams.FirstOrDefaultAsync(t => t.Id == id) ?? null;
+		}
+
+		/// <inheritdoc />
+		public async Task<Team?> GetTeamPlayersAsync(long teamId)
+		{
+			return await _context.Teams.Include(t => t.Players)
+				.FirstOrDefaultAsync(t => t.Id == teamId);
 		}
 
 		/// <inheritdoc />
