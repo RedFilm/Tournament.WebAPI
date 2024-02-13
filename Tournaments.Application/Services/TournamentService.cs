@@ -56,6 +56,9 @@ namespace Tournaments.Application.Services
 
 		public async Task<bool> UpdateTournamentAsync(TournamentModel tournamentModel, long tournamentId)
 		{
+			if (await _tournamentRepository.GetTournamentAsync(tournamentId) is null)
+				throw new NotFoundException("Tournament doesn't exist");
+
 			var tournament = _mapper.Map<Tournament>(tournamentModel);
 			tournament.Id = tournamentId;
 

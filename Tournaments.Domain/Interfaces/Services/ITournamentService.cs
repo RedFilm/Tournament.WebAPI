@@ -32,6 +32,7 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <param name="tournament">Tournament model</param>
 		/// <param name="tournamentId">Tournament id</param>
 		/// <returns>Result of adding. True if entity successfully updated in the database.</returns>
+		/// <exception cref="NotFoundException"></exception>
 		Task<bool> UpdateTournamentAsync(TournamentModel tournament, long tournamentId);
 
 		/// <summary>
@@ -39,6 +40,7 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// </summary>
 		/// <param name="id">Tournament id</param>
 		/// <returns>Result of removing. True if entity successfully removed from the database.</returns>
+		/// <exception cref="NoContentException"></exception>
 		Task<bool> DeleteTournamentAsync(long id);
 	}
 }
