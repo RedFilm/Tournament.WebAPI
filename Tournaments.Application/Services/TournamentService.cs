@@ -39,7 +39,7 @@ namespace Tournaments.Application.Services
 
 		public async Task<IEnumerable<TeamModel>> GetTeamsAsync(long tournamentId)
 		{
-			if (await _tournamentRepository.GetTournamentAsync(tournamentId) is null)
+			if (await _tournamentRepository.GetTournamentByIdAsync(tournamentId) is null)
 				throw new NotFoundException("Tournament with this id doesn't exist");
 
 			var teams = await _tournamentRepository.GetTeamsAsync(tournamentId);
@@ -49,7 +49,7 @@ namespace Tournaments.Application.Services
 
 		public async Task<TournamentModel?> GetTournamentByIdAsync(long id)
 		{
-			var tournament = await _tournamentRepository.GetTournamentAsync(id);
+			var tournament = await _tournamentRepository.GetTournamentByIdAsync(id);
 
 			if (tournament is null)
 				throw new NotFoundException("Tournament doesn't exist");
@@ -67,7 +67,7 @@ namespace Tournaments.Application.Services
 
 		public async Task<bool> UpdateTournamentAsync(TournamentModel tournamentModel)
 		{
-			if (await _tournamentRepository.GetTournamentAsync(tournamentModel.Id) is null)
+			if (await _tournamentRepository.GetTournamentByIdAsync(tournamentModel.Id) is null)
 				throw new NotFoundException("Tournament doesn't exist");
 
 			var tournament = _mapper.Map<Tournament>(tournamentModel);

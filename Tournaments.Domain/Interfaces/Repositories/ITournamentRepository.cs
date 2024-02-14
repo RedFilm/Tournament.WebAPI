@@ -10,7 +10,7 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// </summary>
 		/// <param name="id">Tournament id</param>
 		/// <returns>Tournament entity from the database which has this id</returns>
-		Task<Tournament?> GetTournamentAsync(long id);
+		Task<Tournament?> GetTournamentByIdAsync(long id);
 
 		/// <summary>
 		/// Asynchronously gets list of all tournaments.

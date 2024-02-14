@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 using Tournaments.Domain.Entities;
 using Tournaments.Domain.Interfaces.Repositories;
 
@@ -21,9 +22,24 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
+		public async Task<bool> RemovePlayerFromTeamAsync(AppUser player, Team team)
+		{
+			team.Players.Remove(player);
+			return await _context.SaveChangesAsync() > 0;
+		}
+
+		/// <inheritdoc />
 		public async Task<bool> AddTeamAsync(Team team)
 		{
 			await _context.Teams.AddAsync(team);
+
+			return await _context.SaveChangesAsync() > 0;
+		}
+
+		/// <inheritdoc />
+		public async Task<bool> AddTeamToTournamentAsync(Tournament tournament, Team team)
+		{
+			_context.TournamentTeams.Add(new TournamentTeam { Tournament = tournament, Team = team });
 
 			return await _context.SaveChangesAsync() > 0;
 		}
@@ -42,16 +58,9 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
-		public async Task<Team?> GetTeamAsync(long id)
+		public async Task<Team?> GetTeamByIdAsync(long id)
 		{
 			return await _context.Teams.FirstOrDefaultAsync(t => t.Id == id) ?? null;
-		}
-
-		/// <inheritdoc />
-		public async Task<Team?> GetTeamPlayersAsync(long teamId)
-		{
-			return await _context.Teams.Include(t => t.Players)
-				.FirstOrDefaultAsync(t => t.Id == teamId);
 		}
 
 		/// <inheritdoc />

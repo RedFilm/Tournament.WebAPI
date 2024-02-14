@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
+using Tournaments.Domain.Models;
 using Tournaments.Persistence.Repositories;
 
 namespace Tournaments.Application.Services
@@ -10,27 +12,39 @@ namespace Tournaments.Application.Services
 	public class TeamService : ITeamService
 	{
 		private readonly ITeamRepository _teamRepository;
+		private readonly ITournamentTeamRepository _tournamentTeamRepository;
+		private readonly ITournamentRepository _tournamentRepository;
+		private readonly ITeamUserRepository _teamUserRepository;
 		private readonly UserManager<AppUser> _userManager;
+		private readonly IMapper _mapper;
+		
 
-		public TeamService(ITeamRepository teamRepository, UserManager<AppUser> userManager)
+		public TeamService(ITeamRepository teamRepository,
+			ITournamentTeamRepository tournamentTeamRepository,
+			ITournamentRepository tournamentRepository,
+			ITeamUserRepository teamUserRepository,
+			UserManager<AppUser> userManager,
+			IMapper mapper)
         {
 			_teamRepository = teamRepository;
+			_tournamentTeamRepository = tournamentTeamRepository;
+			_tournamentRepository = tournamentRepository;
+			_teamUserRepository = teamUserRepository;
 			_userManager = userManager;
+			_mapper = mapper;	
 		}
 
         public async Task<bool> AddPlayerToTeamAsync(long teamId, long playerId)
 		{
-			var team = await _teamRepository.GetTeamAsync(teamId);
-			if (await _teamRepository.GetTeamAsync(teamId) is null)
+			var team = await _teamRepository.GetTeamByIdAsync(teamId);
+			if (team is null)
 				throw new NotFoundException("Team doesn't exist");
 
 			var user = await _userManager.FindByIdAsync(playerId.ToString());
 			if (user is null)
 				throw new NotFoundException("User doesn't exist");
 
-			var teamPlayers = await _teamRepository.GetTeamPlayersAsync(teamId);
-
-			if (teamPlayers!.Players.Contains(user))
+			if (await _teamUserRepository.AnyAsync(teamId, playerId))
 				//throw new AlreadyExistsException("User already is in team");
 
 			if (await _teamRepository.AddPlayerToTeamAsync(user, team!))
@@ -38,39 +52,85 @@ namespace Tournaments.Application.Services
 			return false;
 		}
 
-		public async Task<bool> CreateTeamAsync(Team team)
+		public async Task<bool> CreateTeamAsync(TeamModel teamModel)
 		{
-			throw new NotImplementedException();
+			var team = _mapper.Map<Team>(teamModel);
+			return await _teamRepository.AddTeamAsync(team);
 		}
 
 		public async Task<bool> DeleteTeamAsync(long id)
 		{
-			throw new NotImplementedException();
+			var result = await _teamRepository.DeleteTeamAsync(id);
+
+			if (!result)
+				throw new NoContentException("Team's already been removed");
+			return result;
 		}
 
-		public async Task<Team?> GetTeamByIdAsync(long id)
+		public async Task<TeamModel?> GetTeamByIdAsync(long id)
 		{
-			throw new NotImplementedException();
+			var team = await _teamRepository.GetTeamByIdAsync(id);
+
+			if (team is null)
+				throw new NotFoundException("Team doesn't exist");
+
+			return _mapper.Map<TeamModel>(team);
 		}
 
-		public async Task<IEnumerable<Team>> GetTeamsAsync(long tournamentId)
+		public async Task<IEnumerable<TournamentModel>> GetTournamentsAsync(long teamId)
 		{
-			throw new NotImplementedException();
+			if (await _teamRepository.GetTeamByIdAsync(teamId) is null)
+				throw new NotFoundException("Team with this id doesn't exist");
+
+			var teamTournaments = await _teamRepository.GetTournamentsAsync(teamId);
+
+			return _mapper.Map<IEnumerable<TournamentModel>>(teamTournaments);
 		}
 
 		public async Task<bool> RegisterTeamForTournamentAsync(long teamId, long tournamentId)
 		{
-			throw new NotImplementedException();
+			var team = await _teamRepository.GetTeamByIdAsync(teamId);
+			if (team is null)
+				throw new NotFoundException("Team doesn't exist");
+
+			var tournament = await _tournamentRepository.GetTournamentByIdAsync(tournamentId);
+			if (tournament is null)
+				throw new NotFoundException("Tournament doesn't exist");
+
+			if (await _tournamentTeamRepository.AnyAsync(tournamentId, teamId))
+				//throw new AlreadyExistsException("Team already registred");
+
+			if (await _teamRepository.AddTeamToTournamentAsync(tournament, team!))
+				return true;
+			return false;
 		}
 
 		public async Task<bool> RemovePlayerFromTeamAsync(long teamId, long playerId)
 		{
-			throw new NotImplementedException();
+			var team = await _teamRepository.GetTeamByIdAsync(teamId);
+			if (team is null)
+				throw new NotFoundException("Team doesn't exist");
+
+			var player = await _userManager.FindByIdAsync(playerId.ToString());
+			if (player is null)
+				throw new NotFoundException("Player doesn't exist");
+
+			if (!await _teamUserRepository.AnyAsync(teamId, playerId))
+				throw new NoContentException("Player's already been removed");
+
+			if (await _teamRepository.RemovePlayerFromTeamAsync(player, team!))
+				return true;
+			return false;
 		}
 
-		public async Task<bool> UpdateTeamAsync(Team team, long id)
+		public async Task<bool> UpdateTeamAsync(TeamModel teamModel)
 		{
-			throw new NotImplementedException();
+			if (await _teamRepository.GetTeamByIdAsync(teamModel.Id) is null)
+				throw new NotFoundException("Team doesn't exist");
+
+			var team = _mapper.Map<Team>(teamModel);
+
+			return await _teamRepository.UpdateTeamAsync(team);
 		}
 	}
 }

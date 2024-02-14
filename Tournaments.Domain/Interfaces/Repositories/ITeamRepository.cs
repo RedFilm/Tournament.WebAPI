@@ -9,7 +9,7 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// </summary>
 		/// <param name="id">Team id</param>
 		/// <returns>Team entity from the database which has this id</returns>
-		Task<Team?> GetTeamAsync(long id);
+		Task<Team?> GetTeamByIdAsync(long id);
 
 		/// <summary>
 		/// Asynchronously gets a list of all tournaments which team participating.
@@ -19,18 +19,28 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		Task<IEnumerable<Tournament?>> GetTournamentsAsync(long teamId);
 
 		/// <summary>
-		/// Asynchronously gets a list of all players in team.
-		/// </summary>
-		/// <param name="teamId">Team id</param>
-		/// <returns>IEnumerable of AppUser entities</returns>
-		Task<Team?> GetTeamPlayersAsync(long teamId);
-
-		/// <summary>
 		/// Asynchronously adds player to team.
 		/// </summary>
 		/// <param name="player">AppUser user</param>
+		/// <param name="team">Team entity</param>
 		/// <returns>Result of adding. True if user successfully added to the team</returns>
 		Task<bool> AddPlayerToTeamAsync(AppUser player, Team team);
+
+		/// <summary>
+		/// Asynchronously removes player from team.
+		/// </summary>
+		/// <param name="player">AppUser user</param>
+		/// <param name="team">Team entity</param>
+		/// <returns>Result of removing. True if user successfully removed from the team</returns>
+		Task<bool> RemovePlayerFromTeamAsync(AppUser player, Team team);
+
+		/// <summary>
+		/// Asynchronously adds tournament to team.
+		/// </summary>
+		/// <param name="tournament">Tournament entity</param>
+		/// <param name="team">Team entity</param>
+		/// <returns>Result of adding. True if user successfully added to the team</returns>
+		Task<bool> AddTeamToTournamentAsync(Tournament tournament, Team team);
 
 		/// <summary>
 		/// Asynchronously adds team entity to the database.

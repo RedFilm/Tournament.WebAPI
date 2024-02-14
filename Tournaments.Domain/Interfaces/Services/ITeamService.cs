@@ -1,5 +1,6 @@
 ﻿using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
+using Tournaments.Domain.Models;
 
 namespace Tournaments.Domain.Interfaces.Services
 {
@@ -11,30 +12,29 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <param name="id">Team id</param>
 		/// <returns>Team model which has this id</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<Team?> GetTeamByIdAsync(long id);
+		Task<TeamModel?> GetTeamByIdAsync(long id);
 
 		/// <summary>
-		/// Asynchronously gets a list of all teams participating in the tournament.
+		/// Asynchronously gets a list of all tournaments which team participating.
 		/// </summary>
-		/// <param name="tournamentId">Tournament id</param>
-		/// <returns>IEnumerable of Team models</returns>
-		Task<IEnumerable<Team>> GetTeamsAsync(long tournamentId);
+		/// <param name="teamId">Team id</param>
+		/// <returns>IEnumerable of TournamentModel entities</returns>
+		Task<IEnumerable<TournamentModel>> GetTournamentsAsync(long teamId);
 
 		/// <summary>
 		/// Asynchronously create team.
 		/// </summary>
 		/// <param name="team">Team model</param>
 		/// <returns>Result of creating. True if team successfully created.</returns>
-		Task<bool> CreateTeamAsync(Team team);
+		Task<bool> CreateTeamAsync(TeamModel team);
 
 		/// <summary>
 		/// Asynchronously update existing team.
 		/// </summary>
 		/// <param name="team">Team model</param>
-		/// <param name="id">Team id</param>
 		/// <returns>Result of updating. True if team successfully updated.</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<bool> UpdateTeamAsync(Team team, long id);
+		Task<bool> UpdateTeamAsync(TeamModel team);
 
 		/// <summary>
 		/// Asynchronously remove team by id.
