@@ -45,5 +45,12 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// <param name="id">Tournament id</param>
 		/// <returns>Result of removing. True if entity successfully removed from the database.</returns>
 		Task<bool> DeleteTournamentAsync(long id);
-    }
+
+		/// <summary>
+		/// Asynchronously checks if tournament exists.
+		/// </summary>
+		/// <param name="tournamentId">Tournament id</param>
+		/// <returns>Result of checking. True if tournament exists</returns>
+		Task<bool> AnyAsync(long tournamentId);
+	}
 }

@@ -25,7 +25,7 @@ namespace Tournaments.API.Controllers
 		}
 
 		[HttpGet("GetTournament/{id}")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Tournament))]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TournamentModel))]
 		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
 		public async Task<TournamentModel> GetTournament(long id)
 		{
@@ -35,7 +35,7 @@ namespace Tournaments.API.Controllers
 		}
 
 		[HttpGet("GetTournaments")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Tournament>))]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TournamentModel>))]
 		public async Task<IEnumerable<TournamentModel>> GetTournaments()
 		{
 			var tournamentModels = await _tournamentSevice.GetTournamentsAsync();

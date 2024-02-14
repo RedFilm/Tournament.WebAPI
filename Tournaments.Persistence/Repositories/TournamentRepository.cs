@@ -69,5 +69,11 @@ namespace Tournaments.Persistence.Repositories
 
 			return result > 0;
 		}
+
+		/// <inheritdoc />
+		public async Task<bool> AnyAsync(long tournamentId)
+		{
+			return await _context.Tournaments.AsNoTracking().FirstOrDefaultAsync(t => t.Id == tournamentId) is not null;
+		}
 	}
 }

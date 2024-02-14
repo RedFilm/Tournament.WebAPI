@@ -3,7 +3,7 @@ using Tournaments.Domain.Interfaces.Repositories;
 
 namespace Tournaments.Persistence.Repositories
 {
-	internal class TeamUserRepository : ITeamUserRepository
+	public class TeamUserRepository : ITeamUserRepository
 	{
 		private readonly TournamentDbContext _context;
 

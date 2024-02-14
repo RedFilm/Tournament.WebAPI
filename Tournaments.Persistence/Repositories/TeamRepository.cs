@@ -80,5 +80,11 @@ namespace Tournaments.Persistence.Repositories
 			_context.Teams.Update(team);
 			return await _context.SaveChangesAsync() > 0;
 		}
+
+		/// <inheritdoc />
+		public async Task<bool> AnyAsync(long teamId)
+		{
+			return await _context.Teams.AsNoTracking().FirstOrDefaultAsync(t => t.Id == teamId) is not null;
+		}
 	}
 }
