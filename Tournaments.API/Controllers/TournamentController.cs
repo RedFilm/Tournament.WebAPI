@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
+using Tournaments.Application.Services;
 using Tournaments.Domain.Entities;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
@@ -41,6 +42,15 @@ namespace Tournaments.API.Controllers
 			var tournamentModels = await _tournamentSevice.GetTournamentsAsync();
 
 			return tournamentModels;
+		}
+
+		[HttpGet("GetTeams/{id}")]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TeamModel>))]
+		public async Task<IEnumerable<TeamModel>> GetTeams(long id)
+		{
+			var teamModels = await _tournamentSevice.GetTeamsAsync(id);
+
+			return teamModels;
 		}
 
 		[HttpPost("CreateTournament")]

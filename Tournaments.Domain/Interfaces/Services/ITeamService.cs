@@ -15,6 +15,19 @@ namespace Tournaments.Domain.Interfaces.Services
 		Task<TeamModel?> GetTeamByIdAsync(long id);
 
 		/// <summary>
+		/// Asynchronously gets all teams.
+		/// </summary>
+		/// <returns>IEnumerable of TeamModel entities</returns>
+		Task<IEnumerable<TeamModel>> GetTeamsAsync();
+
+		/// <summary>
+		/// Asynchronously gets players from the team.
+		/// </summary>
+		/// <param name="teamId">Team id</param>
+		/// <returns>IEnumerable of AppUser entities</returns>
+		Task<IEnumerable<AppUser>> GetTeamPlayersAsync(long teamId);
+
+		/// <summary>
 		/// Asynchronously gets a list of all tournaments which team participating.
 		/// </summary>
 		/// <param name="teamId">Team id</param>

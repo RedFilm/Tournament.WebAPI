@@ -17,14 +17,17 @@ namespace Tournaments.Persistence.Repositories
 		/// <inheritdoc />
 		public async Task<bool> AddPlayerToTeamAsync(AppUser player, Team team)
 		{
+			team.Players = team.Players ?? new List<AppUser>();
 			team.Players.Add(player);
 			return await _context.SaveChangesAsync() > 0;
 		}
 
 		/// <inheritdoc />
-		public async Task<bool> RemovePlayerFromTeamAsync(AppUser player, Team team)
+		public async Task<bool> RemovePlayerFromTeamAsync(AppUser player, long teamId)
 		{
-			team.Players.Remove(player);
+			var team = await _context.Teams.Include(t => t.Players).FirstOrDefaultAsync(t => t.Id == teamId);
+
+			team?.Players.Remove(player);
 			return await _context.SaveChangesAsync() > 0;
 		}
 
@@ -64,14 +67,27 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
-		public async Task<IEnumerable<Tournament?>> GetTournamentsAsync(long teamId)
+		public async Task<IEnumerable<Tournament>> GetTournamentsAsync(long teamId)
 		{
 			var teamTournaments = from tournamentTeam in _context.TournamentTeams
-								  join tournament in _context.Tournaments on tournamentTeam.TeamId equals tournament.Id
-								  where tournamentTeam.TournamentId == teamId
+								  join tournament in _context.Tournaments on tournamentTeam.TournamentId equals tournament.Id
+								  where tournamentTeam.TeamId == teamId
 								  select tournament;
 
 			return await teamTournaments.ToListAsync();
+		}
+		public async Task<IEnumerable<AppUser>> GetTeamPlayersAsync(long teamId)
+		{
+			var team = await _context.Teams.Include(t => t.Players)
+				.AsNoTracking()
+				.FirstOrDefaultAsync(t => t.Id == teamId);
+
+			return team!.Players;
+		}
+
+		public async Task<IEnumerable<Team>> GetTeamsAsync()
+		{
+			return await _context.Teams.ToListAsync();
 		}
 
 		/// <inheritdoc />

@@ -34,24 +34,6 @@ namespace Tournaments.Application.Services
 			_mapper = mapper;	
 		}
 
-        public async Task<bool> AddPlayerToTeamAsync(long teamId, long playerId)
-		{
-			var team = await _teamRepository.GetTeamByIdAsync(teamId);
-			if (team is null)
-				throw new NotFoundException("Team doesn't exist");
-
-			var user = await _userManager.FindByIdAsync(playerId.ToString());
-			if (user is null)
-				throw new NotFoundException("User doesn't exist");
-
-			if (await _teamUserRepository.AnyAsync(teamId, playerId))
-				//throw new AlreadyExistsException("User already is in team");
-
-			if (await _teamRepository.AddPlayerToTeamAsync(user, team!))
-				return true;
-			return false;
-		}
-
 		public async Task<bool> CreateTeamAsync(TeamModel teamModel)
 		{
 			var team = _mapper.Map<Team>(teamModel);
@@ -87,6 +69,22 @@ namespace Tournaments.Application.Services
 			return _mapper.Map<IEnumerable<TournamentModel>>(teamTournaments);
 		}
 
+		// TODO: Заменить AppUser на модель
+		public async Task<IEnumerable<AppUser>> GetTeamPlayersAsync(long teamId)
+		{
+			if (!await _teamRepository.AnyAsync(teamId))
+				throw new NotFoundException("Team doesn't exist");
+
+			return await _teamRepository.GetTeamPlayersAsync(teamId);
+		}
+
+		public async Task<IEnumerable<TeamModel>> GetTeamsAsync()
+		{
+			var teams = await _teamRepository.GetTeamsAsync();
+
+			return _mapper.Map<IEnumerable<TeamModel>>(teams);
+		}
+
 		public async Task<bool> RegisterTeamForTournamentAsync(long teamId, long tournamentId)
 		{
 			var team = await _teamRepository.GetTeamByIdAsync(teamId);
@@ -96,8 +94,9 @@ namespace Tournaments.Application.Services
 			var tournament = await _tournamentRepository.GetTournamentByIdAsync(tournamentId);
 			if (tournament is null)
 				throw new NotFoundException("Tournament doesn't exist");
-
+			// TODO: Сделать кастомное исключение
 			if (await _tournamentTeamRepository.AnyAsync(tournamentId, teamId))
+				throw new NotImplementedException("Team's already been registred");
 				//throw new AlreadyExistsException("Team already registred");
 
 			if (await _teamRepository.AddTeamToTournamentAsync(tournament, team!))
@@ -105,10 +104,28 @@ namespace Tournaments.Application.Services
 			return false;
 		}
 
-		public async Task<bool> RemovePlayerFromTeamAsync(long teamId, long playerId)
+		public async Task<bool> AddPlayerToTeamAsync(long teamId, long playerId)
 		{
 			var team = await _teamRepository.GetTeamByIdAsync(teamId);
 			if (team is null)
+				throw new NotFoundException("Team doesn't exist");
+
+			var user = await _userManager.FindByIdAsync(playerId.ToString());
+			if (user is null)
+				throw new NotFoundException("User doesn't exist");
+			// TODO: Сделать кастомное исключение
+			if (await _teamUserRepository.AnyAsync(teamId, playerId))
+				throw new NotImplementedException("Player's alredy in team");
+				//throw new AlreadyExistsException("User already is in team");
+
+			if (await _teamRepository.AddPlayerToTeamAsync(user, team!))
+				return true;
+			return false;
+		}
+
+		public async Task<bool> RemovePlayerFromTeamAsync(long teamId, long playerId)
+		{
+			if (!await _teamRepository.AnyAsync(teamId))
 				throw new NotFoundException("Team doesn't exist");
 
 			var player = await _userManager.FindByIdAsync(playerId.ToString());
@@ -118,7 +135,7 @@ namespace Tournaments.Application.Services
 			if (!await _teamUserRepository.AnyAsync(teamId, playerId))
 				throw new NoContentException("Player's already been removed");
 
-			if (await _teamRepository.RemovePlayerFromTeamAsync(player, team!))
+			if (await _teamRepository.RemovePlayerFromTeamAsync(player, teamId))
 				return true;
 			return false;
 		}

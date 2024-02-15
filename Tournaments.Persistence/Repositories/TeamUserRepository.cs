@@ -16,8 +16,9 @@ namespace Tournaments.Persistence.Repositories
 		public async Task<bool> AnyAsync(long teamId, long userId)
 		{
 			var team = await _context.Teams.Include(t => t.Players)
+				.AsNoTracking()
 				.FirstOrDefaultAsync(t => t.Id == teamId);
-
+			 
 			return team!.Players.FirstOrDefault(t => t.Id == userId) is not null;
 		}
 	}

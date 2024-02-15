@@ -5,18 +5,23 @@ using Tournaments.Persistence.Extensions;
 using Tournaments.Persistence.Repositories;
 using Tournaments.API.Extensions;
 using Tournaments.Domain.Mapping;
-using FluentValidation.AspNetCore;
-using Tournaments.Domain.Models;
 using Tournaments.Domain.Validators;
-using System.Reflection;
 using FluentValidation;
 using Tournaments.Domain.Interfaces.Services;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+//.AddJsonOptions(options =>
+//{
+//	options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+//	options.JsonSerializerOptions.WriteIndented = true;
+//});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
