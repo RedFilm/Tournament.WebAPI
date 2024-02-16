@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
-using Tournaments.Domain.Models;
+using Tournaments.Domain.Models.TournamentModels;
 
-namespace Tournaments.Domain.Validators
+namespace Tournaments.Domain.Validators.TournamentModelValidators
 {
-	public class TournamentModelValidator : AbstractValidator<TournamentModel>
+	public class TournamentModelBaseValidator<T> : AbstractValidator<T> where T : TournamentModel
 	{
-        public TournamentModelValidator()
+        public TournamentModelBaseValidator()
         {
-			RuleFor(tournament => tournament.Id).NotEmpty();
 			RuleFor(tournament => tournament.OrganizerId).NotEmpty();
 			RuleFor(tournament => tournament.MaxParticipantCount).NotEmpty().GreaterThanOrEqualTo(0);
 			RuleFor(tournament => tournament.TournamentName).NotEmpty().MaximumLength(30);

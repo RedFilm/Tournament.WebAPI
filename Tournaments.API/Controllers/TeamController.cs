@@ -4,11 +4,13 @@ using Tournaments.Application.Services;
 using Tournaments.Domain.Entities;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
-using Tournaments.Domain.Validators;
+using Tournaments.Domain.Models.TeamModels;
+using Tournaments.Domain.Models.TournamentModels;
+using Tournaments.Domain.Validators.TeamModelValidators;
 
 namespace Tournaments.API.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
 	public class TeamController : ControllerBase
 	{
@@ -51,7 +53,7 @@ namespace Tournaments.API.Controllers
 
 		[HttpGet("GetTournaments/{id}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TeamModel>))]
-		public async Task<IEnumerable<TournamentModel>> GetTournaments(long id)
+		public async Task<IEnumerable<TournamentWithIdModel>> GetTournaments(long id)
 		{
 			var tournamentModels = await _teamService.GetTournamentsAsync(id);
 
@@ -74,7 +76,7 @@ namespace Tournaments.API.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> UpdateTeam(TeamModel model)
+		public async Task<IActionResult> UpdateTeam(TeamWithIdModel model)
 		{
 			await _teamValidator.ValidateAndThrowAsync(model);
 			await _teamService.UpdateTeamAsync(model);
@@ -112,13 +114,13 @@ namespace Tournaments.API.Controllers
 			return Ok();
 		}
 
-		[HttpPost("RegisterForTournament/{teamId}/tournaments/{tournamentId}")]
+		[HttpPost("RegisterForTournament/")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> RegisterTeamForTournamentAsync(long teamId, long tournamentId)
+		public async Task<IActionResult> RegisterTeamForTournamentAsync(RegisterForTournamentModel model)
 		{
-			await _teamService.RegisterTeamForTournamentAsync(teamId, tournamentId);
+			await _teamService.RegisterTeamForTournamentAsync(model);
 			return Ok();
 		}
 	}

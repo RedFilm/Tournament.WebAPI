@@ -7,18 +7,20 @@ using Tournaments.Domain.Entities;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
+using Tournaments.Domain.Models.TeamModels;
+using Tournaments.Domain.Models.TournamentModels;
 using Tournaments.Domain.Validators;
 
 namespace Tournaments.API.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
 	public class TournamentController : ControllerBase
 	{
 		private readonly ITournamentService _tournamentSevice;
-		private readonly IValidator<TournamentModel> _touranmentValidator;
+		private readonly IValidator<TournamentWithIdModel> _touranmentValidator;
 
-		public TournamentController(ITournamentService tournamentService, IValidator<TournamentModel> touranmentValidator)
+		public TournamentController(ITournamentService tournamentService, IValidator<TournamentWithIdModel> touranmentValidator)
         {
             _tournamentSevice = tournamentService;
 			_touranmentValidator = touranmentValidator;
@@ -26,7 +28,7 @@ namespace Tournaments.API.Controllers
 		}
 
 		[HttpGet("GetTournament/{id}")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TournamentModel))]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TournamentWithIdModel))]
 		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
 		public async Task<TournamentModel> GetTournament(long id)
 		{
@@ -36,8 +38,8 @@ namespace Tournaments.API.Controllers
 		}
 
 		[HttpGet("GetTournaments")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TournamentModel>))]
-		public async Task<IEnumerable<TournamentModel>> GetTournaments()
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TournamentWithIdModel>))]
+		public async Task<IEnumerable<TournamentWithIdModel>> GetTournaments()
 		{
 			var tournamentModels = await _tournamentSevice.GetTournamentsAsync();
 
@@ -57,7 +59,7 @@ namespace Tournaments.API.Controllers
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> CreateTournament(TournamentModel model)
+		public async Task<IActionResult> CreateTournament(TournamentWithIdModel model)
 		{
 			await _touranmentValidator.ValidateAndThrowAsync(model);
 			await _tournamentSevice.AddTournamentAsync(model);
@@ -69,7 +71,7 @@ namespace Tournaments.API.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> UpdateTournament(TournamentModel model)
+		public async Task<IActionResult> UpdateTournament(TournamentWithIdModel model)
 		{
 			await _touranmentValidator.ValidateAndThrowAsync(model);
 			await _tournamentSevice.UpdateTournamentAsync(model);

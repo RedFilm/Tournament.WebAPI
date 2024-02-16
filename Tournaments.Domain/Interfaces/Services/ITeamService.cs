@@ -1,10 +1,11 @@
 ﻿using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
-using Tournaments.Domain.Models;
+using Tournaments.Domain.Models.TeamModels;
+using Tournaments.Domain.Models.TournamentModels;
 
 namespace Tournaments.Domain.Interfaces.Services
 {
-	public interface ITeamService
+    public interface ITeamService
 	{
 		/// <summary>
 		/// Asynchronously gets team by id.
@@ -18,7 +19,7 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// Asynchronously gets all teams.
 		/// </summary>
 		/// <returns>IEnumerable of TeamModel entities</returns>
-		Task<IEnumerable<TeamModel>> GetTeamsAsync();
+		Task<IEnumerable<TeamWithIdModel>> GetTeamsAsync();
 
 		/// <summary>
 		/// Asynchronously gets players from the team.
@@ -32,7 +33,7 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// </summary>
 		/// <param name="teamId">Team id</param>
 		/// <returns>IEnumerable of TournamentModel entities</returns>
-		Task<IEnumerable<TournamentModel>> GetTournamentsAsync(long teamId);
+		Task<IEnumerable<TournamentWithIdModel>> GetTournamentsAsync(long teamId);
 
 		/// <summary>
 		/// Asynchronously create team.
@@ -47,7 +48,7 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <param name="team">Team model</param>
 		/// <returns>Result of updating. True if team successfully updated.</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<bool> UpdateTeamAsync(TeamModel team);
+		Task<bool> UpdateTeamAsync(TeamWithIdModel team);
 
 		/// <summary>
 		/// Asynchronously remove team by id.
@@ -79,10 +80,9 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <summary>
 		/// Asynchronously register team for tournament.
 		/// </summary>
-		/// <param name="teamId">Team id</param>
-		/// <param name="tournamentId">Tournament id</param>
+		/// <param name="model">RegisterForTournamentModel model</param>
 		/// <returns>Result registring. True if team successfully registred for tournament.</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<bool> RegisterTeamForTournamentAsync(long teamId, long tournamentId);
+		Task<bool> RegisterTeamForTournamentAsync(RegisterForTournamentModel model);
 	}
 }

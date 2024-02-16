@@ -3,11 +3,12 @@ using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
-using Tournaments.Domain.Models;
+using Tournaments.Domain.Models.TeamModels;
+using Tournaments.Domain.Models.TournamentModels;
 
 namespace Tournaments.Application.Services
 {
-	public class TournamentService : ITournamentService
+    public class TournamentService : ITournamentService
 	{
 		private readonly IMapper _mapper;
 		private readonly ITournamentRepository _tournamentRepository;
@@ -35,14 +36,14 @@ namespace Tournaments.Application.Services
 			return result;
 		}
 
-		public async Task<IEnumerable<TeamModel>> GetTeamsAsync(long tournamentId)
+		public async Task<IEnumerable<TeamWithIdModel>> GetTeamsAsync(long tournamentId)
 		{
 			if (!await _tournamentRepository.AnyAsync(tournamentId))
 				throw new NotFoundException("Tournament with this id doesn't exist");
 
 			var teams = await _tournamentRepository.GetTeamsAsync(tournamentId);
 
-			return _mapper.Map<IEnumerable<TeamModel>>(teams);
+			return _mapper.Map<IEnumerable<TeamWithIdModel>>(teams);
 		}
 
 		public async Task<TournamentModel?> GetTournamentByIdAsync(long id)
@@ -56,14 +57,14 @@ namespace Tournaments.Application.Services
 			return tournamentModel;
 		}
 
-		public async Task<IEnumerable<TournamentModel>> GetTournamentsAsync()
+		public async Task<IEnumerable<TournamentWithIdModel>> GetTournamentsAsync()
 		{
 			var tournaments = await _tournamentRepository.GetTournamentsAsync();
 
-			return _mapper.Map<IEnumerable<TournamentModel>>(tournaments);
+			return _mapper.Map<IEnumerable<TournamentWithIdModel>>(tournaments);
 		}
 
-		public async Task<bool> UpdateTournamentAsync(TournamentModel tournamentModel)
+		public async Task<bool> UpdateTournamentAsync(TournamentWithIdModel tournamentModel)
 		{
 			if (!await _tournamentRepository.AnyAsync(tournamentModel.Id))
 				throw new NotFoundException("Tournament doesn't exist");

@@ -1,10 +1,11 @@
-﻿using Tournaments.Domain.Models;
-using Tournaments.Domain.Exceptions;
+﻿using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Entities;
+using Tournaments.Domain.Models.TeamModels;
+using Tournaments.Domain.Models.TournamentModels;
 
 namespace Tournaments.Domain.Interfaces.Services
 {
-	public interface ITournamentService
+    public interface ITournamentService
 	{
 		/// <summary>
 		/// Asynchronously gets model of tournament by id.
@@ -18,7 +19,7 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// Asynchronously gets list of all tournament models.
 		/// </summary>
 		/// <returns>IEnumerable of TournamentModel</returns>
-		Task<IEnumerable<TournamentModel>> GetTournamentsAsync();
+		Task<IEnumerable<TournamentWithIdModel>> GetTournamentsAsync();
 
 		/// <summary>
 		/// Asynchronously adds tournament to the database.
@@ -33,7 +34,7 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <param name="tournament">Tournament model</param>
 		/// <returns>Result of adding. True if entity successfully updated in the database.</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<bool> UpdateTournamentAsync(TournamentModel tournament);
+		Task<bool> UpdateTournamentAsync(TournamentWithIdModel tournament);
 
 		/// <summary>
 		/// Asynchronously remove tournament from the database by id.
@@ -49,6 +50,6 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <param name="tournamentId">Tournament id</param>
 		/// <returns>IEnumerable of Team models</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<IEnumerable<TeamModel>> GetTeamsAsync(long tournamentId);
+		Task<IEnumerable<TeamWithIdModel>> GetTeamsAsync(long tournamentId);
 	}
 }

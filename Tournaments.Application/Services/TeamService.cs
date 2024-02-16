@@ -4,12 +4,12 @@ using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
-using Tournaments.Domain.Models;
-using Tournaments.Persistence.Repositories;
+using Tournaments.Domain.Models.TeamModels;
+using Tournaments.Domain.Models.TournamentModels;
 
 namespace Tournaments.Application.Services
 {
-	public class TeamService : ITeamService
+    public class TeamService : ITeamService
 	{
 		private readonly ITeamRepository _teamRepository;
 		private readonly ITournamentTeamRepository _tournamentTeamRepository;
@@ -59,14 +59,14 @@ namespace Tournaments.Application.Services
 			return _mapper.Map<TeamModel>(team);
 		}
 
-		public async Task<IEnumerable<TournamentModel>> GetTournamentsAsync(long teamId)
+		public async Task<IEnumerable<TournamentWithIdModel>> GetTournamentsAsync(long teamId)
 		{
 			if (!await _teamRepository.AnyAsync(teamId))
 				throw new NotFoundException("Team with this id doesn't exist");
 
 			var teamTournaments = await _teamRepository.GetTournamentsAsync(teamId);
 
-			return _mapper.Map<IEnumerable<TournamentModel>>(teamTournaments);
+			return _mapper.Map<IEnumerable<TournamentWithIdModel>>(teamTournaments);
 		}
 
 		// TODO: Заменить AppUser на модель
@@ -78,24 +78,28 @@ namespace Tournaments.Application.Services
 			return await _teamRepository.GetTeamPlayersAsync(teamId);
 		}
 
-		public async Task<IEnumerable<TeamModel>> GetTeamsAsync()
+		public async Task<IEnumerable<TeamWithIdModel>> GetTeamsAsync()
 		{
 			var teams = await _teamRepository.GetTeamsAsync();
 
-			return _mapper.Map<IEnumerable<TeamModel>>(teams);
+			return _mapper.Map<IEnumerable<TeamWithIdModel>>(teams);
 		}
 
-		public async Task<bool> RegisterTeamForTournamentAsync(long teamId, long tournamentId)
+		public async Task<bool> RegisterTeamForTournamentAsync(RegisterForTournamentModel model)
 		{
-			var team = await _teamRepository.GetTeamByIdAsync(teamId);
+			var team = await _teamRepository.GetTeamByIdAsync(model.TeamId);
 			if (team is null)
 				throw new NotFoundException("Team doesn't exist");
 
-			var tournament = await _tournamentRepository.GetTournamentByIdAsync(tournamentId);
+			var tournament = await _tournamentRepository.GetTournamentByIdAsync(model.TournamentId);
 			if (tournament is null)
 				throw new NotFoundException("Tournament doesn't exist");
+
+			if (team.OwnerId != model.UserId)
+				throw new BadRequestException("You'r must be the creator of the team to register for tournament");
+
 			// TODO: Сделать кастомное исключение
-			if (await _tournamentTeamRepository.AnyAsync(tournamentId, teamId))
+			if (await _tournamentTeamRepository.AnyAsync(model.TournamentId, model.TeamId))
 				throw new NotImplementedException("Team's already been registred");
 				//throw new AlreadyExistsException("Team already registred");
 
@@ -140,7 +144,7 @@ namespace Tournaments.Application.Services
 			return false;
 		}
 
-		public async Task<bool> UpdateTeamAsync(TeamModel teamModel)
+		public async Task<bool> UpdateTeamAsync(TeamWithIdModel teamModel)
 		{
 			if (!await _teamRepository.AnyAsync(teamModel.Id))
 				throw new NotFoundException("Team doesn't exist");
