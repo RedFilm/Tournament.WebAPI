@@ -138,7 +138,7 @@ namespace Tournaments.Application.Services
 				throw new NotFoundException("Player doesn't exist");
 
 			if (team.OwnerId != model.ExecutorId)
-				throw new BadRequestException("You'r must be the captian of the team to invite players");
+				throw new BadRequestException("You'r must be the captian of the team to remove players");
 
 			if (!await _teamUserRepository.AnyAsync(model.TeamId, model.PlayerId))
 				throw new NoContentException("Player's already been removed");
