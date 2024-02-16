@@ -39,8 +39,8 @@ namespace Tournaments.Application.Services
 
 			var user = _mapper.Map<AppUser>(model);
 
-			await _userManager.AddToRoleAsync(user, IdentityRoles.User.ToString());
-			var result = await _userManager.CreateAsync(user, model.Password);
+			await _userManager.CreateAsync(user, model.Password);
+			var result = await _userManager.AddToRoleAsync(user, IdentityRoles.User.ToString());
 
 			if (!result.Succeeded)
 				throw new RegisterFailedException("Register failed");
