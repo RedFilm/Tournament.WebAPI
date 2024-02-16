@@ -63,16 +63,16 @@ namespace Tournaments.Persistence.Repositories
 		/// <inheritdoc />
 		public async Task<Team?> GetTeamByIdAsync(long id)
 		{
-			return await _context.Teams.FirstOrDefaultAsync(t => t.Id == id) ?? null;
+			return await _context.Teams.FirstOrDefaultAsync(t => t.Id == id);
 		}
 
 		/// <inheritdoc />
 		public async Task<IEnumerable<Tournament>> GetTournamentsAsync(long teamId)
 		{
-			var teamTournaments = from tournamentTeam in _context.TournamentTeams
-								  join tournament in _context.Tournaments on tournamentTeam.TournamentId equals tournament.Id
-								  where tournamentTeam.TeamId == teamId
-								  select tournament;
+			var teamTournaments = _context.TournamentTeams
+				.Where(tournamentTeam => tournamentTeam.TeamId == teamId)
+				.Include(tournamentTeam => tournamentTeam.Tournament)
+				.Select(tournamentTeam => tournamentTeam.Tournament);
 
 			return await teamTournaments.ToListAsync();
 		}
