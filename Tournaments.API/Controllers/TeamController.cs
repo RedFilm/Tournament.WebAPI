@@ -94,23 +94,23 @@ namespace Tournaments.API.Controllers
 			return Ok();
 		}
 
-		[HttpPost("AddPlayer/{teamId}/players/{playerId}")]
+		[HttpPost("AddPlayer")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> AddPlayerToTeamAsync(long teamId, long playerId)
+		public async Task<IActionResult> AddPlayerToTeamAsync(TeamMemberUpdateModel model)
 		{
-			await _teamService.AddPlayerToTeamAsync(teamId, playerId);
+			await _teamService.AddPlayerToTeamAsync(model);
 			return Ok();
 		}
 
-		[HttpDelete("RemovePlayer/{teamId}/players/{playerId}")]
+		[HttpDelete("RemovePlayer")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> RemovePlayerFromTeamAsync(long teamId, long playerId)
+		public async Task<IActionResult> RemovePlayerFromTeamAsync(TeamMemberUpdateModel model)
 		{
-			await _teamService.RemovePlayerFromTeamAsync(teamId, playerId);
+			await _teamService.RemovePlayerFromTeamAsync(model);
 			return Ok();
 		}
 

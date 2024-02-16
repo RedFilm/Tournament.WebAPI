@@ -106,17 +106,20 @@ namespace Tournaments.Application.Services
 			return false;
 		}
 
-		public async Task<bool> AddPlayerToTeamAsync(long teamId, long playerId)
+		public async Task<bool> AddPlayerToTeamAsync(TeamMemberUpdateModel model)
 		{
-			var team = await _teamRepository.GetTeamByIdAsync(teamId);
+			var team = await _teamRepository.GetTeamByIdAsync(model.TeamId);
 			if (team is null)
 				throw new NotFoundException("Team doesn't exist");
 
-			var user = await _userManager.FindByIdAsync(playerId.ToString());
+			var user = await _userManager.FindByIdAsync(model.PlayerId.ToString());
 			if (user is null)
 				throw new NotFoundException("User doesn't exist");
 
-			if (await _teamUserRepository.AnyAsync(teamId, playerId))
+			if (team.OwnerId != model.ExecutorId)
+				throw new BadRequestException("You'r must be the captian of the team to invite players");
+
+			if (await _teamUserRepository.AnyAsync(model.TeamId, model.PlayerId))
 				throw new AlreadyExistsException("Player's alredy in team");
 
 			if (await _teamRepository.AddPlayerToTeamAsync(user, team!))
@@ -124,19 +127,23 @@ namespace Tournaments.Application.Services
 			return false;
 		}
 
-		public async Task<bool> RemovePlayerFromTeamAsync(long teamId, long playerId)
+		public async Task<bool> RemovePlayerFromTeamAsync(TeamMemberUpdateModel model)
 		{
-			if (!await _teamRepository.AnyAsync(teamId))
+			var team = await _teamRepository.GetTeamByIdAsync(model.TeamId);
+			if (team is null)
 				throw new NotFoundException("Team doesn't exist");
 
-			var player = await _userManager.FindByIdAsync(playerId.ToString());
+			var player = await _userManager.FindByIdAsync(model.PlayerId.ToString());
 			if (player is null)
 				throw new NotFoundException("Player doesn't exist");
 
-			if (!await _teamUserRepository.AnyAsync(teamId, playerId))
+			if (team.OwnerId != model.ExecutorId)
+				throw new BadRequestException("You'r must be the captian of the team to invite players");
+
+			if (!await _teamUserRepository.AnyAsync(model.TeamId, model.PlayerId))
 				throw new NoContentException("Player's already been removed");
 
-			if (await _teamRepository.RemovePlayerFromTeamAsync(player, teamId))
+			if (await _teamRepository.RemovePlayerFromTeamAsync(player, model.TeamId))
 				return true;
 			return false;
 		}
