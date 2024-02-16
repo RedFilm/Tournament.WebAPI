@@ -1,8 +1,8 @@
-﻿using Tournaments.Domain.Statuses;
+﻿using Tournaments.Domain.Enums.Statuses;
 
 namespace Tournaments.Domain.Entities
 {
-	public class TournamentTeam
+    public class TournamentTeam
 	{
         public long TeamId { get; set; }
         public Team Team { get; set; } = null!;

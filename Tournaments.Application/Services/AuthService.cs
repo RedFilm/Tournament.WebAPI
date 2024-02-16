@@ -10,6 +10,7 @@ using Tournaments.Domain.Options;
 using AutoMapper;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Services;
+using Tournaments.Domain.Enums;
 
 namespace Tournaments.Application.Services
 {
@@ -21,7 +22,7 @@ namespace Tournaments.Application.Services
 		private readonly IMapper _mapper;
 
 		public AuthService(UserManager<AppUser> userManager, 
-			SignInManager<AppUser> signinManager, 
+			SignInManager<AppUser> signinManager,
 			IOptions<JwtOptions> options,
 			IMapper mapper)
 		{
@@ -38,6 +39,7 @@ namespace Tournaments.Application.Services
 
 			var user = _mapper.Map<AppUser>(model);
 
+			await _userManager.AddToRoleAsync(user, IdentityRoles.User.ToString());
 			var result = await _userManager.CreateAsync(user, model.Password);
 
 			if (!result.Succeeded)
@@ -70,7 +72,7 @@ namespace Tournaments.Application.Services
 			{
 				new Claim(ClaimTypes.NameIdentifier, user!.Id.ToString()),
 				new Claim(ClaimTypes.Name, model.UserName),
-				new Claim(ClaimTypes.Role, "User")
+				new Claim(ClaimTypes.Role, IdentityRoles.User.ToString())
 			};
 
 			var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key));

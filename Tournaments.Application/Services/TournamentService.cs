@@ -3,9 +3,7 @@ using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
-using Tournaments.Domain.Mapping;
 using Tournaments.Domain.Models;
-using Tournaments.Domain.Statuses;
 
 namespace Tournaments.Application.Services
 {

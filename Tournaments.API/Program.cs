@@ -9,6 +9,10 @@ using Tournaments.Domain.Validators;
 using FluentValidation;
 using Tournaments.Domain.Interfaces.Services;
 using System.Text.Json.Serialization;
+using Tournaments.Persistence.Initializers;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Tournaments.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +51,13 @@ var jwtOptions = builder.Configuration.GetSection(JwtOptions.ConfigurationPath).
 builder.Services.AddJwtAuthentication(jwtOptions!);
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+	var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<long>>>();
+
+	await DbInitializer.InitializeRoles(roleManager);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
