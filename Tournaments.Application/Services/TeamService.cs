@@ -9,7 +9,7 @@ using Tournaments.Domain.Models.TournamentModels;
 
 namespace Tournaments.Application.Services
 {
-    public class TeamService : ITeamService
+	public class TeamService : ITeamService
 	{
 		private readonly ITeamRepository _teamRepository;
 		private readonly ITournamentTeamRepository _tournamentTeamRepository;
@@ -98,10 +98,8 @@ namespace Tournaments.Application.Services
 			if (team.OwnerId != model.UserId)
 				throw new BadRequestException("You'r must be the creator of the team to register for tournament");
 
-			// TODO: Сделать кастомное исключение
 			if (await _tournamentTeamRepository.AnyAsync(model.TournamentId, model.TeamId))
-				throw new NotImplementedException("Team's already been registred");
-				//throw new AlreadyExistsException("Team already registred");
+				throw new AlreadyExistsException("Team's already been registred");
 
 			if (await _teamRepository.AddTeamToTournamentAsync(tournament, team!))
 				return true;
@@ -117,10 +115,9 @@ namespace Tournaments.Application.Services
 			var user = await _userManager.FindByIdAsync(playerId.ToString());
 			if (user is null)
 				throw new NotFoundException("User doesn't exist");
-			// TODO: Сделать кастомное исключение
+
 			if (await _teamUserRepository.AnyAsync(teamId, playerId))
-				throw new NotImplementedException("Player's alredy in team");
-				//throw new AlreadyExistsException("User already is in team");
+				throw new AlreadyExistsException("Player's alredy in team");
 
 			if (await _teamRepository.AddPlayerToTeamAsync(user, team!))
 				return true;
