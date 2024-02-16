@@ -85,6 +85,7 @@ namespace Tournaments.Application.Services
 			return _mapper.Map<IEnumerable<TeamWithIdModel>>(teams);
 		}
 
+		// TODO: Вынести некоторые проверки в отдельные методы\классы
 		public async Task<bool> RegisterTeamForTournamentAsync(RegisterForTournamentModel model)
 		{
 			var team = await _teamRepository.GetTeamByIdAsync(model.TeamId);
@@ -100,6 +101,9 @@ namespace Tournaments.Application.Services
 
 			if (await _tournamentTeamRepository.AnyAsync(model.TournamentId, model.TeamId))
 				throw new AlreadyExistsException("Team's already been registred");
+
+			if (tournament.RegistrationEndDate < DateTime.UtcNow)
+				throw new AlreadyExistsException("Registration is over");
 
 			if (await _teamRepository.AddTeamToTournamentAsync(tournament, team!))
 				return true;
