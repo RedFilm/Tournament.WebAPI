@@ -4,6 +4,7 @@ using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
+using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.TeamModels;
 using Tournaments.Domain.Models.TournamentModels;
 
@@ -69,13 +70,14 @@ namespace Tournaments.Application.Services
 			return _mapper.Map<IEnumerable<TournamentWithIdModel>>(teamTournaments);
 		}
 
-		// TODO: Заменить AppUser на модель
-		public async Task<IEnumerable<AppUser>> GetTeamPlayersAsync(long teamId)
+		public async Task<IEnumerable<UserModel>> GetTeamPlayersAsync(long teamId)
 		{
 			if (!await _teamRepository.AnyAsync(teamId))
 				throw new NotFoundException("Team doesn't exist");
 
-			return await _teamRepository.GetTeamPlayersAsync(teamId);
+			var appUsers = await _teamRepository.GetTeamPlayersAsync(teamId);
+
+			return _mapper.Map<IEnumerable<UserModel>>(appUsers);
 		}
 
 		public async Task<IEnumerable<TeamWithIdModel>> GetTeamsAsync()

@@ -34,7 +34,7 @@ namespace Tournaments.API.Controllers
 
 		[HttpGet("{id}/GetPlayers")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AppUser>))]
-		public async Task<IEnumerable<AppUser>> GetPlayers(long id)
+		public async Task<IEnumerable<UserModel>> GetPlayers(long id)
 		{
 			var players = await _teamService.GetTeamPlayersAsync(id);
 

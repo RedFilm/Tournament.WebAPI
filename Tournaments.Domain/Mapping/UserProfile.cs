@@ -6,9 +6,10 @@ namespace Tournaments.Domain.Mapping
 {
 	public class UserProfile : Profile
 	{
-        public UserProfile()
-        {
-            CreateMap<RegisterModel, AppUser>();
-        }
-    }
+		public UserProfile()
+		{
+			CreateMap<RegisterModel, AppUser>();
+			CreateMap<AppUser, UserModel>();
+		}
+	}
 }

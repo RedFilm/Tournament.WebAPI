@@ -1,5 +1,6 @@
 ﻿using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
+using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.TeamModels;
 using Tournaments.Domain.Models.TournamentModels;
 
@@ -25,8 +26,8 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// Asynchronously gets players from the team.
 		/// </summary>
 		/// <param name="teamId">Team id</param>
-		/// <returns>IEnumerable of AppUser entities</returns>
-		Task<IEnumerable<AppUser>> GetTeamPlayersAsync(long teamId);
+		/// <returns>IEnumerable of UserModel entities</returns>
+		Task<IEnumerable<UserModel>> GetTeamPlayersAsync(long teamId);
 
 		/// <summary>
 		/// Asynchronously gets a list of all tournaments which team participating.
