@@ -29,7 +29,7 @@ namespace Tournaments.API.Controllers
 		{
 			var teamModel = await _teamService.GetTeamByIdAsync(id);
 
-			return teamModel!;
+			return teamModel;
 		}
 
 		[HttpGet("{id}/GetPlayers")]

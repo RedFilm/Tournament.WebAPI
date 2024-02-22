@@ -105,9 +105,7 @@ namespace Tournaments.Application.Services
 			if (tournament.RegistrationEndDate < DateTime.UtcNow)
 				throw new AlreadyExistsException("Registration is over");
 
-			if (await _teamRepository.AddTeamToTournamentAsync(tournament, team!))
-				return true;
-			return false;
+			return await _teamRepository.AddTeamToTournamentAsync(tournament, team);
 		}
 
 		public async Task<bool> AddPlayerToTeamAsync(TeamMemberUpdateModel model)
@@ -126,9 +124,7 @@ namespace Tournaments.Application.Services
 			if (await _teamUserRepository.AnyAsync(model.TeamId, model.PlayerId))
 				throw new AlreadyExistsException("Player's already in team");
 
-			if (await _teamRepository.AddPlayerToTeamAsync(user, team!))
-				return true;
-			return false;
+			return await _teamRepository.AddPlayerToTeamAsync(user, team);
 		}
 
 		public async Task<bool> RemovePlayerFromTeamAsync(TeamMemberUpdateModel model)
@@ -147,9 +143,7 @@ namespace Tournaments.Application.Services
 			if (!await _teamUserRepository.AnyAsync(model.TeamId, model.PlayerId))
 				throw new NoContentException("Player's already been removed");
 
-			if (await _teamRepository.RemovePlayerFromTeamAsync(player, model.TeamId))
-				return true;
-			return false;
+			return await _teamRepository.RemovePlayerFromTeamAsync(player, model.TeamId);
 		}
 
 		public async Task<bool> UpdateTeamAsync(TeamWithIdModel teamModel)

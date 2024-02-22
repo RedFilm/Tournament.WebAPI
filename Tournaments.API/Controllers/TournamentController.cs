@@ -28,7 +28,7 @@ namespace Tournaments.API.Controllers
 		{
 			var tournamentModel = await _tournamentService.GetTournamentByIdAsync(id);
 
-			return tournamentModel!;
+			return tournamentModel;
 		}
 
 		[HttpGet("GetTournaments")]
