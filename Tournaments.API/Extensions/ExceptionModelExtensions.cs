@@ -4,7 +4,7 @@ using Tournaments.Domain.Models;
 
 namespace Tournaments.API.Extensions
 {
-    public static class ExceptionModelExtensions
+	public static class ExceptionModelExtensions
 	{
 		public static ExceptionResponseModel GetModel(this ValidationException exception)
 		{
@@ -17,14 +17,15 @@ namespace Tournaments.API.Extensions
 		{
 			return new ExceptionResponseModel
 			{
-				Errors = [ exception.Message ],
+				Errors = [exception.Message],
 			};
 		}
 		public static ExceptionResponseModel GetModel(this Exception exception)
 		{
+			var internalError = "Something went wrong";
 			return new ExceptionResponseModel
 			{
-				Errors = [ exception.Message ]
+				Errors = [internalError]
 			};
 		}
 	}
