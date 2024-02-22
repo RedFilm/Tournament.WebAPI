@@ -1,9 +1,8 @@
 ﻿using Tournaments.Domain.Entities;
-using Tournaments.Domain.Models;
 
 namespace Tournaments.Domain.Interfaces.Repositories
 {
-    public interface ITournamentRepository
+	public interface ITournamentRepository
     {
 		/// <summary>
 		/// Asynchronously gets tournament from the database by id.

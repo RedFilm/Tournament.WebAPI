@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Tournaments.Domain.Models;
 using FluentValidation;
 using Tournaments.API.Extensions;
@@ -7,7 +6,7 @@ using Tournaments.Domain.Exceptions.BaseExceptions;
 
 namespace Tournaments.API.Middlewares
 {
-    public class ExceptionHandlerMiddleware
+	public class ExceptionHandlerMiddleware
 	{
 		private readonly RequestDelegate _next;
 

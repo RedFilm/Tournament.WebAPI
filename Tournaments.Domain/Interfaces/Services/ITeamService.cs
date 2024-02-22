@@ -5,7 +5,7 @@ using Tournaments.Domain.Models.TournamentModels;
 
 namespace Tournaments.Domain.Interfaces.Services
 {
-    public interface ITeamService
+	public interface ITeamService
 	{
 		/// <summary>
 		/// Asynchronously gets team by id.
@@ -13,12 +13,13 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <param name="id">Team id</param>
 		/// <returns>Team model which has this id</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<TeamModel?> GetTeamByIdAsync(long id);
+		Task<TeamModel> GetTeamByIdAsync(long id);
 
 		/// <summary>
 		/// Asynchronously gets all teams.
 		/// </summary>
 		/// <returns>IEnumerable of TeamModel entities</returns>
+		/// <exception cref="NotFoundException"></exception>
 		Task<IEnumerable<TeamWithIdModel>> GetTeamsAsync();
 
 		/// <summary>
@@ -79,7 +80,7 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// Asynchronously register team for tournament.
 		/// </summary>
 		/// <param name="model">RegisterForTournamentModel model</param>
-		/// <returns>Result registring. True if team successfully registred for tournament.</returns>
+		/// <returns>Result registering. True if team successfully registered for tournament.</returns>
 		/// <exception cref="NotFoundException"></exception>
 		Task<bool> RegisterTeamForTournamentAsync(RegisterForTournamentModel model);
 	}

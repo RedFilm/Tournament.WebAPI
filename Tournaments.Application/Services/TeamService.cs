@@ -17,7 +17,7 @@ namespace Tournaments.Application.Services
 		private readonly ITeamUserRepository _teamUserRepository;
 		private readonly UserManager<AppUser> _userManager;
 		private readonly IMapper _mapper;
-		
+
 
 		public TeamService(ITeamRepository teamRepository,
 			ITournamentTeamRepository tournamentTeamRepository,
@@ -25,13 +25,13 @@ namespace Tournaments.Application.Services
 			ITeamUserRepository teamUserRepository,
 			UserManager<AppUser> userManager,
 			IMapper mapper)
-        {
+		{
 			_teamRepository = teamRepository;
 			_tournamentTeamRepository = tournamentTeamRepository;
 			_tournamentRepository = tournamentRepository;
 			_teamUserRepository = teamUserRepository;
 			_userManager = userManager;
-			_mapper = mapper;	
+			_mapper = mapper;
 		}
 
 		public async Task<bool> CreateTeamAsync(TeamModel teamModel)
@@ -49,7 +49,7 @@ namespace Tournaments.Application.Services
 			return result;
 		}
 
-		public async Task<TeamModel?> GetTeamByIdAsync(long id)
+		public async Task<TeamModel> GetTeamByIdAsync(long id)
 		{
 			var team = await _teamRepository.GetTeamByIdAsync(id);
 
@@ -82,6 +82,9 @@ namespace Tournaments.Application.Services
 		{
 			var teams = await _teamRepository.GetTeamsAsync();
 
+			if (teams.Count() == 0)
+				throw new NotFoundException("There no teams yet");
+
 			return _mapper.Map<IEnumerable<TeamWithIdModel>>(teams);
 		}
 
@@ -97,10 +100,10 @@ namespace Tournaments.Application.Services
 				throw new NotFoundException("Tournament doesn't exist");
 
 			if (team.OwnerId != model.UserId)
-				throw new BadRequestException("You'r must be the creator of the team to register for tournament");
+				throw new BadRequestException("You must be the creator of the team to register for tournament");
 
 			if (await _tournamentTeamRepository.AnyAsync(model.TournamentId, model.TeamId))
-				throw new AlreadyExistsException("Team's already been registred");
+				throw new AlreadyExistsException("Team's already been registered");
 
 			if (tournament.RegistrationEndDate < DateTime.UtcNow)
 				throw new AlreadyExistsException("Registration is over");
@@ -121,10 +124,10 @@ namespace Tournaments.Application.Services
 				throw new NotFoundException("User doesn't exist");
 
 			if (team.OwnerId != model.ExecutorId)
-				throw new BadRequestException("You'r must be the captian of the team to invite players");
+				throw new BadRequestException("You must be the captain of the team to invite players");
 
 			if (await _teamUserRepository.AnyAsync(model.TeamId, model.PlayerId))
-				throw new AlreadyExistsException("Player's alredy in team");
+				throw new AlreadyExistsException("Player's already in team");
 
 			if (await _teamRepository.AddPlayerToTeamAsync(user, team!))
 				return true;
@@ -142,7 +145,7 @@ namespace Tournaments.Application.Services
 				throw new NotFoundException("Player doesn't exist");
 
 			if (team.OwnerId != model.ExecutorId)
-				throw new BadRequestException("You'r must be the captian of the team to remove players");
+				throw new BadRequestException("You must be the captain of the team to remove players");
 
 			if (!await _teamUserRepository.AnyAsync(model.TeamId, model.PlayerId))
 				throw new NoContentException("Player's already been removed");

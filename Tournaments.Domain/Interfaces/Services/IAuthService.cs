@@ -3,8 +3,8 @@ using Tournaments.Domain.Exceptions;
 
 namespace Tournaments.Domain.Interfaces.Services
 {
-    public interface IAuthService
-    {
+	public interface IAuthService
+	{
 		/// <summary>
 		/// Authenticate the user.
 		/// </summary>
@@ -18,8 +18,8 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// Register the user.
 		/// </summary>
 		/// <param name="model">Model that contain user name, email, password, birthday and phone number.</param>
-		/// <returns>Result of registring. True if user successfully registred.</returns>
+		/// <returns>Result of registering. True if user successfully registered.</returns>
 		/// <exception cref="RegisterFailedException"></exception>
 		Task<bool> RegisterAsync(RegisterModel model);
-    }
+	}
 }

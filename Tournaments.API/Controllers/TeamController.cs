@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Tournaments.Application.Services;
 using Tournaments.Domain.Entities;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
@@ -10,7 +9,7 @@ using Tournaments.Domain.Validators.TeamModelValidators;
 
 namespace Tournaments.API.Controllers
 {
-    [Route("api/[controller]")]
+	[Route("api/[controller]")]
 	[ApiController]
 	public class TeamController : ControllerBase
 	{
@@ -18,12 +17,12 @@ namespace Tournaments.API.Controllers
 		private readonly TeamModelValidator _teamValidator;
 
 		public TeamController(ITeamService teamService, TeamModelValidator teamValidator)
-        {
+		{
 			_teamService = teamService;
-			_teamValidator	= teamValidator;
+			_teamValidator = teamValidator;
 		}
 
-        [HttpGet("GetTeam/{id}")]
+		[HttpGet("GetTeam/{id}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TeamModel))]
 		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
 		public async Task<TeamModel> GetTeam(long id)
@@ -44,6 +43,7 @@ namespace Tournaments.API.Controllers
 
 		[HttpGet("GetTeams")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TeamModel>))]
+		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
 		public async Task<IEnumerable<TeamModel>> GetTeams()
 		{
 			var teamModels = await _teamService.GetTeamsAsync();
@@ -90,7 +90,6 @@ namespace Tournaments.API.Controllers
 		public async Task<IActionResult> DeleteTeam(long id)
 		{
 			await _teamService.DeleteTeamAsync(id);
-
 			return Ok();
 		}
 

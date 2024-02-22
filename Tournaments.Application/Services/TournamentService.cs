@@ -8,22 +8,22 @@ using Tournaments.Domain.Models.TournamentModels;
 
 namespace Tournaments.Application.Services
 {
-    public class TournamentService : ITournamentService
+	public class TournamentService : ITournamentService
 	{
 		private readonly IMapper _mapper;
 		private readonly ITournamentRepository _tournamentRepository;
 
 		public TournamentService(IMapper mapper, ITournamentRepository tournamentRepository)
-        {
-            _mapper = mapper;
+		{
+			_mapper = mapper;
 			_tournamentRepository = tournamentRepository;
-        }
+		}
 
-        public async Task<bool> AddTournamentAsync(TournamentModel tournamentModel)
+		public async Task<bool> AddTournamentAsync(TournamentModel tournamentModel)
 		{
 			var tournament = _mapper.Map<Tournament>(tournamentModel);
 
-			return await _tournamentRepository.AddTournamentAsync(tournament);	
+			return await _tournamentRepository.AddTournamentAsync(tournament);
 		}
 
 		public async Task<bool> DeleteTournamentAsync(long id)
@@ -46,7 +46,7 @@ namespace Tournaments.Application.Services
 			return _mapper.Map<IEnumerable<TeamWithIdModel>>(teams);
 		}
 
-		public async Task<TournamentModel?> GetTournamentByIdAsync(long id)
+		public async Task<TournamentModel> GetTournamentByIdAsync(long id)
 		{
 			var tournament = await _tournamentRepository.GetTournamentByIdAsync(id);
 

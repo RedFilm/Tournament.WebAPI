@@ -1,11 +1,10 @@
 ﻿using Tournaments.Domain.Exceptions;
-using Tournaments.Domain.Entities;
 using Tournaments.Domain.Models.TeamModels;
 using Tournaments.Domain.Models.TournamentModels;
 
 namespace Tournaments.Domain.Interfaces.Services
 {
-    public interface ITournamentService
+	public interface ITournamentService
 	{
 		/// <summary>
 		/// Asynchronously gets model of tournament by id.
@@ -13,7 +12,7 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <param name="id">Tournament id</param>
 		/// <returns>Tournament model which has this id</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<TournamentModel?> GetTournamentByIdAsync(long id);
+		Task<TournamentModel> GetTournamentByIdAsync(long id);
 
 		/// <summary>
 		/// Asynchronously gets list of all tournament models.

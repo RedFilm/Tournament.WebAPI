@@ -14,14 +14,14 @@ using Tournaments.Domain.Enums;
 
 namespace Tournaments.Application.Services
 {
-    public class AuthService : IAuthService
+	public class AuthService : IAuthService
 	{
 		private readonly UserManager<AppUser> _userManager;
 		private readonly SignInManager<AppUser> _signinManager;
 		private readonly JwtOptions jwtOptions;
 		private readonly IMapper _mapper;
 
-		public AuthService(UserManager<AppUser> userManager, 
+		public AuthService(UserManager<AppUser> userManager,
 			SignInManager<AppUser> signinManager,
 			IOptions<JwtOptions> options,
 			IMapper mapper)
@@ -61,13 +61,13 @@ namespace Tournaments.Application.Services
 
 			var jwtToken = GenerateTokenAsync(model);
 
-			return new AuthenticationResultModel { Token = jwtToken.Result};
+			return new AuthenticationResultModel { Token = jwtToken.Result };
 		}
 
 		private async Task<string> GenerateTokenAsync(LoginModel model)
 		{
 			var user = await _userManager.FindByNameAsync(model.UserName);
-			
+
 			var claims = new List<Claim>()
 			{
 				new Claim(ClaimTypes.NameIdentifier, user!.Id.ToString()),

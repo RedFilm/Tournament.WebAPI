@@ -7,11 +7,8 @@ using Tournaments.API.Extensions;
 using Tournaments.Domain.Mapping;
 using FluentValidation;
 using Tournaments.Domain.Interfaces.Services;
-using System.Text.Json.Serialization;
 using Tournaments.Persistence.Initializers;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Tournaments.API;
 using Tournaments.Domain.Validators.AuthValidators;
 
 var builder = WebApplication.CreateBuilder(args);
