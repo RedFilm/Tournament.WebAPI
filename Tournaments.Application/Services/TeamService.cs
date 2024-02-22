@@ -82,9 +82,6 @@ namespace Tournaments.Application.Services
 		{
 			var teams = await _teamRepository.GetTeamsAsync();
 
-			if (teams.Count() == 0)
-				throw new NotFoundException("There no teams yet");
-
 			return _mapper.Map<IEnumerable<TeamWithIdModel>>(teams);
 		}
 

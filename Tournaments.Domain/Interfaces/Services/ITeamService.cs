@@ -19,7 +19,6 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// Asynchronously gets all teams.
 		/// </summary>
 		/// <returns>IEnumerable of TeamModel entities</returns>
-		/// <exception cref="NotFoundException"></exception>
 		Task<IEnumerable<TeamWithIdModel>> GetTeamsAsync();
 
 		/// <summary>
