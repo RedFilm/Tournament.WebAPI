@@ -15,8 +15,8 @@ namespace Tournaments.API.Controllers
 		private readonly IValidator<TournamentWithIdModel> _tournamentValidator;
 
 		public TournamentController(ITournamentService tournamentService, IValidator<TournamentWithIdModel> tournamentValidator)
-        {
-            _tournamentService = tournamentService;
+		{
+			_tournamentService = tournamentService;
 			_tournamentValidator = tournamentValidator;
 
 		}
@@ -40,7 +40,7 @@ namespace Tournaments.API.Controllers
 			return tournamentModels;
 		}
 
-		[HttpGet("GetTeams/{id}")]
+		[HttpGet("{id}/GetTeams")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TeamModel>))]
 		public async Task<IEnumerable<TeamModel>> GetTeams(long id)
 		{

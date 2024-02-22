@@ -32,7 +32,7 @@ namespace Tournaments.API.Controllers
 			return teamModel!;
 		}
 
-		[HttpGet("GetPlayers/{id}")]
+		[HttpGet("{id}/GetPlayers")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AppUser>))]
 		public async Task<IEnumerable<AppUser>> GetPlayers(long id)
 		{
@@ -51,7 +51,7 @@ namespace Tournaments.API.Controllers
 			return teamModels;
 		}
 
-		[HttpGet("GetTournaments/{id}")]
+		[HttpGet("{id}/GetTournaments")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TeamModel>))]
 		public async Task<IEnumerable<TournamentWithIdModel>> GetTournaments(long id)
 		{
