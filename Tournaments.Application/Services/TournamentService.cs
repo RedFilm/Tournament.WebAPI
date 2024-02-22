@@ -64,14 +64,12 @@ namespace Tournaments.Application.Services
 			return _mapper.Map<IEnumerable<TournamentWithIdModel>>(tournaments);
 		}
 
-		public async Task<bool> UpdateTournamentAsync(TournamentWithIdModel tournamentModel)
+		public async Task UpdateTournamentAsync(TournamentWithIdModel tournamentModel)
 		{
-			if (!await _tournamentRepository.AnyAsync(tournamentModel.Id))
-				throw new NotFoundException("Tournament doesn't exist");
-
 			var tournament = _mapper.Map<Tournament>(tournamentModel);
 
-			return await _tournamentRepository.UpdateTournamentAsync(tournament);
+			if (!await _tournamentRepository.UpdateTournamentAsync(tournament))
+				throw new NotFoundException("Couldn't save changes or tournament doesn't exist");
 		}
 	}
 }

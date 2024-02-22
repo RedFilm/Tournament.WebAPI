@@ -146,14 +146,12 @@ namespace Tournaments.Application.Services
 			return await _teamRepository.RemovePlayerFromTeamAsync(player, model.TeamId);
 		}
 
-		public async Task<bool> UpdateTeamAsync(TeamWithIdModel teamModel)
+		public async Task UpdateTeamAsync(TeamWithIdModel teamModel)
 		{
-			if (!await _teamRepository.AnyAsync(teamModel.Id))
-				throw new NotFoundException("Team doesn't exist");
-
 			var team = _mapper.Map<Team>(teamModel);
 
-			return await _teamRepository.UpdateTeamAsync(team);
+			if (!await _teamRepository.UpdateTeamAsync(team))
+				throw new BadRequestException("Couldn't save changes or team doesn't exist");
 		}
 	}
 }

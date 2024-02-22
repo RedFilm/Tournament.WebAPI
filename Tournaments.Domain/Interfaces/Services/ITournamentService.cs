@@ -31,9 +31,8 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// Asynchronously update existing tournament in the database.
 		/// </summary>
 		/// <param name="tournament">Tournament model</param>
-		/// <returns>Result of adding. True if entity successfully updated in the database.</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<bool> UpdateTournamentAsync(TournamentWithIdModel tournament);
+		Task UpdateTournamentAsync(TournamentWithIdModel tournament);
 
 		/// <summary>
 		/// Asynchronously remove tournament from the database by id.
