@@ -25,18 +25,25 @@ namespace Tournaments.API.Middlewares
 			}
 			catch (ValidationException exception)
 			{
+				_logger.LogInformation("There's an validation error {Message}.", exception.Message);
+
 				await HandleExceptionAsync(context,
 					StatusCodes.Status400BadRequest,
 					exception.GetModel());
 			}
 			catch (ExceptionWithStatusCode exception)
 			{
+				_logger.LogWarning("Bad request {Message}. Status code : {StatuseCode}.",
+					exception.Message, exception.StatusCode);
+
 				await HandleExceptionAsync(context,
 					exception.StatusCode,
 					exception.GetModel());
 			}
 			catch (Exception exception)
 			{
+				_logger.LogError("Internal server error {exception}", exception);
+
 				await HandleExceptionAsync(context,
 					StatusCodes.Status500InternalServerError,
 					exception.GetModel());

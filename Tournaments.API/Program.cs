@@ -54,6 +54,7 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+
 app.UseSerilogRequestLogging();
 app.UseExceptionHandlerMiddleware();
 app.UseAuthentication();
