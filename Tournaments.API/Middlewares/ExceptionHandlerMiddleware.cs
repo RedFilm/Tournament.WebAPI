@@ -33,7 +33,7 @@ namespace Tournaments.API.Middlewares
 			}
 			catch (ExceptionWithStatusCode exception)
 			{
-				_logger.LogWarning("Bad request {Message}. Status code : {StatuseCode}.",
+				_logger.LogInformation("Bad request {Message}. Status code : {StatuseCode}.",
 					exception.Message, exception.StatusCode);
 
 				await HandleExceptionAsync(context,
