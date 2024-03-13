@@ -2,10 +2,11 @@
 using Tournaments.Domain.Models;
 using FluentValidation;
 using Tournaments.Domain.Interfaces.Services;
+using Tournaments.Domain.Models.AuthModels;
 
 namespace Tournaments.API.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
 	public class AuthController : ControllerBase
 	{

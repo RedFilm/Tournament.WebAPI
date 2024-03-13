@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Tournaments.Domain.Models;
+using Tournaments.Domain.Models.AuthModels;
 
 namespace Tournaments.Domain.Validators.AuthValidators
 {

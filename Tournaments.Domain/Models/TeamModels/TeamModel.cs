@@ -7,7 +7,6 @@ namespace Tournaments.Domain.Models.TeamModels
         public long OwnerId { get; set; }
 
         public string TeamName { get; set; } = null!;
-        public TournamentTeamStatus Status { get; set; }
         public DateTime CreationDate { get; set; }
     }
 }

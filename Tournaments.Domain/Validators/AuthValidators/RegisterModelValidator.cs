@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using System.Text.RegularExpressions;
-using Tournaments.Domain.Models;
+using Tournaments.Domain.Models.AuthModels;
 
 namespace Tournaments.Domain.Validators.AuthValidators
 {
