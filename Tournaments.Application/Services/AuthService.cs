@@ -11,6 +11,7 @@ using AutoMapper;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Enums;
+using Microsoft.Extensions.Logging;
 
 namespace Tournaments.Application.Services
 {
@@ -20,22 +21,25 @@ namespace Tournaments.Application.Services
 		private readonly SignInManager<AppUser> _signinManager;
 		private readonly JwtOptions jwtOptions;
 		private readonly IMapper _mapper;
+		private readonly ILogger<AuthService> _logger;
 
 		public AuthService(UserManager<AppUser> userManager,
 			SignInManager<AppUser> signinManager,
 			IOptions<JwtOptions> options,
-			IMapper mapper)
+			IMapper mapper,
+			ILogger<AuthService> logger)
 		{
 			_userManager = userManager;
 			_signinManager = signinManager;
 			jwtOptions = options.Value;
 			_mapper = mapper;
+			_logger = logger;
 		}
 		public async Task<bool> RegisterAsync(RegisterModel model)
 		{
 			var existingUser = _userManager.Users.FirstOrDefault(u => u.UserName == model.UserName);
 			if (existingUser is not null)
-				throw new BadRequestException("User with the same username already exists.");
+				throw new BadRequestException("User with the same user name already exists.");
 
 			var user = _mapper.Map<AppUser>(model);
 
@@ -44,6 +48,8 @@ namespace Tournaments.Application.Services
 
 			if (!result.Succeeded)
 				throw new RegisterFailedException("Register failed");
+
+			_logger.LogInformation("User has registered. User id: {Id}", user.Id);
 
 			return result.Succeeded;
 		}
@@ -60,6 +66,8 @@ namespace Tournaments.Application.Services
 				throw new AuthenticationFailedException("Authentication failed");
 
 			var jwtToken = GenerateTokenAsync(model);
+
+			_logger.LogInformation("User has authenticated. User id: {Id}", user.Id);
 
 			return new AuthenticationResultModel { Token = jwtToken.Result };
 		}

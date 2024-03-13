@@ -1,15 +1,12 @@
 using Tournaments.Domain.Options;
-using Tournaments.Domain.Interfaces.Repositories;
-using Tournaments.Application.Services;
 using Tournaments.Persistence.Extensions;
-using Tournaments.Persistence.Repositories;
 using Tournaments.API.Extensions;
 using Tournaments.Domain.Mapping;
 using FluentValidation;
-using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Persistence.Initializers;
 using Microsoft.AspNetCore.Identity;
 using Tournaments.Domain.Validators.AuthValidators;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +19,9 @@ builder.Services.AddControllers();
 //	options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 //	options.JsonSerializerOptions.WriteIndented = true;
 //});
+
+builder.Host.UseSerilog((context, configuration) =>
+	configuration.ReadFrom.Configuration(context.Configuration));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -54,6 +54,8 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+
+app.UseSerilogRequestLogging();
 app.UseExceptionHandlerMiddleware();
 app.UseAuthentication();
 app.UseAuthorization();
