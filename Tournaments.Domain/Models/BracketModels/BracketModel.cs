@@ -6,6 +6,6 @@ namespace Tournaments.Domain.Models.BracketModels
 	{
 		public long Id { get; set; }
 		public long TournamentId { get; set; }
-		public List<Stage> Stages { get; set; } = null!;
+		public List<StageModel> Stages { get; set; } = null!;
 	}
 }
