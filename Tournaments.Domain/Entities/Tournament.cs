@@ -4,6 +4,9 @@
 	{
         public long Id { get; set; }
 
+        public long? BracketId { get; set; }
+        public Bracket? Bracket { get; set; }
+
         public long OrganizerId { get; set; }
 		public AppUser Organizer { get; set; } = null!;
 

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Tournaments.Persistence;
@@ -11,9 +12,11 @@ using Tournaments.Persistence;
 namespace Tournaments.Persistence.Migrations
 {
     [DbContext(typeof(TournamentDbContext))]
-    partial class TournamentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240313104904_AddStage")]
+    partial class AddStage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,25 +242,6 @@ namespace Tournaments.Persistence.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Tournaments.Domain.Entities.Bracket", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("TournamentId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TournamentId")
-                        .IsUnique();
-
-                    b.ToTable("Brackets");
-                });
-
             modelBuilder.Entity("Tournaments.Domain.Entities.Match", b =>
                 {
                     b.Property<long>("MatchId")
@@ -302,15 +286,10 @@ namespace Tournaments.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long?>("BracketId")
-                        .HasColumnType("bigint");
-
                     b.Property<int>("StageNumber")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BracketId");
 
                     b.ToTable("Stages");
                 });
@@ -345,9 +324,6 @@ namespace Tournaments.Persistence.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long?>("BracketId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("GameName")
                         .IsRequired()
@@ -473,17 +449,6 @@ namespace Tournaments.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Tournaments.Domain.Entities.Bracket", b =>
-                {
-                    b.HasOne("Tournaments.Domain.Entities.Tournament", "Tournament")
-                        .WithOne("Bracket")
-                        .HasForeignKey("Tournaments.Domain.Entities.Bracket", "TournamentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tournament");
-                });
-
             modelBuilder.Entity("Tournaments.Domain.Entities.Match", b =>
                 {
                     b.HasOne("Tournaments.Domain.Entities.Stage", "Stage")
@@ -511,13 +476,6 @@ namespace Tournaments.Persistence.Migrations
                     b.Navigation("Team2");
 
                     b.Navigation("Winner");
-                });
-
-            modelBuilder.Entity("Tournaments.Domain.Entities.Stage", b =>
-                {
-                    b.HasOne("Tournaments.Domain.Entities.Bracket", null)
-                        .WithMany("Stages")
-                        .HasForeignKey("BracketId");
                 });
 
             modelBuilder.Entity("Tournaments.Domain.Entities.Tournament", b =>
@@ -555,11 +513,6 @@ namespace Tournaments.Persistence.Migrations
                     b.Navigation("Tournaments");
                 });
 
-            modelBuilder.Entity("Tournaments.Domain.Entities.Bracket", b =>
-                {
-                    b.Navigation("Stages");
-                });
-
             modelBuilder.Entity("Tournaments.Domain.Entities.Stage", b =>
                 {
                     b.Navigation("Matches");
@@ -572,8 +525,6 @@ namespace Tournaments.Persistence.Migrations
 
             modelBuilder.Entity("Tournaments.Domain.Entities.Tournament", b =>
                 {
-                    b.Navigation("Bracket");
-
                     b.Navigation("TournamentTeams");
                 });
 #pragma warning restore 612, 618
