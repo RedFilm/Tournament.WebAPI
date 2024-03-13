@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Entities;
+using System.Numerics;
 
 namespace Tournaments.Persistence.Repositories
 {
@@ -74,6 +75,16 @@ namespace Tournaments.Persistence.Repositories
 		public async Task<bool> AnyAsync(long tournamentId)
 		{
 			return await _context.Tournaments.AsNoTracking().FirstOrDefaultAsync(t => t.Id == tournamentId) is not null;
+		}
+
+		public async Task<bool> AddBracketAsync(Bracket bracket, long tournamentId)
+		{
+			var tournament = _context.Tournaments.FirstOrDefault(t => t.Id == tournamentId);
+
+			if (tournament is not null)
+				tournament.Bracket = bracket;
+
+			return await _context.SaveChangesAsync() > 0;
 		}
 	}
 }

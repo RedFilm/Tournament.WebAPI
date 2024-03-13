@@ -1,8 +1,6 @@
-﻿using Tournaments.Domain.Enums.Statuses;
-
-namespace Tournaments.Domain.Models.TeamModels
+﻿namespace Tournaments.Domain.Models.TeamModels
 {
-    public class TeamModel
+	public class TeamModel
     {
         public long OwnerId { get; set; }
 

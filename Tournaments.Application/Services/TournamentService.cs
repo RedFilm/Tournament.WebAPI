@@ -3,6 +3,7 @@ using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
+using Tournaments.Domain.Models.BracketModels;
 using Tournaments.Domain.Models.TeamModels;
 using Tournaments.Domain.Models.TournamentModels;
 
@@ -12,11 +13,15 @@ namespace Tournaments.Application.Services
 	{
 		private readonly IMapper _mapper;
 		private readonly ITournamentRepository _tournamentRepository;
+		private readonly BracketGenerator _bracketGenerator;
 
-		public TournamentService(IMapper mapper, ITournamentRepository tournamentRepository)
+		public TournamentService(IMapper mapper,
+			ITournamentRepository tournamentRepository,
+			BracketGenerator bracketGenerator)
 		{
 			_mapper = mapper;
 			_tournamentRepository = tournamentRepository;
+			_bracketGenerator = bracketGenerator;
 		}
 
 		public async Task<bool> AddTournamentAsync(TournamentModel tournamentModel)
@@ -70,6 +75,43 @@ namespace Tournaments.Application.Services
 
 			if (!await _tournamentRepository.UpdateTournamentAsync(tournament))
 				throw new NotFoundException("Couldn't save changes or tournament doesn't exist");
+		}
+
+		public async Task<BracketModel> GenerateNewBracketAsync(long tournamentId)
+		{
+			var tournament = await _tournamentRepository.GetTournamentByIdAsync(tournamentId);
+
+			if (tournament is null)
+				throw new NotFoundException("Tournament with this id doesn't exist");
+
+			var teams = await _tournamentRepository.GetTeamsAsync(tournamentId);
+
+			if (teams == null || teams.Count() < 2 || teams.Count() > 32)
+			{
+				throw new ArgumentException("Количество команд должно быть в диапазоне [2;32].");
+			}
+
+			var bracket = _bracketGenerator.GenerateNewBracket(teams.ToList(), tournamentId);
+
+			await _tournamentRepository.AddBracketAsync(bracket, tournamentId);
+
+			return _mapper.Map<BracketModel>(bracket);
+		}
+
+		public async Task<BracketModel> GetBracketAsync(long tournamentId)
+		{
+			var tournament = await _tournamentRepository.GetTournamentByIdAsync(tournamentId);
+
+			if (tournament is null)
+				throw new NotFoundException("Tournament with this id doesn't exist");
+
+			return _mapper.Map<BracketModel>(tournament.Bracket) ?? 
+				throw new NotFoundException("There's no bracket yet");
+		}
+
+		public async Task<BracketModel> UpdateBracketAsync(BracketUpdateModel bracketModel)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

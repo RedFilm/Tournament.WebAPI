@@ -46,6 +46,14 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		Task<bool> DeleteTournamentAsync(long id);
 
 		/// <summary>
+		/// Asynchronously adds bracket to tournament.
+		/// </summary>
+		/// <param name="bracket">Bracket</param>
+		/// <param name="tournamentId">Tournament id</param>
+		/// <returns>Result of adding. True if bracket successfully added to the tournament</returns>
+		Task<bool> AddBracketAsync(Bracket bracket, long tournamentId);
+
+		/// <summary>
 		/// Asynchronously checks if tournament exists.
 		/// </summary>
 		/// <param name="tournamentId">Tournament id</param>

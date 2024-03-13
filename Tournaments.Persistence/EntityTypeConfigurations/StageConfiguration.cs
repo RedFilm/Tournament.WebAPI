@@ -9,8 +9,7 @@ namespace Tournaments.Persistence.EntityTypeConfigurations
 		public void Configure(EntityTypeBuilder<Stage> builder)
 		{
 			builder.HasMany(s => s.Matches)
-				.WithOne(m => m.Stage)
-				.HasForeignKey(m => m.StageId);
+				.WithOne(m => m.Stage);
 		}
 	}
 }

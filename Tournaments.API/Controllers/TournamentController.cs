@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
+using Tournaments.Domain.Models.BracketModels;
 using Tournaments.Domain.Models.TeamModels;
 using Tournaments.Domain.Models.TournamentModels;
 
@@ -13,12 +14,15 @@ namespace Tournaments.API.Controllers
 	{
 		private readonly ITournamentService _tournamentService;
 		private readonly IValidator<TournamentWithIdModel> _tournamentValidator;
+		private readonly IValidator<BracketUpdateModel> _bracketValidator;
 
-		public TournamentController(ITournamentService tournamentService, IValidator<TournamentWithIdModel> tournamentValidator)
+		public TournamentController(ITournamentService tournamentService, 
+			IValidator<TournamentWithIdModel> tournamentValidator,
+			IValidator<BracketUpdateModel> bracketValidator)
 		{
 			_tournamentService = tournamentService;
 			_tournamentValidator = tournamentValidator;
-
+			_bracketValidator = bracketValidator;
 		}
 
 		[HttpGet("GetTournament/{id}")]
@@ -81,6 +85,21 @@ namespace Tournaments.API.Controllers
 			await _tournamentService.DeleteTournamentAsync(id);
 
 			return Ok();
+		}
+
+		[HttpPost("{tournamentId}/GenerateNewBracket")]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BracketModel))]
+		public Task<BracketModel> GenerateNewBracket(long tournamentId)
+		{
+			return _tournamentService.GenerateNewBracketAsync(tournamentId);
+		}
+
+		[HttpPost("{tournamentId}/UpdateBracket")]
+		public Task<BracketModel> UpdateBracket(BracketUpdateModel model)
+		{
+			_bracketValidator.ValidateAndThrowAsync(model);
+
+			return _tournamentService.UpdateBracketAsync(model);
 		}
 	}
 }

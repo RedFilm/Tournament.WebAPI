@@ -1,4 +1,5 @@
 ﻿using Tournaments.Domain.Exceptions;
+using Tournaments.Domain.Models.BracketModels;
 using Tournaments.Domain.Models.TeamModels;
 using Tournaments.Domain.Models.TournamentModels;
 
@@ -49,5 +50,28 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <returns>IEnumerable of Team models</returns>
 		/// <exception cref="NotFoundException"></exception>
 		Task<IEnumerable<TeamWithIdModel>> GetTeamsAsync(long tournamentId);
+
+		/// <summary>
+		/// Asynchronously get bracket by id.
+		/// </summary>
+		/// <param name="bracketId">Bracket id</param>
+		/// <returns>BracketModel which has this id</returns>
+		/// <exception cref="NotFoundException"></exception>
+		Task<BracketModel> GetBracketAsync(long tournamentId);
+
+		/// <summary>
+		/// Asynchronously generate new bracket. If the bracket already exists, replace it with a new one.
+		/// </summary>
+		/// <param name="tournamentId">Tournament id</param>
+		/// <returns>New bracket model</returns>
+		Task<BracketModel> GenerateNewBracketAsync(long tournamentId);
+
+		/// <summary>
+		/// Asynchronously update existing bracket based on the results of the matches.
+		/// </summary>
+		/// <param name="bracketModel">BracketModel</param>
+		/// <returns>Updated bracket model</returns>
+		/// <exception cref="NotFoundException"></exception>
+		Task<BracketModel> UpdateBracketAsync(BracketUpdateModel bracketModel);
 	}
 }

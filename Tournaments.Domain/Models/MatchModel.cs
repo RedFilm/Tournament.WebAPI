@@ -1,6 +1,4 @@
-﻿using Tournaments.Domain.Entities;
-
-namespace Tournaments.Domain.Models
+﻿namespace Tournaments.Domain.Models
 {
 	public class MatchModel
 	{
