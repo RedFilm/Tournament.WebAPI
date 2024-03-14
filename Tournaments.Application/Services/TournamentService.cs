@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Repositories;
@@ -87,9 +88,7 @@ namespace Tournaments.Application.Services
 			var teams = await _tournamentRepository.GetTeamsAsync(tournamentId);
 
 			if (teams == null || teams.Count() < 2 || teams.Count() > 32)
-			{
-				throw new ArgumentException("Количество команд должно быть в диапазоне [2;32].");
-			}
+				throw new BadRequestException("The number of teams in the tournament should be in the range [2;32].");
 
 			var bracket = _bracketGenerator.GenerateNewBracket(teams.ToList(), tournamentId);
 
@@ -105,7 +104,7 @@ namespace Tournaments.Application.Services
 			if (tournament is null)
 				throw new NotFoundException("Tournament with this id doesn't exist");
 
-			return _mapper.Map<BracketModel>(tournament.Bracket) ?? 
+			return _mapper.Map<BracketModel>(tournament.Bracket) ??
 				throw new NotFoundException("There's no bracket yet");
 		}
 

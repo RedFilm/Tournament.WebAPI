@@ -98,7 +98,7 @@ namespace Tournaments.Application.Services
 			if (tournament is null)
 				throw new NotFoundException("Tournament doesn't exist");
 
-			if (team.OwnerId != model.UserId)
+			if (team.OwnerId != model.OwnerId)
 				throw new BadRequestException("You must be the creator of the team to register for tournament");
 
 			if (await _tournamentTeamRepository.AnyAsync(model.TournamentId, model.TeamId))

@@ -33,7 +33,7 @@ namespace Tournaments.Application
 			return new Bracket
 			{
 				Stages = stages,
-				TournamentId = tournamentId
+				//TournamentId = tournamentId
 			};
 		}
 

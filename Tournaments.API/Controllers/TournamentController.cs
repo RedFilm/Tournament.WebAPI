@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Tournaments.Domain.Exceptions.BaseExceptions;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.BracketModels;
@@ -89,6 +90,7 @@ namespace Tournaments.API.Controllers
 
 		[HttpPost("{tournamentId}/GenerateNewBracket")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BracketModel))]
+		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		public Task<BracketModel> GenerateNewBracket(long tournamentId)
 		{
 			return _tournamentService.GenerateNewBracketAsync(tournamentId);

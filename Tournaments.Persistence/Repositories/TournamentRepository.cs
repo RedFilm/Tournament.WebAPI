@@ -10,9 +10,9 @@ namespace Tournaments.Persistence.Repositories
 		private readonly TournamentDbContext _context;
 
 		public TournamentRepository(TournamentDbContext context)
-        {
-            _context =	context;
-        }
+		{
+			_context = context;
+		}
 
 		/// <inheritdoc />
 		public async Task<bool> AddTournamentAsync(Tournament tournament)
@@ -28,7 +28,7 @@ namespace Tournaments.Persistence.Repositories
 		{
 			var tournament = await _context.Tournaments.FirstOrDefaultAsync(x => x.Id == id);
 
-			if (tournament is null) 
+			if (tournament is null)
 				return false;
 
 			_context.Tournaments.Remove(tournament);
@@ -54,7 +54,7 @@ namespace Tournaments.Persistence.Repositories
 			var tournament = await _context.Tournaments.FirstOrDefaultAsync(x => x.Id == id);
 			return tournament;
 		}
-		
+
 		/// <inheritdoc />
 		public async Task<IEnumerable<Tournament>> GetTournamentsAsync()
 		{
@@ -79,7 +79,11 @@ namespace Tournaments.Persistence.Repositories
 
 		public async Task<bool> AddBracketAsync(Bracket bracket, long tournamentId)
 		{
-			var tournament = _context.Tournaments.FirstOrDefault(t => t.Id == tournamentId);
+			var tournament = _context.Tournaments
+				.Include(t => t.Bracket)
+				.ThenInclude(b => b.Stages)
+				.ThenInclude(s => s.Matches)
+				.FirstOrDefault(t => t.Id == tournamentId);
 
 			if (tournament is not null)
 				tournament.Bracket = bracket;
