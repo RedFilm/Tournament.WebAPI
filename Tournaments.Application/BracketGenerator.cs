@@ -5,7 +5,7 @@ namespace Tournaments.Application
 	public class BracketGenerator
 	{
 		// Точка входа для генерации сетки
-		public Bracket GenerateNewBracket(List<Team> teams, long tournamentId)
+		public Bracket GenerateNewBracket(List<Team> teams)
 		{
 			List<long> teamIds = new List<long>();
 
@@ -14,9 +14,9 @@ namespace Tournaments.Application
 			int stagesCount = (int)Math.Ceiling(Math.Log2(teams.Count)); // Вычисление общего количества стадий
 
 			List<Stage> stages = new List<Stage>(); // Список стадий
-			//int.PopCount()
+
 			// Если кол-во игроков равно степени двойки, то заполняются все стадии пустыми матчами, кроме последней.
-			if (Math.Log2(teams.Count) == stagesCount)
+			if (int.PopCount(teams.Count) == 1)
 			{
 				// Создание пустых матчей для каждой стадии
 				FillStagesWithDefault(stagesCount - 1, stages);
@@ -30,11 +30,7 @@ namespace Tournaments.Application
 				FillLastStages(stagesCount - 2, stagesCount - 1, teams.Count, stages, teamIds);
 			}
 
-			return new Bracket
-			{
-				Stages = stages,
-				//TournamentId = tournamentId
-			};
+			return new Bracket { Stages = stages };
 		}
 
 		// Заполнение стадий турнира пустыми матчами (матчи, которые будут сыграны позже)
@@ -103,19 +99,23 @@ namespace Tournaments.Application
 					}
 				}
 				// Когда заполняется последняя стадия, stageCount = 1, формула расчета кол-ва матчей меняется.
+				// Заполнение последней стадии зависит от того, как заполнена предыдущая.
 				else
 				{
-					// Расчет кол-ва матчей для последней стадии
-					//teamsInStageCount = 2 * totalTeamsCount - (int)Math.Pow(2, stageNumber + 1);
-					//matchesCount = teamsInStageCount / 2;
-
 					var totalMatchesInStageCount = (int)Math.Pow(2, stageNumber);
 
 					// Распределение команд по матчам в стадии
 					for (int i = 0; i < totalMatchesInStageCount; i++)
 					{
+						// Частный случай. Команды только 2, соответственно номер стадии будет 0.
+						if (stageNumber == 0)
+						{
+							var match = CreateMatch(i, CreateCount.TwoTeam, teamIds);
+							matches.Add(match);
+							i++;
+						}
 						// Если на следующей стадии соответствующий матч уже заполнен, то смещаем i = identifier на 2 и продолжаем проверку
-						if (stages[stageNumber - 1].Matches[i / 2].Team1Id is not null &&
+						else if (stages[stageNumber - 1].Matches[i / 2].Team1Id is not null &&
 							stages[stageNumber - 1].Matches[i / 2].Team2Id is not null)
 						{
 							i = i + 2;

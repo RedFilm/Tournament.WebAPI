@@ -90,7 +90,7 @@ namespace Tournaments.Application.Services
 			if (teams == null || teams.Count() < 2 || teams.Count() > 32)
 				throw new BadRequestException("The number of teams in the tournament should be in the range [2;32].");
 
-			var bracket = _bracketGenerator.GenerateNewBracket(teams.ToList(), tournamentId);
+			var bracket = _bracketGenerator.GenerateNewBracket(teams.ToList());
 
 			await _tournamentRepository.AddBracketAsync(bracket, tournamentId);
 
