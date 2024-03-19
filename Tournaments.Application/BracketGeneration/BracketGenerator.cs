@@ -1,6 +1,7 @@
 ﻿using Tournaments.Domain.Entities;
+using Tournaments.Domain.Models;
 
-namespace Tournaments.Application
+namespace Tournaments.Application.BracketGeneration
 {
 	public class BracketGenerator
 	{
@@ -149,10 +150,13 @@ namespace Tournaments.Application
 
 			if (count == CreateCount.TwoTeam)
 			{
-				var team1Id = teamIds[random.Next(teamIds.Count)];
-				var team2Id = teamIds[random.Next(teamIds.Count)];
+				if (teamIds.Count < 2)
+					throw new ArgumentException("To create a match, the number of teams must be at least 2");
 
+				var team1Id = teamIds[random.Next(teamIds.Count)];
 				teamIds?.Remove(team1Id);
+
+				var team2Id = teamIds![random.Next(teamIds.Count)];
 				teamIds?.Remove(team2Id);
 
 				return new Match
@@ -196,14 +200,14 @@ namespace Tournaments.Application
 			Random random = new Random();
 
 			// Добавить вторую команду, если одна из них null
-			if (match.Team1Id == null)
+			if (match.Team1Id is null)
 			{
 				var team1Id = teamIds[random.Next(teamIds.Count)];
 				teamIds?.Remove(team1Id);
 
 				match.Team1Id = team1Id;
 			}
-			else if (match.Team2Id == null)
+			else if (match.Team2Id is null)
 			{
 				var team2Id = teamIds[random.Next(teamIds.Count)];
 				teamIds?.Remove(team2Id);
@@ -225,10 +229,35 @@ namespace Tournaments.Application
 			}
 		}
 
-		// Dictionary<long,long> - MatchId, WinnerId
-		public void Update(Bracket bracket, Dictionary<long, long> results)
+		public Bracket Update(Bracket bracket, List<MatchResultModel> matchesResult)
 		{
+			if (matchesResult[0].StageNumber == 0)
+				return bracket;
 
+			for (int i = 0; i < matchesResult.Count; i++)
+			{
+				var currentStageMatch = bracket.Stages.SelectMany(s => s.Matches)
+					.FirstOrDefault(m => m.MatchId == matchesResult[i].MatchId);
+
+				if (currentStageMatch is null)
+					continue;
+
+				currentStageMatch.WinnerId = matchesResult[i].WinnerId;
+				var nextStageMatchNumber = currentStageMatch.Identifier / 2;
+
+				var nextStageMatch = bracket.Stages.SelectMany(s => s.Matches)
+					.FirstOrDefault(m => m.Identifier == nextStageMatchNumber);
+
+				if (nextStageMatch is null)
+					continue;
+
+				if (nextStageMatch.Team1Id is null)
+					nextStageMatch.Team1Id = matchesResult[i].WinnerId;
+				else if (nextStageMatch.Team2Id is null)
+					nextStageMatch.Team2Id = matchesResult[i].WinnerId;
+			}
+
+			return bracket;
 		}
 	}
 

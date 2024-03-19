@@ -2,9 +2,8 @@
 {
 	public class BracketUpdateModel
 	{
-        public long TournamentId { get; set; }
+		public long TournamentId { get; set; }
 
-        // Dictionary<long,long> - MatchId, WinnerId
-        public Dictionary<long, long>? Results { get; set; }
+		public List<MatchResultModel> Results { get; set; } = null!;
     }
 }

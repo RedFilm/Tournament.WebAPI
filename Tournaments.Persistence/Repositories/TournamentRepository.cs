@@ -66,9 +66,7 @@ namespace Tournaments.Persistence.Repositories
 		public async Task<bool> UpdateTournamentAsync(Tournament tournament)
 		{
 			_context.Tournaments.Update(tournament);
-			var result = await _context.SaveChangesAsync();
-
-			return result > 0;
+			return await _context.SaveChangesAsync() > 0;
 		}
 
 		/// <inheritdoc />
@@ -77,18 +75,26 @@ namespace Tournaments.Persistence.Repositories
 			return await _context.Tournaments.AsNoTracking().FirstOrDefaultAsync(t => t.Id == tournamentId) is not null;
 		}
 
+		/// <inheritdoc />
 		public async Task<bool> AddBracketAsync(Bracket bracket, long tournamentId)
 		{
-			var tournament = _context.Tournaments
-				.Include(t => t.Bracket)
-				.ThenInclude(b => b.Stages)
-				.ThenInclude(s => s.Matches)
-				.FirstOrDefault(t => t.Id == tournamentId);
+			var tournament = await GetTournamentWithBracketAsync(tournamentId);
 
-			if (tournament is not null)
+			if (tournament is not null )
 				tournament.Bracket = bracket;
 
 			return await _context.SaveChangesAsync() > 0;
+		}
+
+		public async Task<Tournament?> GetTournamentWithBracketAsync(long tournamentId)
+		{
+			var tournament = await _context.Tournaments
+				.Include(t => t.Bracket)
+				.ThenInclude(b => b.Stages)
+				.ThenInclude(s => s.Matches)
+				.FirstOrDefaultAsync(t => t.Id == tournamentId);
+
+			return tournament;
 		}
 	}
 }

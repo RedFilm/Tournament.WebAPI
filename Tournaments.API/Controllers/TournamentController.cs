@@ -91,17 +91,17 @@ namespace Tournaments.API.Controllers
 		[HttpPost("{tournamentId}/GenerateNewBracket")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BracketModel))]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
-		public Task<BracketModel> GenerateNewBracket(long tournamentId)
+		public async Task<BracketModel> GenerateNewBracket(long tournamentId)
 		{
-			return _tournamentService.GenerateNewBracketAsync(tournamentId);
+			return await _tournamentService.GenerateNewBracketAsync(tournamentId);
 		}
 
 		[HttpPost("{tournamentId}/UpdateBracket")]
-		public Task<BracketModel> UpdateBracket(BracketUpdateModel model)
+		public async Task<BracketModel> UpdateBracket(BracketUpdateModel model)
 		{
-			_bracketValidator.ValidateAndThrowAsync(model);
+			await _bracketValidator.ValidateAndThrowAsync(model);
 
-			return _tournamentService.UpdateBracketAsync(model);
+			return await _tournamentService.UpdateBracketAsync(model);
 		}
 	}
 }

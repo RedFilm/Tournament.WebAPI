@@ -1,6 +1,4 @@
-﻿using Tournaments.Domain.Entities;
-
-namespace Tournaments.Domain.Models.BracketModels
+﻿namespace Tournaments.Domain.Models.BracketModels
 {
 	public class BracketModel
 	{

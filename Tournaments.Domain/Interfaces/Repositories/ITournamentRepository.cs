@@ -1,15 +1,24 @@
 ﻿using Tournaments.Domain.Entities;
+using Tournaments.Domain.Models.BracketModels;
+using Tournaments.Domain.Models;
 
 namespace Tournaments.Domain.Interfaces.Repositories
 {
 	public interface ITournamentRepository
-    {
+	{
 		/// <summary>
 		/// Asynchronously gets tournament from the database by id.
 		/// </summary>
-		/// <param name="id">Tournament id</param>
+		/// <param name="tournamentId">Tournament id</param>
 		/// <returns>Tournament entity from the database which has this id</returns>
-		Task<Tournament?> GetTournamentByIdAsync(long id);
+		Task<Tournament?> GetTournamentByIdAsync(long tournamentId);
+
+		/// <summary>
+		/// Asynchronously gets tournament include its bracket from the database by id.
+		/// </summary>
+		/// <param name="tournamentId">Tournament id</param>
+		/// <returns>Tournament entity include its bracket</returns>
+		Task<Tournament?> GetTournamentWithBracketAsync(long tournamentId);
 
 		/// <summary>
 		/// Asynchronously gets list of all tournaments.
@@ -41,16 +50,16 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// <summary>
 		/// Asynchronously remove tournament from the database by id.
 		/// </summary>
-		/// <param name="id">Tournament id</param>
+		/// <param name="tournamentId">Tournament id</param>
 		/// <returns>Result of removing. True if entity successfully removed from the database.</returns>
-		Task<bool> DeleteTournamentAsync(long id);
+		Task<bool> DeleteTournamentAsync(long tournamentId);
 
 		/// <summary>
 		/// Asynchronously adds bracket to tournament.
 		/// </summary>
 		/// <param name="bracket">Bracket</param>
 		/// <param name="tournamentId">Tournament id</param>
-		/// <returns>Result of adding. True if bracket successfully added to the tournament</returns>
+		/// <returns>Result of adding. True if bracket successfully added to the tournament.</returns>
 		Task<bool> AddBracketAsync(Bracket bracket, long tournamentId);
 
 		/// <summary>

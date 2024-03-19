@@ -1,4 +1,5 @@
 ﻿using Tournaments.Domain.Exceptions;
+using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.BracketModels;
 using Tournaments.Domain.Models.TeamModels;
 using Tournaments.Domain.Models.TournamentModels;
@@ -69,9 +70,11 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <summary>
 		/// Asynchronously update existing bracket based on the results of the matches.
 		/// </summary>
-		/// <param name="bracketModel">BracketModel</param>
+		/// <param name="model">BracketUpdateModel</param>
 		/// <returns>Updated bracket model</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<BracketModel> UpdateBracketAsync(BracketUpdateModel bracketModel);
+		Task<BracketModel> UpdateBracketAsync(BracketUpdateModel model);
+
+
 	}
 }
