@@ -82,14 +82,12 @@ namespace Tournaments.Application.Services
 
 		public async Task<BracketModel> GenerateNewBracketAsync(long tournamentId)
 		{
-			var tournament = await _tournamentRepository.GetTournamentByIdAsync(tournamentId);
-
-			if (tournament is null)
+			if (!await _tournamentRepository.AnyAsync(tournamentId))
 				throw new NotFoundException("Tournament with this id doesn't exist");
 
 			var teams = await _tournamentRepository.GetTeamsAsync(tournamentId);
 
-			if (teams == null || teams.Count() < 2 || teams.Count() > 32)
+			if (teams.Count() < 2 || teams.Count() > 32)
 				throw new BadRequestException("The number of teams in the tournament should be in the range [2;32].");
 
 			var bracket = _bracketGenerator.GenerateNewBracket(teams.ToList());
@@ -101,27 +99,29 @@ namespace Tournaments.Application.Services
 
 		public async Task<BracketModel> GetBracketAsync(long tournamentId)
 		{
-			var tournament = await _tournamentRepository.GetTournamentWithBracketAsync(tournamentId);
+			var bracket = await _tournamentRepository.GetBracketAsync(tournamentId);
 
-			if (tournament is null)
-				throw new NotFoundException("Tournament with this id doesn't exist");
-
-			return _mapper.Map<BracketModel>(tournament.Bracket) ??
+			if (bracket is null)
 				throw new NotFoundException("There's no bracket yet");
+
+			return _mapper.Map<BracketModel>(bracket);
 		}
 
 		public async Task<BracketModel> UpdateBracketAsync(BracketUpdateModel model)
 		{
-			var tournament = await _tournamentRepository.GetTournamentWithBracketAsync(model.TournamentId);
+			var tournament = await _tournamentRepository.GetTournamentByIdAsync(model.TournamentId);
 
 			if (tournament is null)
 				throw new NotFoundException("Tournament with this id doesn't exist");
-			if (tournament.Bracket is null)
-				throw new NotFoundException("Tournament has no bracket yet.");
 
-			var bracket = _bracketGenerator.Update(tournament.Bracket, model.Results);
+			var bracket = await _tournamentRepository.GetBracketAsync(model.TournamentId);
 
-			tournament.Bracket = bracket;
+			if (bracket is null)
+				throw new NotFoundException("Tournament has no bracket yet. Generate a new one");
+
+			var updatedBracket = _bracketGenerator.Update(bracket, model.Results);
+
+			tournament.Bracket = updatedBracket;
 
 			await _tournamentRepository.UpdateTournamentAsync(tournament);
 

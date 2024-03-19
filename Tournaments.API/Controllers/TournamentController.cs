@@ -97,11 +97,23 @@ namespace Tournaments.API.Controllers
 		}
 
 		[HttpPost("{tournamentId}/UpdateBracket")]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BracketModel))]
+		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		public async Task<BracketModel> UpdateBracket(BracketUpdateModel model)
 		{
 			await _bracketValidator.ValidateAndThrowAsync(model);
 
 			return await _tournamentService.UpdateBracketAsync(model);
+		}
+
+		[HttpPost("{tournamentId}/GetBracket")]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BracketModel))]
+		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
+		public async Task<BracketModel> GetBracket(long tournamentId)
+		{
+			var bracketModel = await _tournamentService.GetBracketAsync(tournamentId);
+
+			return bracketModel;
 		}
 	}
 }

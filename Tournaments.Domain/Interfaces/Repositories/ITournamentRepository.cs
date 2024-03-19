@@ -1,6 +1,4 @@
 ﻿using Tournaments.Domain.Entities;
-using Tournaments.Domain.Models.BracketModels;
-using Tournaments.Domain.Models;
 
 namespace Tournaments.Domain.Interfaces.Repositories
 {
@@ -12,13 +10,6 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// <param name="tournamentId">Tournament id</param>
 		/// <returns>Tournament entity from the database which has this id</returns>
 		Task<Tournament?> GetTournamentByIdAsync(long tournamentId);
-
-		/// <summary>
-		/// Asynchronously gets tournament include its bracket from the database by id.
-		/// </summary>
-		/// <param name="tournamentId">Tournament id</param>
-		/// <returns>Tournament entity include its bracket</returns>
-		Task<Tournament?> GetTournamentWithBracketAsync(long tournamentId);
 
 		/// <summary>
 		/// Asynchronously gets list of all tournaments.
@@ -53,6 +44,13 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// <param name="tournamentId">Tournament id</param>
 		/// <returns>Result of removing. True if entity successfully removed from the database.</returns>
 		Task<bool> DeleteTournamentAsync(long tournamentId);
+
+		/// <summary>
+		/// Asynchronously gets tournament bracket.
+		/// </summary>
+		/// <param name="tournamentId">Tournament id</param>
+		/// <returns>Bracket of tournament that has this id</returns>
+		Task<Bracket?> GetBracketAsync(long tournamentId);
 
 		/// <summary>
 		/// Asynchronously adds bracket to tournament.

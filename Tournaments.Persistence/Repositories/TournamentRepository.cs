@@ -78,23 +78,22 @@ namespace Tournaments.Persistence.Repositories
 		/// <inheritdoc />
 		public async Task<bool> AddBracketAsync(Bracket bracket, long tournamentId)
 		{
-			var tournament = await GetTournamentWithBracketAsync(tournamentId);
+			var tournament = await GetTournamentByIdAsync(tournamentId);
 
-			if (tournament is not null )
+			if (tournament is not null)
 				tournament.Bracket = bracket;
 
 			return await _context.SaveChangesAsync() > 0;
 		}
 
-		public async Task<Tournament?> GetTournamentWithBracketAsync(long tournamentId)
+		public async Task<Bracket?> GetBracketAsync(long tournamentId)
 		{
-			var tournament = await _context.Tournaments
-				.Include(t => t.Bracket)
-				.ThenInclude(b => b.Stages)
+			var bracket = await _context.Brackets
+				.Include(b => b.Stages)
 				.ThenInclude(s => s.Matches)
-				.FirstOrDefaultAsync(t => t.Id == tournamentId);
+				.FirstOrDefaultAsync(b => b.TournamentId == tournamentId);
 
-			return tournament;
+			return bracket;
 		}
 	}
 }
