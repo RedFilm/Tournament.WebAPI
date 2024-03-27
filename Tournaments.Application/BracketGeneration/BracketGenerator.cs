@@ -6,15 +6,13 @@ namespace Tournaments.Application.BracketGeneration
 	public class BracketGenerator
 	{
 		// Точка входа для генерации сетки
-		public Bracket GenerateNewBracket(List<Team> teams)
+		public Bracket GenerateNewBracket(ICollection<Team> teams)
 		{
-			List<long> teamIds = new List<long>();
+			var teamIds = teams.Select(t => t.Id).ToList();
 
-			FillTeamIds(teams, teamIds);
+			var stagesCount = (int)Math.Ceiling(Math.Log2(teams.Count)); // Вычисление общего количества стадий
 
-			int stagesCount = (int)Math.Ceiling(Math.Log2(teams.Count)); // Вычисление общего количества стадий
-
-			List<Stage> stages = new List<Stage>(); // Список стадий
+			var stages = new List<Stage>(stagesCount); // Список стадий
 
 			// Если кол-во игроков равно степени двойки, то заполняются все стадии пустыми матчами, кроме последней.
 			if (int.PopCount(teams.Count) == 1)
@@ -35,61 +33,64 @@ namespace Tournaments.Application.BracketGeneration
 		}
 
 		// Заполнение стадий турнира пустыми матчами (матчи, которые будут сыграны позже)
-		private void FillStagesWithDefault(int endStageIndex, List<Stage> stages)
+		private void FillStagesWithDefault(int endStageIndex, ICollection<Stage> stages)
 		{
 			for (int stageNumber = 0; stageNumber < endStageIndex; stageNumber++)
 			{
-				List<Match> matches = new List<Match>();
+				var matches = new List<Match>();
 
 				// 1 << stageNumber
 				var matchesCount = (int)Math.Pow(2, stageNumber);
 
 				for (int i = 0; i < matchesCount; i++)
-				{
-					var match = CreateEmptyMatch(i);
-					matches.Add(match);
-				}
+					matches.Add(new Match { Identifier = i });
 
 				stages.Add(new Stage { StageNumber = stageNumber, Matches = matches });
 			}
 		}
 
 		// Заполнение последних стадий турнира
-		private void FillLastStages(int startStageIndex, int totalStagesCount, int totalTeamsCount, List<Stage> stages, List<long> teamIds)
+		private void FillLastStages(int startStageIndex, int totalStagesCount, int totalTeamsCount, IList<Stage> stages, IList<long> teamIds)
 		{
 			for (int stageNumber = startStageIndex; stageNumber <= totalStagesCount; stageNumber++)
 			{
-				var teamsInStageCount = 0;
-				var matchesCount = 0;
-				List<Match> matches = new List<Match>();
+				var matches = new List<Match>();
 
-				// Если stageCount = 2, то стадий для заполнения 2, предпоследняя и последняя соответственно,
+				// Проверяется количество стадий для заполнения. Если разница > 0, то стадии 2: предпоследняя и последняя,
 				// для них по-разному считается кол-во матчей.
 				if (totalStagesCount - stageNumber > 0)
 				{
-					// Расчет кол-ва матчей для предпоследней стадии
-					teamsInStageCount = (int)Math.Pow(2, totalStagesCount + 1) - totalTeamsCount;
-					matchesCount = (int)Math.Pow(2, stageNumber);
+					// Расчет кол-ва команд и матчей для предпоследней стадии
+					var teamsInStageCount = (int)Math.Pow(2, totalStagesCount + 1) - totalTeamsCount;
+					var matchesCount = (int)Math.Pow(2, stageNumber);
 
 					// Флаг, который показывает было ли обнуление i
 					var hasResetToZero = false;
+
+					// Происходит заполнение матчей в стадии последовательно по одной команде на первую позицию Team1 в каждый матч, пока не кончатся пустые матчи.
+					// Далее происходит однуление i и заполняем матчи снова по одной команде на вторую позицию Team2.
 					for (int i = 0; i < teamsInStageCount || i < matchesCount && !hasResetToZero; i++)
 					{
 						if (i >= teamsInStageCount)
-							matches.Add(CreateEmptyMatch(i));
+							matches.Add(new Match { Identifier = i });
 						else
 						{
+							// Если заполнил каждый матч по 1 команде и остались ещё команды
 							if (i >= matchesCount)
 							{
 								hasResetToZero = true;
+								// Уменьшаем количество команд на число матчей, которые уже заполнили по 1 команде
 								teamsInStageCount -= matchesCount;
+								// Обнуляем, чтобы пройтись по каждому матчу еще раз и дозаполнить
 								i = 0;
 							}
+							// Если не прошел круг заполнения матчей командами, то создаем новый матч с одной командой
 							if (!hasResetToZero)
 								matches.Add(CreateMatch(i, CreateCount.OneTeam, teamIds));
+							// Если круг был пройден, то достаем уже добавленные матчи и дозаполняем их
 							else
 							{
-								var match = GetMatch(i, matches);
+								var match = matches[i];//GetMatch(i, matches);
 
 								if (match is not null)
 									AddTeamToMatch(match, teamIds);
@@ -99,7 +100,7 @@ namespace Tournaments.Application.BracketGeneration
 						}
 					}
 				}
-				// Когда заполняется последняя стадия, stageCount = 1, формула расчета кол-ва матчей меняется.
+				// Когда заполняется последняя стадия, формула расчета кол-ва матчей меняется.
 				// Заполнение последней стадии зависит от того, как заполнена предыдущая.
 				else
 				{
@@ -119,7 +120,7 @@ namespace Tournaments.Application.BracketGeneration
 						else if (stages[stageNumber - 1].Matches[i / 2].Team1Id is not null &&
 							stages[stageNumber - 1].Matches[i / 2].Team2Id is not null)
 						{
-							i = i + 2;
+							i += 2;
 							continue;
 						}
 						// Если на следующей стадии одна из команд уже проставлена, то создаем один матч для определения второй команды и смещаем индекс на 1
@@ -144,88 +145,64 @@ namespace Tournaments.Application.BracketGeneration
 		}
 
 		// Создание матча с одной\двумя командами
-		private Match CreateMatch(int identifier, CreateCount count, List<long> teamIds)
+		private Match CreateMatch(int identifier, CreateCount count, IList<long> teamIds)
 		{
-			Random random = new Random();
-
-			if (count == CreateCount.TwoTeam)
+			switch (count)
 			{
-				if (teamIds.Count < 2)
-					throw new ArgumentException("To create a match, the number of teams must be at least 2");
+				case CreateCount.OneTeam:
 
-				var team1Id = teamIds[random.Next(teamIds.Count)];
-				teamIds?.Remove(team1Id);
+					var team1Id = teamIds[Random.Shared.Next(teamIds.Count)];
+					teamIds.Remove(team1Id);
 
-				var team2Id = teamIds![random.Next(teamIds.Count)];
-				teamIds?.Remove(team2Id);
+					return new Match
+					{
+						Identifier = identifier,
+						Team1Id = team1Id,
+						Team2Id = null, // Один игрок, второй не определен
+						WinnerId = null,
+					};
 
-				return new Match
-				{
-					Identifier = identifier,
-					Team1Id = team1Id,
-					Team2Id = team2Id,
-					WinnerId = null,
-				};
+				case CreateCount.TwoTeam:
+
+					if (teamIds.Count < 2)
+						throw new ArgumentException("To create a match, the number of teams must be at least 2");
+
+					team1Id = teamIds[Random.Shared.Next(teamIds.Count)];
+					teamIds.Remove(team1Id);
+
+					var team2Id = teamIds![Random.Shared.Next(teamIds.Count)];
+					teamIds.Remove(team2Id);
+
+					return new Match
+					{
+						Identifier = identifier,
+						Team1Id = team1Id,
+						Team2Id = team2Id,
+						WinnerId = null,
+					};
+
+				default:
+					throw new ArgumentException($"Invalid parameter: {typeof(CreateCount)}");
 			}
-			else
-			{
-				var team1Id = teamIds[random.Next(teamIds.Count)];
-				teamIds?.Remove(team1Id);
-
-				return new Match
-				{
-					Identifier = identifier,
-					Team1Id = team1Id,
-					Team2Id = null, // Один игрок, второй не определен
-					WinnerId = null,
-				};
-			}
-		}
-
-		// Создание пустого матча
-		private Match CreateEmptyMatch(int identifier)
-		{
-			return new Match
-			{
-				Identifier = identifier,
-				Team1Id = null,
-				Team2Id = null,
-				WinnerId = null,
-			};
 		}
 
 		// Добавление команды в существующий матч
-		private void AddTeamToMatch(Match match, List<long> teamIds)
+		private void AddTeamToMatch(Match match, IList<long> teamIds)
 		{
-			Random random = new Random();
-
 			// Добавить вторую команду, если одна из них null
 			if (match.Team1Id is null)
 			{
-				var team1Id = teamIds[random.Next(teamIds.Count)];
-				teamIds?.Remove(team1Id);
+				var team1Id = teamIds[Random.Shared.Next(teamIds.Count)];
+				teamIds.Remove(team1Id);
 
 				match.Team1Id = team1Id;
 			}
 			else if (match.Team2Id is null)
 			{
-				var team2Id = teamIds[random.Next(teamIds.Count)];
-				teamIds?.Remove(team2Id);
+				var team2Id = teamIds[Random.Shared.Next(teamIds.Count)];
+				teamIds.Remove(team2Id);
 
 				match.Team2Id = team2Id;
-			}
-		}
-
-		public Match? GetMatch(int identifier, List<Match> matches)
-		{
-			return matches.FirstOrDefault(match => match.Identifier == identifier);
-		}
-
-		private void FillTeamIds(List<Team> teams, List<long> teamIds)
-		{
-			foreach (var team in teams)
-			{
-				teamIds.Add(team.Id);
 			}
 		}
 
@@ -234,15 +211,15 @@ namespace Tournaments.Application.BracketGeneration
 			if (matchesResult[0].StageNumber == 0)
 				return bracket;
 
-			for (int i = 0; i < matchesResult.Count; i++)
+			foreach (var t in matchesResult)
 			{
 				var currentStageMatch = bracket.Stages.SelectMany(s => s.Matches)
-					.FirstOrDefault(m => m.MatchId == matchesResult[i].MatchId);
+					.FirstOrDefault(m => m.MatchId == t.MatchId);
 
 				if (currentStageMatch is null)
 					continue;
 
-				currentStageMatch.WinnerId = matchesResult[i].WinnerId;
+				currentStageMatch.WinnerId = t.WinnerId;
 				var nextStageMatchNumber = currentStageMatch.Identifier / 2;
 
 				var nextStageMatch = bracket.Stages.SelectMany(s => s.Matches)
@@ -252,18 +229,11 @@ namespace Tournaments.Application.BracketGeneration
 					continue;
 
 				if (nextStageMatch.Team1Id is null)
-					nextStageMatch.Team1Id = matchesResult[i].WinnerId;
-				else if (nextStageMatch.Team2Id is null)
-					nextStageMatch.Team2Id = matchesResult[i].WinnerId;
+					nextStageMatch.Team1Id = t.WinnerId;
+				else nextStageMatch.Team2Id ??= t.WinnerId;
 			}
 
 			return bracket;
 		}
-	}
-
-	public enum CreateCount
-	{
-		OneTeam,
-		TwoTeam,
 	}
 }

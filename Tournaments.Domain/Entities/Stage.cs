@@ -4,6 +4,6 @@
 	{
         public long Id { get; set; }
         public int StageNumber { get; set; }
-        public List<Match> Matches { get; set; } = null!;
+        public IList<Match> Matches { get; set; } = null!;
     }
 }
