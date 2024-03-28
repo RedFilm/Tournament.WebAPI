@@ -206,7 +206,7 @@ namespace Tournaments.Application.BracketGeneration
 			}
 		}
 
-		public Bracket Update(Bracket bracket, List<MatchResultModel> matchesResult)
+		public Bracket Update(Bracket bracket, IList<MatchResultModel> matchesResult)
 		{
 			if (matchesResult[0].StageNumber == 0)
 				return bracket;

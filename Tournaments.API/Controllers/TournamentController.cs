@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
-using Tournaments.Domain.Models.BracketModels;
 using Tournaments.Domain.Models.TeamModels;
 using Tournaments.Domain.Models.TournamentModels;
 
@@ -14,15 +13,12 @@ namespace Tournaments.API.Controllers
 	{
 		private readonly ITournamentService _tournamentService;
 		private readonly IValidator<TournamentModel> _tournamentValidator;
-		private readonly IValidator<BracketUpdateModel> _bracketValidator;
 
-		public TournamentController(ITournamentService tournamentService, 
-			IValidator<TournamentModel> tournamentValidator,
-			IValidator<BracketUpdateModel> bracketValidator)
+		public TournamentController(ITournamentService tournamentService,
+			IValidator<TournamentModel> tournamentValidator)
 		{
 			_tournamentService = tournamentService;
 			_tournamentValidator = tournamentValidator;
-			_bracketValidator = bracketValidator;
 		}
 
 		[HttpGet("GetTournament/{tournamentId}")]
@@ -85,34 +81,6 @@ namespace Tournaments.API.Controllers
 			await _tournamentService.DeleteTournamentAsync(tournamentId);
 
 			return Ok();
-		}
-
-		[HttpPost("{tournamentId}/GenerateNewBracket")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BracketModel))]
-		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
-		public async Task<BracketModel> GenerateNewBracket([FromRoute] long tournamentId)
-		{
-			return await _tournamentService.GenerateNewBracketAsync(tournamentId);
-		}
-
-		[HttpPost("{tournamentId}/UpdateBracket")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BracketModel))]
-		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
-		public async Task<BracketModel> UpdateBracket(BracketUpdateModel model)
-		{
-			await _bracketValidator.ValidateAndThrowAsync(model);
-
-			return await _tournamentService.UpdateBracketAsync(model);
-		}
-
-		[HttpPost("{tournamentId}/GetBracket")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BracketModel))]
-		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
-		public async Task<BracketModel> GetBracket([FromRoute] long tournamentId)
-		{
-			var bracketModel = await _tournamentService.GetBracketAsync(tournamentId);
-
-			return bracketModel;
 		}
 	}
 }
