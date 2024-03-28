@@ -47,8 +47,9 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// Asynchronously update existing team.
 		/// </summary>
 		/// <param name="team">Team model</param>
+		/// <param name="teamId">Team id</param>
 		/// <exception cref="NotFoundException"></exception>
-		Task UpdateTeamAsync(TeamWithIdModel team);
+		Task UpdateTeamAsync(TeamModel team, long teamId);
 
 		/// <summary>
 		/// Asynchronously remove team by id.

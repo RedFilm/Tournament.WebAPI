@@ -22,40 +22,40 @@ namespace Tournaments.API.Controllers
 			_teamValidator = teamValidator;
 		}
 
-		[HttpGet("GetTeam/{id}")]
+		[HttpGet("GetTeam/{teamId}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TeamModel))]
 		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
-		public async Task<TeamModel> GetTeam(long id)
+		public async Task<TeamModel> GetTeam([FromRoute] long teamId)
 		{
-			var teamModel = await _teamService.GetTeamByIdAsync(id);
+			var teamModel = await _teamService.GetTeamByIdAsync(teamId);
 
 			return teamModel;
 		}
 
-		[HttpGet("{id}/GetPlayers")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AppUser>))]
-		public async Task<IEnumerable<UserModel>> GetPlayers(long id)
+		[HttpGet("{teamId}/GetPlayers")]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserModel>))]
+		public async Task<IEnumerable<UserModel>> GetPlayers([FromRoute] long teamId)
 		{
-			var players = await _teamService.GetTeamPlayersAsync(id);
+			var players = await _teamService.GetTeamPlayersAsync(teamId);
 
 			return players;
 		}
 
 		[HttpGet("GetTeams")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TeamModel>))]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TeamWithIdModel>))]
 		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
-		public async Task<IEnumerable<TeamModel>> GetTeams()
+		public async Task<IEnumerable<TeamWithIdModel>> GetTeams()
 		{
 			var teamModels = await _teamService.GetTeamsAsync();
 
 			return teamModels;
 		}
 
-		[HttpGet("{id}/GetTournaments")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TeamModel>))]
-		public async Task<IEnumerable<TournamentWithIdModel>> GetTournaments(long id)
+		[HttpGet("{teamId}/GetTournaments")]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TournamentWithIdModel>))]
+		public async Task<IEnumerable<TournamentWithIdModel>> GetTournaments([FromRoute] long teamId)
 		{
-			var tournamentModels = await _teamService.GetTournamentsAsync(id);
+			var tournamentModels = await _teamService.GetTournamentsAsync(teamId);
 
 			return tournamentModels;
 		}
@@ -64,7 +64,7 @@ namespace Tournaments.API.Controllers
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> CreateTeam(TeamModel model)
+		public async Task<IActionResult> CreateTeam([FromBody] TeamModel model)
 		{
 			await _teamValidator.ValidateAndThrowAsync(model);
 			await _teamService.CreateTeamAsync(model);
@@ -72,24 +72,24 @@ namespace Tournaments.API.Controllers
 			return Created();
 		}
 
-		[HttpPut("UpdateTeam")]
+		[HttpPut("UpdateTeam/{teamId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> UpdateTeam(TeamWithIdModel model)
+		public async Task<IActionResult> UpdateTeam([FromBody] TeamModel model, [FromRoute] long teamId)
 		{
 			await _teamValidator.ValidateAndThrowAsync(model);
-			await _teamService.UpdateTeamAsync(model);
+			await _teamService.UpdateTeamAsync(model, teamId);
 
 			return Ok();
 		}
 
-		[HttpDelete("DeleteTeam/{id}")]
+		[HttpDelete("DeleteTeam/{teamId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> DeleteTeam(long id)
+		public async Task<IActionResult> DeleteTeam([FromRoute] long teamId)
 		{
-			await _teamService.DeleteTeamAsync(id);
+			await _teamService.DeleteTeamAsync(teamId);
 			return Ok();
 		}
 
@@ -97,7 +97,7 @@ namespace Tournaments.API.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> AddPlayerToTeamAsync(TeamMemberUpdateModel model)
+		public async Task<IActionResult> AddPlayerToTeamAsync([FromBody] TeamMemberUpdateModel model)
 		{
 			await _teamService.AddPlayerToTeamAsync(model);
 			return Ok();
@@ -107,17 +107,17 @@ namespace Tournaments.API.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> RemovePlayerFromTeamAsync(TeamMemberUpdateModel model)
+		public async Task<IActionResult> RemovePlayerFromTeamAsync([FromBody] TeamMemberUpdateModel model)
 		{
 			await _teamService.RemovePlayerFromTeamAsync(model);
 			return Ok();
 		}
 
-		[HttpPost("RegisterForTournament/")]
+		[HttpPost("RegisterForTournament")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> RegisterTeamForTournamentAsync(RegisterForTournamentModel model)
+		public async Task<IActionResult> RegisterTeamForTournamentAsync([FromBody] RegisterForTournamentModel model)
 		{
 			await _teamService.RegisterTeamForTournamentAsync(model);
 			return Ok();

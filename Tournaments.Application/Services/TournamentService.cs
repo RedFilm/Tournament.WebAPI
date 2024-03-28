@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using Tournaments.Application.BracketGeneration;
 using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
-using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.BracketModels;
 using Tournaments.Domain.Models.TeamModels;
 using Tournaments.Domain.Models.TournamentModels;
@@ -72,9 +70,10 @@ namespace Tournaments.Application.Services
 			return _mapper.Map<IEnumerable<TournamentWithIdModel>>(tournaments);
 		}
 
-		public async Task UpdateTournamentAsync(TournamentWithIdModel tournamentModel)
+		public async Task UpdateTournamentAsync(TournamentModel tournamentModel, long tournamentId)
 		{
 			var tournament = _mapper.Map<Tournament>(tournamentModel);
+			tournament.Id = tournamentId;
 
 			if (!await _tournamentRepository.UpdateTournamentAsync(tournament))
 				throw new NotFoundException("Couldn't save changes or tournament doesn't exist");
