@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
-using Tournaments.Application.BracketGeneration;
 using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
-using Tournaments.Domain.Models.BracketModels;
 using Tournaments.Domain.Models.TeamModels;
 using Tournaments.Domain.Models.TournamentModels;
 
 namespace Tournaments.Application.Services
 {
-    public class TournamentService : ITournamentService
+	public class TournamentService : ITournamentService
 	{
 		private readonly IMapper _mapper;
 		private readonly ITournamentRepository _tournamentRepository;
