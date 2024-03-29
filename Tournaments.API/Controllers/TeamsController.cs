@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Tournaments.Domain.Entities;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.TeamModels;
@@ -11,18 +10,18 @@ namespace Tournaments.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class TeamController : ControllerBase
+	public class TeamsController : ControllerBase
 	{
 		private readonly ITeamService _teamService;
 		private readonly TeamModelValidator _teamValidator;
 
-		public TeamController(ITeamService teamService, TeamModelValidator teamValidator)
+		public TeamsController(ITeamService teamService, TeamModelValidator teamValidator)
 		{
 			_teamService = teamService;
 			_teamValidator = teamValidator;
 		}
 
-		[HttpGet("GetTeam/{teamId}")]
+		[HttpGet("{teamId}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TeamModel))]
 		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
 		public async Task<TeamModel> GetTeam([FromRoute] long teamId)
@@ -32,7 +31,7 @@ namespace Tournaments.API.Controllers
 			return teamModel;
 		}
 
-		[HttpGet("{teamId}/GetPlayers")]
+		[HttpGet("{teamId}/Players")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserModel>))]
 		public async Task<IEnumerable<UserModel>> GetPlayers([FromRoute] long teamId)
 		{
@@ -51,7 +50,7 @@ namespace Tournaments.API.Controllers
 			return teamModels;
 		}
 
-		[HttpGet("{teamId}/GetTournaments")]
+		[HttpGet("{teamId}/Tournaments")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TournamentWithIdModel>))]
 		public async Task<IEnumerable<TournamentWithIdModel>> GetTournaments([FromRoute] long teamId)
 		{
@@ -72,7 +71,7 @@ namespace Tournaments.API.Controllers
 			return Created();
 		}
 
-		[HttpPut("UpdateTeam/{teamId}")]
+		[HttpPut("{teamId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
@@ -84,7 +83,7 @@ namespace Tournaments.API.Controllers
 			return Ok();
 		}
 
-		[HttpDelete("DeleteTeam/{teamId}")]
+		[HttpDelete("{teamId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ExceptionResponseModel))]
 		public async Task<IActionResult> DeleteTeam([FromRoute] long teamId)

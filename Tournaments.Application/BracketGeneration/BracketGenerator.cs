@@ -68,7 +68,7 @@ namespace Tournaments.Application.BracketGeneration
 					var hasResetToZero = false;
 
 					// Происходит заполнение матчей в стадии последовательно по одной команде на первую позицию Team1 в каждый матч, пока не кончатся пустые матчи.
-					// Далее происходит однуление i и заполняем матчи снова по одной команде на вторую позицию Team2.
+					// Далее происходит обнуление i и заполняем матчи снова по одной команде на вторую позицию Team2.
 					for (int i = 0; i < teamsInStageCount || i < matchesCount && !hasResetToZero; i++)
 					{
 						if (i >= teamsInStageCount)

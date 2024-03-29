@@ -16,20 +16,20 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// </summary>
 		/// <param name="teamId">Team id</param>
 		/// <returns>IEnumerable of Tournament entities</returns>
-		Task<IEnumerable<Tournament>> GetTournamentsAsync(long teamId);
+		Task<List<Tournament>> GetTournamentsAsync(long teamId);
 
 		/// <summary>
 		/// Asynchronously gets players from the team.
 		/// </summary>
 		/// <param name="teamId">Team id</param>
 		/// <returns>All players from the team</returns>
-		Task<IEnumerable<AppUser>> GetTeamPlayersAsync(long teamId);
+		Task<List<AppUser>> GetTeamPlayersAsync(long teamId);
 
 		/// <summary>
 		/// Asynchronously gets all teams.
 		/// </summary>
 		/// <returns>IEnumerable of Team entities</returns>
-		Task<IEnumerable<Team>> GetTeamsAsync();
+		Task<List<Team>> GetTeamsAsync();
 
 		/// <summary>
 		/// Asynchronously adds player to team.

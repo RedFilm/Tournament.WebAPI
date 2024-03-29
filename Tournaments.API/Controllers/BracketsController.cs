@@ -8,19 +8,16 @@ namespace Tournaments.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class BracketController : ControllerBase
+	public class BracketsController : ControllerBase
 	{
 		private readonly IBracketService _bracketService;
-		private readonly IValidator<BracketUpdateModel> _bracketValidator;
 
-        public BracketController(IBracketService bracketService,
-			IValidator<BracketUpdateModel> bracketValidator)
+        public BracketsController(IBracketService bracketService)
         {
             _bracketService = bracketService;
-			_bracketValidator = bracketValidator;
         }
 
-		[HttpPost("GetBracket/{tournamentId}")]
+		[HttpGet("GetBracket/{tournamentId}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BracketModel))]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		public async Task<BracketModel> GetBracket([FromRoute] long tournamentId)
@@ -36,7 +33,7 @@ namespace Tournaments.API.Controllers
 			return await _bracketService.GenerateNewBracketAsync(tournamentId);
 		}
 
-		[HttpPost("UpdateBracket/{tournamentId}")]
+		[HttpPut("UpdateBracket/{tournamentId}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BracketModel))]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		public async Task<BracketModel> UpdateBracket([FromRoute] long tournamentId, [FromBody] IList<MatchResultModel> matchResultModels)

@@ -15,14 +15,14 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// Asynchronously gets list of all tournaments.
 		/// </summary>
 		/// <returns>IEnumerable of Tournament entities</returns>
-		Task<IEnumerable<Tournament>> GetTournamentsAsync();
+		Task<List<Tournament>> GetTournamentsAsync();
 
 		/// <summary>
 		/// Asynchronously gets a list of all teams participating in the tournament.
 		/// </summary>
 		/// <param name="tournamentId">Tournament id</param>
 		/// <returns>IEnumerable of Team entities</returns>
-		Task<IEnumerable<Team>> GetTeamsAsync(long tournamentId);
+		Task<List<Team>> GetTeamsAsync(long tournamentId);
 
 		/// <summary>
 		/// Asynchronously adds tournament entity to the database.

@@ -66,7 +66,7 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
-		public async Task<IEnumerable<Tournament>> GetTournamentsAsync(long teamId)
+		public async Task<List<Tournament>> GetTournamentsAsync(long teamId)
 		{
 			var teamTournaments = _context.TournamentTeams
 				.Where(tournamentTeam => tournamentTeam.TeamId == teamId)
@@ -75,7 +75,7 @@ namespace Tournaments.Persistence.Repositories
 
 			return await teamTournaments.ToListAsync();
 		}
-		public async Task<IEnumerable<AppUser>> GetTeamPlayersAsync(long teamId)
+		public async Task<List<AppUser>> GetTeamPlayersAsync(long teamId)
 		{
 			var team = await _context.Teams.Include(t => t.Players)
 				.AsNoTracking()
@@ -84,7 +84,7 @@ namespace Tournaments.Persistence.Repositories
 			return team!.Players;
 		}
 
-		public async Task<IEnumerable<Team>> GetTeamsAsync()
+		public async Task<List<Team>> GetTeamsAsync()
 		{
 			return await _context.Teams.ToListAsync();
 		}

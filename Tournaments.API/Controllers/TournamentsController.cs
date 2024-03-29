@@ -9,19 +9,19 @@ namespace Tournaments.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class TournamentController : ControllerBase
+	public class TournamentsController : ControllerBase
 	{
 		private readonly ITournamentService _tournamentService;
 		private readonly IValidator<TournamentModel> _tournamentValidator;
 
-		public TournamentController(ITournamentService tournamentService,
+		public TournamentsController(ITournamentService tournamentService,
 			IValidator<TournamentModel> tournamentValidator)
 		{
 			_tournamentService = tournamentService;
 			_tournamentValidator = tournamentValidator;
 		}
 
-		[HttpGet("GetTournament/{tournamentId}")]
+		[HttpGet("{tournamentId}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TournamentWithIdModel))]
 		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
 		public async Task<TournamentModel> GetTournament([FromRoute] long tournamentId)
@@ -40,7 +40,7 @@ namespace Tournaments.API.Controllers
 			return tournamentModels;
 		}
 
-		[HttpGet("{tournamentId}/GetTeams")]
+		[HttpGet("{tournamentId}/Teams")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TeamModel>))]
 		public async Task<IEnumerable<TeamModel>> GetTeams([FromRoute] long tournamentId)
 		{
@@ -61,7 +61,7 @@ namespace Tournaments.API.Controllers
 			return Created();
 		}
 
-		[HttpPut("UpdateTournament/{tournamentId}")]
+		[HttpPut("{tournamentId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
@@ -73,7 +73,7 @@ namespace Tournaments.API.Controllers
 			return Ok();
 		}
 
-		[HttpDelete("DeleteTournament/{tournamentId}")]
+		[HttpDelete("{tournamentId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ExceptionResponseModel))]
 		public async Task<IActionResult> DeleteTournament([FromRoute] long tournamentId)

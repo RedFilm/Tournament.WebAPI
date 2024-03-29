@@ -38,7 +38,7 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
-		public async Task<IEnumerable<Team>> GetTeamsAsync(long tournamentId)
+		public async Task<List<Team>> GetTeamsAsync(long tournamentId)
 		{
 			var tournamentTeams = _context.TournamentTeams
 				.Where(tournamentTeam => tournamentTeam.TournamentId == tournamentId)
@@ -56,7 +56,7 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
-		public async Task<IEnumerable<Tournament>> GetTournamentsAsync()
+		public async Task<List<Tournament>> GetTournamentsAsync()
 		{
 			var tournaments = await _context.Tournaments.AsNoTracking().ToListAsync();
 			return tournaments;
