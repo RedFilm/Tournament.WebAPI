@@ -50,7 +50,7 @@ namespace Tournaments.Application.Services
 			return _mapper.Map<BracketModel>(bracket);
 		}
 
-		public async Task<BracketModel> UpdateBracketAsync(IList<MatchResultModel> results, long tournamentId)
+		public async Task<BracketModel> UpdateBracketAsync(IEnumerable<MatchResultModel> results, long tournamentId)
 		{
 			var tournament = await _tournamentRepository.GetTournamentByIdAsync(tournamentId);
 

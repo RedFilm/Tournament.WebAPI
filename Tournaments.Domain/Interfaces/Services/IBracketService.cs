@@ -27,6 +27,6 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <param name="tournamentId">Tournament id</param>
 		/// <returns>Updated bracket model</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<BracketModel> UpdateBracketAsync(IList<MatchResultModel> results, long tournamentId);
+		Task<BracketModel> UpdateBracketAsync(IEnumerable<MatchResultModel> results, long tournamentId);
 	}
 }

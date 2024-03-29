@@ -206,13 +206,13 @@ namespace Tournaments.Application.BracketGeneration
 			}
 		}
 
-		public Bracket Update(Bracket bracket, IList<MatchResultModel> matchesResult)
+		public Bracket Update(Bracket bracket, IEnumerable<MatchResultModel> matchesResult)
 		{
-			if (matchesResult[0].StageNumber == 0)
-				return bracket;
-
 			foreach (var t in matchesResult)
 			{
+				if (t.StageNumber == 0)
+					return bracket;
+
 				var currentStageMatch = bracket.Stages.SelectMany(s => s.Matches)
 					.FirstOrDefault(m => m.MatchId == t.MatchId);
 

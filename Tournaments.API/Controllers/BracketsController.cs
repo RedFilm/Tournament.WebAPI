@@ -36,7 +36,7 @@ namespace Tournaments.API.Controllers
 		[HttpPut("UpdateBracket/{tournamentId}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BracketModel))]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
-		public async Task<BracketModel> UpdateBracket([FromRoute] long tournamentId, [FromBody] IList<MatchResultModel> matchResultModels)
+		public async Task<BracketModel> UpdateBracket([FromRoute] long tournamentId, [FromBody] IEnumerable<MatchResultModel> matchResultModels)
 		{
 			return await _bracketService.UpdateBracketAsync(matchResultModels, tournamentId);
 		}
