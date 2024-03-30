@@ -255,7 +255,7 @@ namespace Tournaments.Persistence.Migrations
                     b.HasIndex("TournamentId")
                         .IsUnique();
 
-                    b.ToTable("Brackets");
+                    b.ToTable("Brackets", (string)null);
                 });
 
             modelBuilder.Entity("Tournaments.Domain.Entities.Match", b =>
@@ -291,7 +291,7 @@ namespace Tournaments.Persistence.Migrations
 
                     b.HasIndex("WinnerId");
 
-                    b.ToTable("Matches");
+                    b.ToTable("Matches", (string)null);
                 });
 
             modelBuilder.Entity("Tournaments.Domain.Entities.Stage", b =>
@@ -302,7 +302,7 @@ namespace Tournaments.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long?>("BracketId")
+                    b.Property<long>("BracketId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("StageNumber")
@@ -312,7 +312,7 @@ namespace Tournaments.Persistence.Migrations
 
                     b.HasIndex("BracketId");
 
-                    b.ToTable("Stages");
+                    b.ToTable("Stages", (string)null);
                 });
 
             modelBuilder.Entity("Tournaments.Domain.Entities.Team", b =>
@@ -335,7 +335,7 @@ namespace Tournaments.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teams");
+                    b.ToTable("Teams", (string)null);
                 });
 
             modelBuilder.Entity("Tournaments.Domain.Entities.Tournament", b =>
@@ -386,7 +386,7 @@ namespace Tournaments.Persistence.Migrations
 
                     b.HasIndex("OrganizerId");
 
-                    b.ToTable("Tournaments");
+                    b.ToTable("Tournaments", (string)null);
                 });
 
             modelBuilder.Entity("Tournaments.Domain.Entities.TournamentTeam", b =>
@@ -404,7 +404,7 @@ namespace Tournaments.Persistence.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("TournamentTeams");
+                    b.ToTable("TournamentTeams", (string)null);
                 });
 
             modelBuilder.Entity("AppUserTeam", b =>
@@ -515,9 +515,13 @@ namespace Tournaments.Persistence.Migrations
 
             modelBuilder.Entity("Tournaments.Domain.Entities.Stage", b =>
                 {
-                    b.HasOne("Tournaments.Domain.Entities.Bracket", null)
+                    b.HasOne("Tournaments.Domain.Entities.Bracket", "Bracket")
                         .WithMany("Stages")
-                        .HasForeignKey("BracketId");
+                        .HasForeignKey("BracketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bracket");
                 });
 
             modelBuilder.Entity("Tournaments.Domain.Entities.Tournament", b =>

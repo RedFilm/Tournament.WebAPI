@@ -8,9 +8,9 @@ namespace Tournaments.Persistence.Repositories
 	{
 		private readonly TournamentDbContext _context;
 
-		public TeamRepository(TournamentDbContext contect)
+		public TeamRepository(TournamentDbContext context)
         {
-            _context = contect;
+            _context = context;
         }
 
 		/// <inheritdoc />

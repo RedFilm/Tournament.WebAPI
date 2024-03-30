@@ -13,6 +13,7 @@
 		public Team? Team2 { get; set; }
 		public Team? Winner { get; set; }
 
-		public Stage Stage { get; set; } = null!;
+        public long StageId { get; set; }
+        public Stage Stage { get; set; } = null!;
 	}
 }
