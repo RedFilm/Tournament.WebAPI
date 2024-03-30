@@ -6,21 +6,22 @@ using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.BracketModels;
+using Tournaments.Persistence.Repositories;
 
 namespace Tournaments.Application.Services
 {
 	public class BracketService : IBracketService
 	{
 		private readonly ITournamentRepository _tournamentRepository;
-		private readonly BracketGenerator _bracketHandler;
+		private readonly BracketGenerator _bracketGenerator;
 		private readonly IMapper _mapper;
 
 		public BracketService(ITournamentRepository tournamentRepository,
-			BracketGenerator bracketHandler,
+			BracketGenerator bracketGenerator,
 			IMapper mapper)
 		{
 			_tournamentRepository = tournamentRepository;
-			_bracketHandler = bracketHandler;
+			_bracketGenerator = bracketGenerator;
 			_mapper = mapper;
 		}
 
@@ -36,7 +37,7 @@ namespace Tournaments.Application.Services
 			if (teams.Count < 2 || teams.Count > 32)
 				throw new BadRequestException("The number of teams in the tournament should be in the range [2;32].");
 
-			var bracket = _bracketHandler.GenerateNewBracket(teams.ToList(), true);
+			var bracket = _bracketGenerator.GenerateNewBracket(teams.ToList(), true);
 
 			await _tournamentRepository.AddBracketAsync(bracket, tournamentId);
 
