@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tournaments.Domain.Models.BracketModels;
 using Tournaments.Domain.Models;
-using FluentValidation;
 using Tournaments.Domain.Interfaces.Services;
 
 namespace Tournaments.API.Controllers
@@ -12,10 +11,10 @@ namespace Tournaments.API.Controllers
 	{
 		private readonly IBracketService _bracketService;
 
-        public BracketsController(IBracketService bracketService)
-        {
-            _bracketService = bracketService;
-        }
+		public BracketsController(IBracketService bracketService)
+		{
+			_bracketService = bracketService;
+		}
 
 		[HttpGet("GetBracket/{tournamentId}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BracketModel))]

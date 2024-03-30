@@ -78,8 +78,12 @@ namespace Tournaments.Persistence.Repositories
 		/// <inheritdoc />
 		public async Task<bool> AddBracketAsync(Bracket bracket, long tournamentId)
 		{
-			var tournament = await GetTournamentByIdAsync(tournamentId);
-
+			var tournament = await _context.Tournaments
+				.Include(t => t.Bracket)
+				.ThenInclude(b => b.Stages)
+				.ThenInclude(s => s.Matches)
+				.FirstOrDefaultAsync(t => t.Id == tournamentId);
+			
 			if (tournament is not null)
 				tournament.Bracket = bracket;
 

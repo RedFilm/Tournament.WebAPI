@@ -18,6 +18,7 @@ namespace Tournaments.API.Extensions
 			services.AddScoped<IAuthService, AuthService>();
 			services.AddScoped<ITournamentService, TournamentService>();
 			services.AddScoped<ITeamService, TeamService>();
+			services.AddScoped<IBracketService, BracketService>();
 
 			services.AddScoped<BracketGenerator>();
 
