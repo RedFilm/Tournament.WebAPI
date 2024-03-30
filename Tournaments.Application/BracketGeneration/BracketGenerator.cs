@@ -61,14 +61,15 @@ namespace Tournaments.Application.BracketGeneration
 					break;
 				}
 
-				if (stages[firstStageIndex - 1].Matches[i / 2].Team1Id is not null ^
-					stages[firstStageIndex - 1].Matches[i / 2].Team2Id is not null)
+				var previousMatch = stages[firstStageIndex - 1].Matches.Skip(i / 2).FirstOrDefault() 
+					?? throw new NullReferenceException("Expected match");
+
+				if (previousMatch.Team1Id is not null ^ previousMatch.Team2Id is not null)
 				{
 					matches.Add(new Match { Identifier = i, Team1Id = teams[teamIndex].Id, Team2Id = teams[teamIndex + 1].Id });
 					teamIndex += 2;
 				}
-				if (stages[firstStageIndex - 1].Matches[i / 2].Team1Id is null &&
-					stages[firstStageIndex - 1].Matches[i / 2].Team2Id is null)
+				if (previousMatch.Team1Id is null && previousMatch.Team2Id is null)
 				{
 					matches.Add(new Match { Identifier = i, Team1Id = teams[teamIndex].Id, Team2Id = teams[teamIndex + 1].Id });
 					teamIndex += 2;
