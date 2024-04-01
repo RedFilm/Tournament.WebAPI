@@ -62,19 +62,23 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <summary>
 		/// Asynchronously add player to team.
 		/// </summary>
-		/// <param name="model">AddPlayerModel model</param>
+		/// <param name="inviterId">Team captain's id</param>
+		/// <param name="playerId">Id of the invited player</param>
+		/// <param name="teamId">Team id</param>
 		/// <returns>Result adding. True if player successfully added to the team.</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<bool> AddPlayerToTeamAsync(TeamMemberUpdateModel model);
+		Task<bool> AddPlayerToTeamAsync(long teamId, long playerId, long inviterId);
 
 		/// <summary>
 		/// Asynchronously remove player from team.
 		/// </summary>
-		/// <param name="model">TeamMemberUpdateModel model</param>
+		/// <param name="inviterId">Team captain's id</param>
+		/// <param name="playerId">Id of the invited player</param>
+		/// <param name="teamId">Team id</param>
 		/// <returns>Result removing. True if player successfully removed from the team.</returns>
 		/// <exception cref="NotFoundException"></exception>
 		/// <exception cref="NoContentException"></exception>
-		Task<bool> RemovePlayerFromTeamAsync(TeamMemberUpdateModel model);
+		Task<bool> RemovePlayerFromTeamAsync(long teamId, long playerId, long inviterId);
 
 		/// <summary>
 		/// Asynchronously register team for tournament.

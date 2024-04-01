@@ -1,5 +1,8 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Tournaments.Domain.Entities;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.TeamModels;
@@ -92,23 +95,39 @@ namespace Tournaments.API.Controllers
 			return Ok();
 		}
 
-		[HttpPost("AddPlayer")]
+		[HttpPost("{teamId}/Players/{playerId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> AddPlayerToTeamAsync([FromBody] TeamMemberUpdateModel model)
+		public async Task<IActionResult> AddPlayerToTeamAsync([FromRoute] long teamId, [FromRoute] long playerId)
 		{
-			await _teamService.AddPlayerToTeamAsync(model);
+			var idClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+
+			if (idClaim == null)
+				return BadRequest("Name identifier claim is missing");
+
+			if (!long.TryParse(idClaim?.Value, out long inviterId))
+				return BadRequest("Invalid format of NameIdentifier claim.");
+
+			await _teamService.AddPlayerToTeamAsync(teamId, playerId, inviterId);
 			return Ok();
 		}
 
-		[HttpDelete("RemovePlayer")]
+		[HttpDelete("{teamId}/Players/{playerId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> RemovePlayerFromTeamAsync([FromBody] TeamMemberUpdateModel model)
+		public async Task<IActionResult> RemovePlayerFromTeamAsync([FromRoute] long teamId, [FromRoute] long playerId)
 		{
-			await _teamService.RemovePlayerFromTeamAsync(model);
+			var idClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+
+			if (idClaim == null)
+				return BadRequest("Name identifier claim is missing");
+
+			if (!long.TryParse(idClaim?.Value, out long inviterId))
+				return BadRequest("Invalid format of NameIdentifier claim.");
+
+			await _teamService.RemovePlayerFromTeamAsync(teamId, playerId, inviterId);
 			return Ok();
 		}
 
