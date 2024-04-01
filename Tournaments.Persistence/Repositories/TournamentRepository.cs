@@ -56,10 +56,11 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
-		public async Task<List<Tournament>> GetTournamentsAsync()
+		public async Task<List<Tournament>> GetTournamentsAsync(int pageNumber, int pageSize)
 		{
-			var tournaments = await _context.Tournaments.AsNoTracking().ToListAsync();
-			return tournaments;
+			var skipCount = (pageNumber - 1) * pageSize;
+
+			return await _context.Tournaments.Skip(skipCount).Take(pageSize).ToListAsync();
 		}
 
 		/// <inheritdoc />

@@ -17,8 +17,10 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <summary>
 		/// Asynchronously gets list of all tournament models.
 		/// </summary>
+		/// <param name="pageNumber">Number of the required page</param>
+		/// <param name="pageSize">Tournaments count on the page</param>
 		/// <returns>IEnumerable of TournamentModel</returns>
-		Task<IEnumerable<TournamentWithIdModel>> GetTournamentsAsync();
+		Task<IEnumerable<TournamentWithIdModel>> GetTournamentsAsync(int pageNumber, int pageSize);
 
 		/// <summary>
 		/// Asynchronously adds tournament to the database.

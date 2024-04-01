@@ -28,8 +28,10 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// <summary>
 		/// Asynchronously gets all teams.
 		/// </summary>
+		/// <param name="pageNumber">Number of the required page</param>
+		/// <param name="pageSize">Teams count on the page</param>
 		/// <returns>IEnumerable of Team entities</returns>
-		Task<List<Team>> GetTeamsAsync();
+		Task<List<Team>> GetTeamsAsync(int pageNumber, int pageSize);
 
 		/// <summary>
 		/// Asynchronously adds player to team.

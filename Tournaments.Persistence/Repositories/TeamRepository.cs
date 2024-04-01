@@ -84,9 +84,11 @@ namespace Tournaments.Persistence.Repositories
 			return team!.Players;
 		}
 
-		public async Task<List<Team>> GetTeamsAsync()
+		public async Task<List<Team>> GetTeamsAsync(int pageNumber, int pageSize)
 		{
-			return await _context.Teams.ToListAsync();
+			var skipCount = (pageNumber - 1) * pageSize;
+
+			return await _context.Teams.Skip(skipCount).Take(pageSize).ToListAsync();
 		}
 
 		/// <inheritdoc />

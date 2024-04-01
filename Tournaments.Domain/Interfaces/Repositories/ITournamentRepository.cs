@@ -14,8 +14,10 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// <summary>
 		/// Asynchronously gets list of all tournaments.
 		/// </summary>
+		/// <param name="pageNumber">Number of the required page</param>
+		/// <param name="pageSize">Tournaments count on the page</param>
 		/// <returns>IEnumerable of Tournament entities</returns>
-		Task<List<Tournament>> GetTournamentsAsync();
+		Task<List<Tournament>> GetTournamentsAsync(int pageNumber, int pageSize);
 
 		/// <summary>
 		/// Asynchronously gets a list of all teams participating in the tournament.

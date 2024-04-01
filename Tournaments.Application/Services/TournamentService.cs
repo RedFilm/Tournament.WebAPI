@@ -58,9 +58,9 @@ namespace Tournaments.Application.Services
 			return tournamentModel;
 		}
 
-		public async Task<IEnumerable<TournamentWithIdModel>> GetTournamentsAsync()
+		public async Task<IEnumerable<TournamentWithIdModel>> GetTournamentsAsync(int pageNumber, int pageSize)
 		{
-			var tournaments = await _tournamentRepository.GetTournamentsAsync();
+			var tournaments = await _tournamentRepository.GetTournamentsAsync(pageNumber, pageSize);
 
 			return _mapper.Map<IEnumerable<TournamentWithIdModel>>(tournaments);
 		}

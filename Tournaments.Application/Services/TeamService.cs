@@ -80,9 +80,9 @@ namespace Tournaments.Application.Services
 			return _mapper.Map<IEnumerable<UserModel>>(appUsers);
 		}
 
-		public async Task<IEnumerable<TeamWithIdModel>> GetTeamsAsync()
+		public async Task<IEnumerable<TeamWithIdModel>> GetTeamsAsync(int pageNumber, int pageSize)
 		{
-			var teams = await _teamRepository.GetTeamsAsync();
+			var teams = await _teamRepository.GetTeamsAsync(pageNumber, pageSize);
 
 			return _mapper.Map<IEnumerable<TeamWithIdModel>>(teams);
 		}
