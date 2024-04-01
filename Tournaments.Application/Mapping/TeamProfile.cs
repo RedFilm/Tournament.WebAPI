@@ -9,6 +9,7 @@ namespace Tournaments.Domain.Mapping
         public TeamProfile()
         {
             CreateMap<TeamModel, Team>().ReverseMap();
+            CreateMap<Team, TeamWithIdModel>();
         }
     }
 }

@@ -60,8 +60,10 @@ namespace Tournaments.Application.Services
 
 		public async Task<IEnumerable<TournamentWithIdModel>> GetTournamentsAsync(int pageNumber, int pageSize)
 		{
-			var tournaments = await _tournamentRepository.GetTournamentsAsync(pageNumber, pageSize);
+			if (pageNumber < 0 || pageSize < 0)
+				throw new BadRequestException("Page number and size must be non negative");
 
+			var tournaments = await _tournamentRepository.GetTournamentsAsync(pageNumber, pageSize);
 			return _mapper.Map<IEnumerable<TournamentWithIdModel>>(tournaments);
 		}
 
