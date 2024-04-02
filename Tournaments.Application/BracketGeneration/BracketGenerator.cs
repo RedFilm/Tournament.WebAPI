@@ -21,7 +21,7 @@ namespace Tournaments.Application.BracketGeneration
 			var stages = new List<Stage>(totalStagesCount);
 
 			var isPowerOfTwo = int.PopCount(teams.Count) == 1;
-			var emptyStagesCount = int.PopCount(teams.Count) == 1 ? totalStagesCount - 1 : totalStagesCount - 2;
+			var emptyStagesCount = isPowerOfTwo ? totalStagesCount - 1 : totalStagesCount - 2;
 
 			FillStagesWithDefault(emptyStagesCount, stages);
 
