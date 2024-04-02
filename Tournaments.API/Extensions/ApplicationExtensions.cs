@@ -1,11 +1,12 @@
-﻿using Tournaments.Application.Services;
+﻿using Tournaments.Application.BracketGeneration;
+using Tournaments.Application.Services;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Persistence.Repositories;
 
 namespace Tournaments.API.Extensions
 {
-	public static class ApplicationExtensions
+    public static class ApplicationExtensions
 	{
 		public static IServiceCollection AddApplication(this IServiceCollection services)
 		{
@@ -17,6 +18,9 @@ namespace Tournaments.API.Extensions
 			services.AddScoped<IAuthService, AuthService>();
 			services.AddScoped<ITournamentService, TournamentService>();
 			services.AddScoped<ITeamService, TeamService>();
+			services.AddScoped<IBracketService, BracketService>();
+
+			services.AddScoped<BracketGenerator>();
 
 			return services;
 		}

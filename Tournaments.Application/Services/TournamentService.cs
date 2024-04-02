@@ -13,7 +13,8 @@ namespace Tournaments.Application.Services
 		private readonly IMapper _mapper;
 		private readonly ITournamentRepository _tournamentRepository;
 
-		public TournamentService(IMapper mapper, ITournamentRepository tournamentRepository)
+		public TournamentService(IMapper mapper,
+			ITournamentRepository tournamentRepository)
 		{
 			_mapper = mapper;
 			_tournamentRepository = tournamentRepository;
@@ -64,9 +65,10 @@ namespace Tournaments.Application.Services
 			return _mapper.Map<IEnumerable<TournamentWithIdModel>>(tournaments);
 		}
 
-		public async Task UpdateTournamentAsync(TournamentWithIdModel tournamentModel)
+		public async Task UpdateTournamentAsync(TournamentModel tournamentModel, long tournamentId)
 		{
 			var tournament = _mapper.Map<Tournament>(tournamentModel);
+			tournament.Id = tournamentId;
 
 			if (!await _tournamentRepository.UpdateTournamentAsync(tournament))
 				throw new NotFoundException("Couldn't save changes or tournament doesn't exist");

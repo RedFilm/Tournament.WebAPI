@@ -9,24 +9,24 @@ namespace Tournaments.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class TournamentController : ControllerBase
+	public class TournamentsController : ControllerBase
 	{
 		private readonly ITournamentService _tournamentService;
-		private readonly IValidator<TournamentWithIdModel> _tournamentValidator;
+		private readonly IValidator<TournamentModel> _tournamentValidator;
 
-		public TournamentController(ITournamentService tournamentService, IValidator<TournamentWithIdModel> tournamentValidator)
+		public TournamentsController(ITournamentService tournamentService,
+			IValidator<TournamentModel> tournamentValidator)
 		{
 			_tournamentService = tournamentService;
 			_tournamentValidator = tournamentValidator;
-
 		}
 
-		[HttpGet("GetTournament/{id}")]
+		[HttpGet("{tournamentId}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TournamentWithIdModel))]
 		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
-		public async Task<TournamentModel> GetTournament(long id)
+		public async Task<TournamentModel> GetTournament([FromRoute] long tournamentId)
 		{
-			var tournamentModel = await _tournamentService.GetTournamentByIdAsync(id);
+			var tournamentModel = await _tournamentService.GetTournamentByIdAsync(tournamentId);
 
 			return tournamentModel;
 		}
@@ -40,11 +40,11 @@ namespace Tournaments.API.Controllers
 			return tournamentModels;
 		}
 
-		[HttpGet("{id}/GetTeams")]
+		[HttpGet("{tournamentId}/Teams")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TeamModel>))]
-		public async Task<IEnumerable<TeamModel>> GetTeams(long id)
+		public async Task<IEnumerable<TeamModel>> GetTeams([FromRoute] long tournamentId)
 		{
-			var teamModels = await _tournamentService.GetTeamsAsync(id);
+			var teamModels = await _tournamentService.GetTeamsAsync(tournamentId);
 
 			return teamModels;
 		}
@@ -53,7 +53,7 @@ namespace Tournaments.API.Controllers
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> CreateTournament(TournamentWithIdModel model)
+		public async Task<IActionResult> CreateTournament([FromBody] TournamentModel model)
 		{
 			await _tournamentValidator.ValidateAndThrowAsync(model);
 			await _tournamentService.AddTournamentAsync(model);
@@ -61,24 +61,24 @@ namespace Tournaments.API.Controllers
 			return Created();
 		}
 
-		[HttpPut("UpdateTournament")]
+		[HttpPut("{tournamentId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> UpdateTournament(TournamentWithIdModel model)
+		public async Task<IActionResult> UpdateTournament([FromBody] TournamentModel model, [FromRoute] long tournamentId)
 		{
 			await _tournamentValidator.ValidateAndThrowAsync(model);
-			await _tournamentService.UpdateTournamentAsync(model);
+			await _tournamentService.UpdateTournamentAsync(model, tournamentId);
 
 			return Ok();
 		}
 
-		[HttpDelete("DeleteTournament/{id}")]
+		[HttpDelete("{tournamentId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ExceptionResponseModel))]
-		public async Task<IActionResult> DeleteTournament(long id)
+		public async Task<IActionResult> DeleteTournament([FromRoute] long tournamentId)
 		{
-			await _tournamentService.DeleteTournamentAsync(id);
+			await _tournamentService.DeleteTournamentAsync(tournamentId);
 
 			return Ok();
 		}

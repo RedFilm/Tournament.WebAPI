@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using Tournaments.Domain.Entities;
 using System.IdentityModel.Tokens.Jwt;
-using Tournaments.Domain.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Options;
@@ -13,9 +12,13 @@ using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Enums;
 using Microsoft.Extensions.Logging;
 
+
+
+using Tournaments.Domain.Models.AuthModels;
+
 namespace Tournaments.Application.Services
 {
-	public class AuthService : IAuthService
+    public class AuthService : IAuthService
 	{
 		private readonly UserManager<AppUser> _userManager;
 		private readonly SignInManager<AppUser> _signinManager;

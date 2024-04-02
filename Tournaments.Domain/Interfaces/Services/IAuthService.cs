@@ -1,9 +1,9 @@
-﻿using Tournaments.Domain.Models;
-using Tournaments.Domain.Exceptions;
+﻿using Tournaments.Domain.Exceptions;
+using Tournaments.Domain.Models.AuthModels;
 
 namespace Tournaments.Domain.Interfaces.Services
 {
-	public interface IAuthService
+    public interface IAuthService
 	{
 		/// <summary>
 		/// Authenticate the user.
