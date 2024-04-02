@@ -2,6 +2,7 @@
 using Tournaments.Domain.Models.BracketModels;
 using Tournaments.Domain.Models;
 using Tournaments.Domain.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Tournaments.API.Controllers
 {
@@ -24,6 +25,7 @@ namespace Tournaments.API.Controllers
 			return await _bracketService.GetBracketAsync(tournamentId);
 		}
 
+		[Authorize(Roles = "Administrator, TournamentCreator")]
 		[HttpPost("GenerateNewBracket/{tournamentId}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BracketModel))]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
@@ -32,6 +34,7 @@ namespace Tournaments.API.Controllers
 			return await _bracketService.GenerateNewBracketAsync(tournamentId);
 		}
 
+		[Authorize(Roles = "Administrator, TournamentCreator")]
 		[HttpPut("UpdateBracket/{tournamentId}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BracketModel))]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
