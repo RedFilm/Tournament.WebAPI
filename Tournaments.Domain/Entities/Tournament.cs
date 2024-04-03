@@ -13,7 +13,8 @@
         public List<TournamentTeam> TournamentTeams { get; set; } = null!;
 
         public int PrizePool { get; set; }
-		public int MaxParticipantCount { get; set; }
+        public int TeamPlayersCount { get; set; }
+        public int MaxParticipantCount { get; set; }
 		public string TournamentName { get; set; } = null!;
 		public string GameName { get; set; } = null!;
 		public string TournamentDescription { get; set; } = null!;
