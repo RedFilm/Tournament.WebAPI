@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
-using Tournaments.Domain.Models.BracketModels;
-using Tournaments.Domain.Models.TeamModels;
 
 namespace Tournaments.API.Controllers
 {
@@ -19,16 +18,16 @@ namespace Tournaments.API.Controllers
 		[HttpGet("{matchId}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MatchModel))]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
-		public async Task<BracketModel> GetMatch([FromRoute] long matchId)
+		public async Task<MatchModel> GetMatch([FromRoute] long matchId)
 		{
-			return await _matchService.GetBracketAsync(matchId);
+			return await _matchService.GetMatchByIdAsync(matchId);
 		}
 
-		[HttpGet("{bracketId}/Stages/{stageId}")]
+		[HttpGet("Stages/{stageId}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<MatchModel>))]
-		public async Task<IEnumerable<TeamWithIdModel>> GetTeams([FromRoute] long bracketId, [FromRoute] long stageId)
+		public async Task<IEnumerable<MatchModel>> GetMatches([FromRoute] long stageId)
 		{
-			return await _matchService.GetMatchesAsync();
+			return await _matchService.GetMatchesAsync(stageId);
 		}
 	}
 }
