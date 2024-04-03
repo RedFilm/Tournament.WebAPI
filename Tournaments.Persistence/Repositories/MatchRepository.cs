@@ -4,7 +4,7 @@ using Tournaments.Domain.Interfaces.Repositories;
 
 namespace Tournaments.Persistence.Repositories
 {
-	internal class MatchRepository : IMatchRepository
+	public class MatchRepository : IMatchRepository
 	{
 		private readonly TournamentDbContext _tournamentDbContext;
 

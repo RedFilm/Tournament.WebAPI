@@ -14,12 +14,14 @@ namespace Tournaments.API.Extensions
 			services.AddScoped<ITeamRepository, TeamRepository>();
 			services.AddScoped<ITeamUserRepository, TeamUserRepository>();
 			services.AddScoped<ITournamentTeamRepository, TournamentTeamRepository>();
+			services.AddScoped<IMatchRepository, MatchRepository>();
 
 			services.AddScoped<IAuthService, AuthService>();
 			services.AddScoped<ITournamentService, TournamentService>();
 			services.AddScoped<ITeamService, TeamService>();
 			services.AddScoped<IBracketService, BracketService>();
 			services.AddScoped<IUserService, UserService>();
+			services.AddScoped<IMatchService, MatchService>();
 
 			services.AddScoped<BracketGenerator>();
 
