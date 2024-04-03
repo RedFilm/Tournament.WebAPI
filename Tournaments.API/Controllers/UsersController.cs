@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
 
 namespace Tournaments.API.Controllers
@@ -16,23 +17,28 @@ namespace Tournaments.API.Controllers
 		}
 
 		[HttpGet("{userId}")]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserModel))]
+		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
 		public async Task<UserModel> GetUser(long userId)
 		{
-			var user = await _userService.GetUserAsync(userId);
-			return Ok(user);
+			return await _userService.GetUserByIdAsync(userId);
 		}
 
 		[HttpGet]
-		public async Task<IEnumerable<UserModel>> GetUsers([FromQuery] int pageNumber, [FromQuery] int pageSize)
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserModel>))]
+		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
+		public async Task<IEnumerable<UserModel>> GetUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
 		{
 			return await _userService.GetUsersAsync(pageNumber, pageSize);
 		}
 
-		[HttpDelete("{userId}")]
 		[Authorize(Roles = "Administrator")]
-		public async Task<IActionResult> DeleteUser(string userId)
+		[HttpDelete("{userId}")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ExceptionResponseModel))]
+		public async Task<IActionResult> DeleteUser(long userId)
 		{
-			await _userService.DeleteUserAsync(userId);
+			await _userService.DeleteUserByIdAsync(userId);
 			return Ok();
 		}
 	}
