@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 
 
 using Tournaments.Domain.Models.AuthModels;
+using System.Data;
 
 namespace Tournaments.Application.Services
 {
@@ -68,23 +69,24 @@ namespace Tournaments.Application.Services
 			if (!result.Succeeded)
 				throw new AuthenticationFailedException("Authentication failed");
 
-			var jwtToken = GenerateTokenAsync(model);
+			var jwtToken = GenerateTokenAsync(user);
 
 			_logger.LogInformation("User has authenticated. User id: {Id}", user.Id);
 
 			return new AuthenticationResultModel { Token = jwtToken.Result };
 		}
 
-		private async Task<string> GenerateTokenAsync(LoginModel model)
+		private async Task<string> GenerateTokenAsync(AppUser user)
 		{
-			var user = await _userManager.FindByNameAsync(model.UserName);
+            var userRoles = await _userManager.GetRolesAsync(user);
 
 			var claims = new List<Claim>()
 			{
-				new Claim(ClaimTypes.NameIdentifier, user!.Id.ToString()),
-				new Claim(ClaimTypes.Name, model.UserName),
-				new Claim(ClaimTypes.Role, IdentityRoles.User.ToString())
+				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+				new Claim(ClaimTypes.Name, user.UserName!),
 			};
+			foreach (var role in userRoles)
+				claims.Add(new Claim(ClaimTypes.Role, role));
 
 			var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key));
 
