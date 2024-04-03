@@ -13,13 +13,12 @@ namespace Tournaments.Persistence.Repositories
         }
 
 		/// <inheritdoc />
-		public async Task<bool> AnyAsync(long tournamentId, long teamId)
+		public async Task<bool> AnyAsync(long tournamentId, long teamId, IEnumerable<long> playerIds)
 		{
-			var tournamentTeam = await _context.TournamentTeams
-				.AsNoTracking()
-				.FirstOrDefaultAsync(tt => tt.TournamentId == tournamentId && tt.TeamId == teamId);
-
-			return tournamentTeam is not null;
+			return await _context.TournamentTeams.AnyAsync(
+				tt => tt.TournamentId == tournamentId &&
+				tt.TeamId == teamId &&
+				playerIds.Any(pid => pid == tt.PlayerId));
 		}
 	}
 }

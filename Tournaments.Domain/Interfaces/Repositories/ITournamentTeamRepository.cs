@@ -7,7 +7,8 @@
 		/// </summary>
 		/// <param name="tournamentId">Tournament id</param>
 		/// <param name="teamId">Team id</param>
+		/// <param name="playerIds">List of participants</param>
 		/// <returns>Result of checking. True if tournament already contains team.</returns>
-		Task<bool> AnyAsync(long tournamentId, long teamId);
+		Task<bool> AnyAsync(long tournamentId, long teamId, IEnumerable<long> playerIds);
 	}
 }

@@ -72,7 +72,7 @@ namespace Tournaments.Persistence.Repositories
 		/// <inheritdoc />
 		public async Task<bool> AnyAsync(long tournamentId)
 		{
-			return await _context.Tournaments.AsNoTracking().FirstOrDefaultAsync(t => t.Id == tournamentId) is not null;
+			return await _context.Tournaments.AnyAsync(t => t.Id == tournamentId);
 		}
 
 		/// <inheritdoc />

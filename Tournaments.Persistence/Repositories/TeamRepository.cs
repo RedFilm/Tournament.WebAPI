@@ -9,9 +9,9 @@ namespace Tournaments.Persistence.Repositories
 		private readonly TournamentDbContext _context;
 
 		public TeamRepository(TournamentDbContext context)
-        {
-            _context = context;
-        }
+		{
+			_context = context;
+		}
 
 		/// <inheritdoc />
 		public async Task<bool> AddPlayerToTeamAsync(AppUser player, Team team)
@@ -39,9 +39,10 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
-		public async Task<bool> AddTeamToTournamentAsync(Tournament tournament, Team team)
+		public async Task<bool> AddTeamToTournamentAsync(Tournament tournament, Team team, IEnumerable<long> playerIds)
 		{
-			_context.TournamentTeams.Add(new TournamentTeam { Tournament = tournament, Team = team });
+			foreach (var playerId in playerIds)
+				_context.TournamentTeams.Add(new TournamentTeam { Tournament = tournament, Team = team, PlayerId = playerId });
 
 			return await _context.SaveChangesAsync() > 0;
 		}
@@ -99,7 +100,7 @@ namespace Tournaments.Persistence.Repositories
 		/// <inheritdoc />
 		public async Task<bool> AnyAsync(long teamId)
 		{
-			return await _context.Teams.AsNoTracking().FirstOrDefaultAsync(t => t.Id == teamId) is not null;
+			return await _context.Teams.AnyAsync(t => t.Id == teamId);
 		}
 	}
 }

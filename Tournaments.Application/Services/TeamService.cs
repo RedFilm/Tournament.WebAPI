@@ -102,13 +102,13 @@ namespace Tournaments.Application.Services
 				tournament.RegistrationEndDate < DateTime.UtcNow)
 				throw new AlreadyExistsException("Registration is over");
 
-			if (await _tournamentTeamRepository.AnyAsync(model.TournamentId, model.TeamId))
+			if (await _tournamentTeamRepository.AnyAsync(model.TournamentId, model.TeamId, model.PlayerIDs))
 				throw new AlreadyExistsException("Team's already been registered");
 
 			if (team.OwnerId != model.OwnerId)
 				throw new BadRequestException("You must be the creator of the team to register for tournament");
 
-			return await _teamRepository.AddTeamToTournamentAsync(tournament, team);
+			return await _teamRepository.AddTeamToTournamentAsync(tournament, team, model.PlayerIDs);
 		}
 
 		public async Task<bool> AddPlayerToTeamAsync(long teamId, long playerId, long inviterId)

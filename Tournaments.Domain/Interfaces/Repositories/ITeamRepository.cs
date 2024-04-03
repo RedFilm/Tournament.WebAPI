@@ -52,8 +52,9 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// </summary>
 		/// <param name="tournament">Tournament entity</param>
 		/// <param name="team">Team entity</param>
+		/// <param name="playerIds">List of participants</param>
 		/// <returns>Result of adding. True if user successfully added to the team</returns>
-		Task<bool> AddTeamToTournamentAsync(Tournament tournament, Team team);
+		Task<bool> AddTeamToTournamentAsync(Tournament tournament, Team team, IEnumerable<long> playerIds);
 
 		/// <summary>
 		/// Asynchronously adds team entity to the database.
