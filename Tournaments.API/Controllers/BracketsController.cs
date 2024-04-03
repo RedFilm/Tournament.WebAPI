@@ -29,9 +29,9 @@ namespace Tournaments.API.Controllers
 		[HttpPost("GenerateNewBracket/{tournamentId}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BracketModel))]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
-		public async Task<BracketModel> GenerateNewBracket([FromRoute] long tournamentId)
+		public async Task<BracketModel> GenerateNewBracket([FromRoute] long tournamentId, [FromQuery] bool shuffleTeams = true)
 		{
-			return await _bracketService.GenerateNewBracketAsync(tournamentId);
+			return await _bracketService.GenerateNewBracketAsync(tournamentId, shuffleTeams);
 		}
 
 		[Authorize(Roles = "Administrator, TournamentCreator")]

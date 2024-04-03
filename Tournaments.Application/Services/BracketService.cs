@@ -25,7 +25,7 @@ namespace Tournaments.Application.Services
 			_mapper = mapper;
 		}
 
-		public async Task<BracketModel> GenerateNewBracketAsync(long tournamentId)
+		public async Task<BracketModel> GenerateNewBracketAsync(long tournamentId, bool shuffleTeams)
 		{
 			if (!await _tournamentRepository.AnyAsync(tournamentId))
 				throw new NotFoundException("Tournament with this id doesn't exist");
@@ -37,7 +37,7 @@ namespace Tournaments.Application.Services
 			if (teams.Count < 2 || teams.Count > 32)
 				throw new BadRequestException("The number of teams in the tournament should be in the range [2;32].");
 
-			var bracket = _bracketGenerator.GenerateNewBracket(teams.ToList(), true);
+			var bracket = _bracketGenerator.GenerateNewBracket(teams.ToList(), shuffleTeams);
 
 			await _tournamentRepository.AddBracketAsync(bracket, tournamentId);
 
