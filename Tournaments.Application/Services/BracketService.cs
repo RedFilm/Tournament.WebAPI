@@ -6,21 +6,23 @@ using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.BracketModels;
-using Tournaments.Persistence.Repositories;
 
 namespace Tournaments.Application.Services
 {
 	public class BracketService : IBracketService
 	{
 		private readonly ITournamentRepository _tournamentRepository;
+		private readonly ITeamRepository _teamRepository;
 		private readonly BracketGenerator _bracketGenerator;
 		private readonly IMapper _mapper;
 
 		public BracketService(ITournamentRepository tournamentRepository,
+			ITeamRepository teamRepository,
 			BracketGenerator bracketGenerator,
 			IMapper mapper)
 		{
 			_tournamentRepository = tournamentRepository;
+			_teamRepository = teamRepository;
 			_bracketGenerator = bracketGenerator;
 			_mapper = mapper;
 		}
