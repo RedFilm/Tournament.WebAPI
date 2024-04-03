@@ -51,7 +51,7 @@ namespace Tournaments.Persistence.Repositories
 		/// <inheritdoc />
 		public async Task<Tournament?> GetTournamentByIdAsync(long id)
 		{
-			var tournament = await _context.Tournaments.FirstOrDefaultAsync(x => x.Id == id);
+			var tournament = await _context.Tournaments.Include(t => t.TournamentTeams).FirstOrDefaultAsync(x => x.Id == id);
 			return tournament;
 		}
 
