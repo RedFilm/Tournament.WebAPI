@@ -409,7 +409,12 @@ namespace Tournaments.Persistence.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.HasKey("TournamentId", "TeamId", "Status");
+                    b.Property<long>("PlayerId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("TournamentId", "TeamId", "Status", "PlayerId");
+
+                    b.HasIndex("PlayerId");
 
                     b.HasIndex("TeamId");
 
@@ -546,6 +551,12 @@ namespace Tournaments.Persistence.Migrations
 
             modelBuilder.Entity("Tournaments.Domain.Entities.TournamentTeam", b =>
                 {
+                    b.HasOne("Tournaments.Domain.Entities.AppUser", "Player")
+                        .WithMany("TournamentTeams")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Tournaments.Domain.Entities.Team", "Team")
                         .WithMany("TournamentTeams")
                         .HasForeignKey("TeamId")
@@ -558,6 +569,8 @@ namespace Tournaments.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Player");
+
                     b.Navigation("Team");
 
                     b.Navigation("Tournament");
@@ -565,6 +578,8 @@ namespace Tournaments.Persistence.Migrations
 
             modelBuilder.Entity("Tournaments.Domain.Entities.AppUser", b =>
                 {
+                    b.Navigation("TournamentTeams");
+
                     b.Navigation("Tournaments");
                 });
 

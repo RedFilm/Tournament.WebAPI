@@ -8,7 +8,7 @@ namespace Tournaments.Persistence.EntityTypeConfigurations
 	{
 		public void Configure(EntityTypeBuilder<TournamentTeam> builder)
 		{
-			builder.HasKey(t => new { t.TournamentId, t.TeamId, t.Status });
+			builder.HasKey(t => new { t.TournamentId, t.TeamId, t.Status, t.PlayerId});
 
 			builder.HasOne(t => t.Tournament)
 				.WithMany(tr => tr.TournamentTeams)
@@ -16,6 +16,9 @@ namespace Tournaments.Persistence.EntityTypeConfigurations
 			builder.HasOne(t => t.Team)
 				.WithMany(tm => tm.TournamentTeams)
 				.HasForeignKey(tm => tm.TeamId);
+			builder.HasOne(t => t.Player)
+				.WithMany(p => p.TournamentTeams)
+				.HasForeignKey(t => t.PlayerId);
 		}
 	}
 }
