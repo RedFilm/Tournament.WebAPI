@@ -353,6 +353,9 @@ namespace Tournaments.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsOfficial")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("MaxParticipantCount")
                         .HasColumnType("integer");
 

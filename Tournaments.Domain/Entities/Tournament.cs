@@ -12,6 +12,7 @@
 
         public List<TournamentTeam> TournamentTeams { get; set; } = null!;
 
+        public bool IsOfficial { get; set; }
         public int PrizePool { get; set; }
         public int TeamPlayersCount { get; set; }
         public int MaxParticipantCount { get; set; }
