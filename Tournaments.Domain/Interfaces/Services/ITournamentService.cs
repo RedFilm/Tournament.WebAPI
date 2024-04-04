@@ -1,4 +1,5 @@
 ﻿using Tournaments.Domain.Exceptions;
+using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.TeamModels;
 using Tournaments.Domain.Models.TournamentModels;
 
@@ -17,8 +18,9 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <summary>
 		/// Asynchronously gets list of all tournament models.
 		/// </summary>
-		/// <returns>IEnumerable of TournamentModel</returns>
-		Task<IEnumerable<TournamentWithIdModel>> GetTournamentsAsync();
+		/// <param name="model">Model that contains page number and size</param>
+		/// <returns>Page model that contains list of tournaments, total count, page number and size</returns>
+		Task<PageModel<TournamentWithIdModel>> GetTournamentsAsync(PaginationModel model);
 
 		/// <summary>
 		/// Asynchronously adds tournament to the database.

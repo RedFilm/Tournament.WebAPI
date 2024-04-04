@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tournaments.Domain.Entities;
 using Tournaments.Domain.Interfaces.Repositories;
+using Tournaments.Domain.Models;
 
 namespace Tournaments.Persistence.Repositories
 {
@@ -84,9 +85,11 @@ namespace Tournaments.Persistence.Repositories
 			return team!.Players;
 		}
 
-		public async Task<List<Team>> GetTeamsAsync()
+		public async Task<List<Team>> GetTeamsAsync(PaginationModel model)
 		{
-			return await _context.Teams.ToListAsync();
+			var skipCount = (model.PageNumber - 1) * model.PageSize;
+
+			return await _context.Teams.Skip(skipCount).Take(model.PageSize).ToListAsync();
 		}
 
 		/// <inheritdoc />
@@ -94,6 +97,11 @@ namespace Tournaments.Persistence.Repositories
 		{
 			_context.Teams.Update(team);
 			return await _context.SaveChangesAsync() > 0;
+		}
+
+		public async Task<int> GetTotalCountAsync()
+		{
+			return await _context.Teams.CountAsync();
 		}
 
 		/// <inheritdoc />

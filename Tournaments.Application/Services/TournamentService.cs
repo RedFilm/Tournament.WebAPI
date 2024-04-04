@@ -3,6 +3,7 @@ using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
+using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.TeamModels;
 using Tournaments.Domain.Models.TournamentModels;
 
@@ -58,11 +59,18 @@ namespace Tournaments.Application.Services
 			return tournamentModel;
 		}
 
-		public async Task<IEnumerable<TournamentWithIdModel>> GetTournamentsAsync()
+		public async Task<PageModel<TournamentWithIdModel>> GetTournamentsAsync(PaginationModel model)
 		{
-			var tournaments = await _tournamentRepository.GetTournamentsAsync();
+			var tournaments = await _tournamentRepository.GetTournamentsAsync(model);
+			var tournamentsModels = _mapper.Map<IEnumerable<TournamentWithIdModel>>(tournaments);
 
-			return _mapper.Map<IEnumerable<TournamentWithIdModel>>(tournaments);
+			return new PageModel<TournamentWithIdModel>
+			{
+				PageNumber = model.PageNumber,
+				PageSize = model.PageSize,
+				Items = tournamentsModels,
+				ItemsCount = await _tournamentRepository.GetTotalCountAsync()
+			};
 		}
 
 		public async Task UpdateTournamentAsync(TournamentModel tournamentModel, long tournamentId)

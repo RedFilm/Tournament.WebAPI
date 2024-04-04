@@ -2,6 +2,7 @@
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Entities;
 using System.Numerics;
+using Tournaments.Domain.Models;
 
 namespace Tournaments.Persistence.Repositories
 {
@@ -56,10 +57,11 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
-		public async Task<List<Tournament>> GetTournamentsAsync()
+		public async Task<List<Tournament>> GetTournamentsAsync(PaginationModel model)
 		{
-			var tournaments = await _context.Tournaments.AsNoTracking().ToListAsync();
-			return tournaments;
+			var skipCount = (model.PageNumber - 1) * model.PageSize;
+
+			return await _context.Tournaments.Skip(skipCount).Take(model.PageSize).ToListAsync();
 		}
 
 		/// <inheritdoc />
@@ -98,6 +100,11 @@ namespace Tournaments.Persistence.Repositories
 				.FirstOrDefaultAsync(b => b.TournamentId == tournamentId);
 
 			return bracket;
+		}
+
+		public async Task<int> GetTotalCountAsync()
+		{
+			return await _context.Tournaments.CountAsync();
 		}
 	}
 }

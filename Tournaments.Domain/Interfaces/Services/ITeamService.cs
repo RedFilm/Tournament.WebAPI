@@ -19,8 +19,9 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <summary>
 		/// Asynchronously gets all teams.
 		/// </summary>
-		/// <returns>IEnumerable of TeamModel entities</returns>
-		Task<IEnumerable<TeamWithIdModel>> GetTeamsAsync();
+		/// <param name="model">Model that contains page number and size</param>
+		/// <returns>Page model that contains list of teams, total count, page number and size</returns>
+		Task<PageModel<TeamWithIdModel>> GetTeamsAsync(PaginationModel model);
 
 		/// <summary>
 		/// Asynchronously gets players from the team.

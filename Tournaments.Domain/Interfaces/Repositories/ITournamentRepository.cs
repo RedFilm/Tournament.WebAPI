@@ -1,4 +1,5 @@
 ﻿using Tournaments.Domain.Entities;
+using Tournaments.Domain.Models;
 
 namespace Tournaments.Domain.Interfaces.Repositories
 {
@@ -14,8 +15,9 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// <summary>
 		/// Asynchronously gets list of all tournaments.
 		/// </summary>
+		/// <param name="model">Model that contains page number and size</param>
 		/// <returns>IEnumerable of Tournament entities</returns>
-		Task<List<Tournament>> GetTournamentsAsync();
+		Task<List<Tournament>> GetTournamentsAsync(PaginationModel model);
 
 		/// <summary>
 		/// Asynchronously gets a list of all teams participating in the tournament.
@@ -59,6 +61,12 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// <param name="tournamentId">Tournament id</param>
 		/// <returns>Result of adding. True if bracket successfully added to the tournament.</returns>
 		Task<bool> AddBracketAsync(Bracket bracket, long tournamentId);
+
+		/// <summary>
+		/// Gets total tournaments count
+		/// </summary>
+		/// <returns>Tournaments count</returns>
+		Task<int> GetTotalCountAsync();
 
 		/// <summary>
 		/// Asynchronously checks if tournament exists.
