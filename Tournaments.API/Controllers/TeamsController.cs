@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Expressions.Internal;
 using Tournaments.Application.Validators;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
@@ -15,11 +16,11 @@ namespace Tournaments.API.Controllers
 	{
 		private readonly ITeamService _teamService;
 		private readonly TeamModelValidator _teamValidator;
-		private readonly PaginationModelValidator _paginationValidator;
+		private readonly IValidator<PaginationModel> _paginationValidator;
 
 		public TeamsController(ITeamService teamService,
 			TeamModelValidator teamValidator,
-			PaginationModelValidator paginationValidator)
+			IValidator<PaginationModel> paginationValidator)
 		{
 			_teamService = teamService;
 			_teamValidator = teamValidator;

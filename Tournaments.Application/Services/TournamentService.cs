@@ -59,10 +59,18 @@ namespace Tournaments.Application.Services
 			return tournamentModel;
 		}
 
-		public async Task<IEnumerable<TournamentWithIdModel>> GetTournamentsAsync(PaginationModel model)
+		public async Task<PageModel<TournamentWithIdModel>> GetTournamentsAsync(PaginationModel model)
 		{
 			var tournaments = await _tournamentRepository.GetTournamentsAsync(model);
-			return _mapper.Map<IEnumerable<TournamentWithIdModel>>(tournaments);
+			var tournamentsModels = _mapper.Map<IEnumerable<TournamentWithIdModel>>(tournaments);
+
+			return new PageModel<TournamentWithIdModel>
+			{
+				PageNumber = model.PageNumber,
+				PageSize = model.PageSize,
+				Items = tournamentsModels,
+				ItemsCount = await _tournamentRepository.GetTotalCountAsync()
+			};
 		}
 
 		public async Task UpdateTournamentAsync(TournamentModel tournamentModel, long tournamentId)

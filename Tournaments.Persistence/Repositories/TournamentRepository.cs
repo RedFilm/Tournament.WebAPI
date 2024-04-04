@@ -101,5 +101,10 @@ namespace Tournaments.Persistence.Repositories
 
 			return bracket;
 		}
+
+		public async Task<int> GetTotalCountAsync()
+		{
+			return await _context.Tournaments.CountAsync();
+		}
 	}
 }

@@ -63,6 +63,12 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		Task<bool> AddBracketAsync(Bracket bracket, long tournamentId);
 
 		/// <summary>
+		/// Gets total tournaments count
+		/// </summary>
+		/// <returns>Tournaments count</returns>
+		Task<int> GetTotalCountAsync();
+
+		/// <summary>
 		/// Asynchronously checks if tournament exists.
 		/// </summary>
 		/// <param name="tournamentId">Tournament id</param>
