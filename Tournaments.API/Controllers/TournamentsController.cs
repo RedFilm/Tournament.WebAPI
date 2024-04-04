@@ -34,9 +34,9 @@ namespace Tournaments.API.Controllers
 		[HttpGet("GetTournaments")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TournamentWithIdModel>))]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
-		public async Task<IEnumerable<TournamentWithIdModel>> GetTournaments([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+		public async Task<IEnumerable<TournamentWithIdModel>> GetTournaments([FromQuery] PaginationModel model)
 		{
-			var tournamentModels = await _tournamentService.GetTournamentsAsync(pageNumber, pageSize);
+			var tournamentModels = await _tournamentService.GetTournamentsAsync(model);
 
 			return tournamentModels;
 		}

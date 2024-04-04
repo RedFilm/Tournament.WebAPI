@@ -1,4 +1,5 @@
 ﻿using Tournaments.Domain.Entities;
+using Tournaments.Domain.Models;
 
 namespace Tournaments.Domain.Interfaces.Repositories
 {
@@ -14,10 +15,9 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// <summary>
 		/// Asynchronously gets list of all tournaments.
 		/// </summary>
-		/// <param name="pageNumber">Number of the required page</param>
-		/// <param name="pageSize">Tournaments count on the page</param>
+		/// <param name="model">Model that contains page number and size</param>
 		/// <returns>IEnumerable of Tournament entities</returns>
-		Task<List<Tournament>> GetTournamentsAsync(int pageNumber, int pageSize);
+		Task<List<Tournament>> GetTournamentsAsync(PaginationModel model);
 
 		/// <summary>
 		/// Asynchronously gets a list of all teams participating in the tournament.

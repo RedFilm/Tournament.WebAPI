@@ -1,4 +1,5 @@
 ﻿using Tournaments.Domain.Entities;
+using Tournaments.Domain.Models;
 
 namespace Tournaments.Domain.Interfaces.Repositories
 {
@@ -28,10 +29,9 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// <summary>
 		/// Asynchronously gets all teams.
 		/// </summary>
-		/// <param name="pageNumber">Number of the required page</param>
-		/// <param name="pageSize">Teams count on the page</param>
+		/// <param name="model">Model that contains page number and size</param>
 		/// <returns>IEnumerable of Team entities</returns>
-		Task<List<Team>> GetTeamsAsync(int pageNumber, int pageSize);
+		Task<List<Team>> GetTeamsAsync(PaginationModel model);
 
 		/// <summary>
 		/// Asynchronously adds player to team.

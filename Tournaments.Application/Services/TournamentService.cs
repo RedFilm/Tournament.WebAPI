@@ -3,6 +3,7 @@ using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
+using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.TeamModels;
 using Tournaments.Domain.Models.TournamentModels;
 
@@ -58,12 +59,9 @@ namespace Tournaments.Application.Services
 			return tournamentModel;
 		}
 
-		public async Task<IEnumerable<TournamentWithIdModel>> GetTournamentsAsync(int pageNumber, int pageSize)
+		public async Task<IEnumerable<TournamentWithIdModel>> GetTournamentsAsync(PaginationModel model)
 		{
-			if (pageNumber < 0 || pageSize < 0)
-				throw new BadRequestException("Page number and size must be non negative");
-
-			var tournaments = await _tournamentRepository.GetTournamentsAsync(pageNumber, pageSize);
+			var tournaments = await _tournamentRepository.GetTournamentsAsync(model);
 			return _mapper.Map<IEnumerable<TournamentWithIdModel>>(tournaments);
 		}
 
