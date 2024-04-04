@@ -21,7 +21,7 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// </summary>
 		/// <param name="model">Model that contains page number and size</param>
 		/// <returns>IEnumerable of TeamModel entities</returns>
-		Task<IEnumerable<TeamWithIdModel>> GetTeamsAsync(PaginationModel model);
+		Task<PageModel<TeamWithIdModel>> GetTeamsAsync(PaginationModel model);
 
 		/// <summary>
 		/// Asynchronously gets players from the team.

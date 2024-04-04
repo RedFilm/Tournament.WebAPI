@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Tournaments.Application.Validators;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.TeamModels;
@@ -14,11 +15,15 @@ namespace Tournaments.API.Controllers
 	{
 		private readonly ITeamService _teamService;
 		private readonly TeamModelValidator _teamValidator;
+		private readonly PaginationModelValidator _paginationValidator;
 
-		public TeamsController(ITeamService teamService, TeamModelValidator teamValidator)
+		public TeamsController(ITeamService teamService,
+			TeamModelValidator teamValidator,
+			PaginationModelValidator paginationValidator)
 		{
 			_teamService = teamService;
 			_teamValidator = teamValidator;
+			_paginationValidator = paginationValidator;
 		}
 
 		[HttpGet("{teamId}")]
@@ -43,11 +48,12 @@ namespace Tournaments.API.Controllers
 		[HttpGet("GetTeams")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TeamWithIdModel>))]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
-		public async Task<IEnumerable<TeamWithIdModel>> GetTeams([FromQuery] PaginationModel model)
+		public async Task<PageModel<TeamWithIdModel>> GetTeams([FromQuery] PaginationModel model)
 		{
-			var teamModels = await _teamService.GetTeamsAsync(model);
+			await _paginationValidator.ValidateAndThrowAsync(model);
+			var pageModel = await _teamService.GetTeamsAsync(model);
 
-			return teamModels;
+			return pageModel;
 		}
 
 		[HttpGet("{teamId}/Tournaments")]

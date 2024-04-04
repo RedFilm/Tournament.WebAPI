@@ -79,6 +79,12 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		Task<bool> DeleteTeamAsync(long id);
 
 		/// <summary>
+		/// Gets total teams count
+		/// </summary>
+		/// <returns>Teams count</returns>
+		Task<int> GetTotalCountAsync();
+
+		/// <summary>
 		/// Asynchronously checks if team exists.
 		/// </summary>
 		/// <param name="teamId">Team id</param>

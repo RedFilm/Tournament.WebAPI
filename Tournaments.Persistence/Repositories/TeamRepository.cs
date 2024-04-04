@@ -99,6 +99,11 @@ namespace Tournaments.Persistence.Repositories
 			return await _context.SaveChangesAsync() > 0;
 		}
 
+		public async Task<int> GetTotalCountAsync()
+		{
+			return await _context.Teams.CountAsync();
+		}
+
 		/// <inheritdoc />
 		public async Task<bool> AnyAsync(long teamId)
 		{

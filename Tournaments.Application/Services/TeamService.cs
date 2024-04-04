@@ -80,10 +80,18 @@ namespace Tournaments.Application.Services
 			return _mapper.Map<IEnumerable<UserModel>>(appUsers);
 		}
 
-		public async Task<IEnumerable<TeamWithIdModel>> GetTeamsAsync(PaginationModel model)
+		public async Task<PageModel<TeamWithIdModel>> GetTeamsAsync(PaginationModel model)
 		{
 			var teams = await _teamRepository.GetTeamsAsync(model);
-			return _mapper.Map<IEnumerable<TeamWithIdModel>>(teams);
+			var teamModels = _mapper.Map<IEnumerable<TeamWithIdModel>>(teams);
+
+			return new PageModel<TeamWithIdModel>
+			{
+				PageNumber = model.PageNumber,
+				PageSize = model.PageSize,
+				Items = teamModels,
+				ItemsCount = await _teamRepository.GetTotalCountAsync()
+			};
 		}
 
 		// TODO: Вынести некоторые проверки в отдельные методы\классы
