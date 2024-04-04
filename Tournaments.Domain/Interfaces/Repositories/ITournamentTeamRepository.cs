@@ -1,7 +1,18 @@
-﻿namespace Tournaments.Domain.Interfaces.Repositories
+﻿using Tournaments.Domain.Entities;
+
+namespace Tournaments.Domain.Interfaces.Repositories
 {
 	public interface ITournamentTeamRepository
 	{
+
+		/// <summary>
+		/// Asynchronously gets players from the team participating in the tournament.
+		/// </summary>
+		/// <param name="tournamentId">Tournament id</param>
+		/// <param name="teamId">Team id</param>
+		/// <returns>List of AppUser entities</returns>
+		Task<List<long>> GetTournamentTeamPlayerIdsAsync(long tournamentId, long teamId);
+
 		/// <summary>
 		/// Asynchronously checks if tournament contains this team.
 		/// </summary>
