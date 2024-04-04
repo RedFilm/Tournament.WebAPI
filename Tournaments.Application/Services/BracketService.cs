@@ -125,7 +125,10 @@ namespace Tournaments.Application.Services
 			{
 				var user = await _userManager.FindByIdAsync(playerId.ToString());
 				if (user is not null)
+				{
 					user.Rating += (100 - stageNumber) * 0.2d;
+					await _userManager.UpdateAsync(user);
+				}
 			}
 		}
 	}
