@@ -8,9 +8,9 @@ namespace Tournaments.Persistence.Repositories
 		private readonly TournamentDbContext _context;
 
 		public TournamentTeamRepository(TournamentDbContext context)
-        {
-            _context = context;
-        }
+		{
+			_context = context;
+		}
 
 		public async Task<List<long>> GetTournamentTeamPlayerIdsAsync(long tournamentId, long teamId)
 		{

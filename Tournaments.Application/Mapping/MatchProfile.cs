@@ -6,9 +6,9 @@ namespace Tournaments.Application.Mapping
 {
 	public class MatchProfile : Profile
 	{
-        public MatchProfile()
-        {
-            CreateMap<Match, MatchModel>();
-        }
-    }
+		public MatchProfile()
+		{
+			CreateMap<Match, MatchModel>();
+		}
+	}
 }

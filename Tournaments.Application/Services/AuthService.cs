@@ -11,15 +11,11 @@ using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Enums;
 using Microsoft.Extensions.Logging;
-
-
-
 using Tournaments.Domain.Models.AuthModels;
-using System.Data;
 
 namespace Tournaments.Application.Services
 {
-    public class AuthService : IAuthService
+	public class AuthService : IAuthService
 	{
 		private readonly UserManager<AppUser> _userManager;
 		private readonly SignInManager<AppUser> _signinManager;
@@ -78,7 +74,7 @@ namespace Tournaments.Application.Services
 
 		private async Task<string> GenerateTokenAsync(AppUser user)
 		{
-            var userRoles = await _userManager.GetRolesAsync(user);
+			var userRoles = await _userManager.GetRolesAsync(user);
 
 			var claims = new List<Claim>()
 			{

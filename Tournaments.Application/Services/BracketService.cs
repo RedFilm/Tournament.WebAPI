@@ -79,7 +79,7 @@ namespace Tournaments.Application.Services
 				foreach (var result in results)
 					await SetRating(result.WinnerId, result.StageNumber, tournamentId);
 			}
-			
+
 			tournament.Bracket = updatedBracket;
 
 			await _tournamentRepository.UpdateTournamentAsync(tournament);

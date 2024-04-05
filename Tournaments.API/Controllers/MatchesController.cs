@@ -11,9 +11,9 @@ namespace Tournaments.API.Controllers
 		private readonly IMatchService _matchService;
 
 		public MatchesController(IMatchService matchService)
-        {
+		{
 			_matchService = matchService;
-        }
+		}
 
 		[HttpGet("{matchId}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MatchModel))]

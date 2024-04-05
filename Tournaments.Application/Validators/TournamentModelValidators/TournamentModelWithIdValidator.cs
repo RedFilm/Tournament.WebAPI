@@ -5,9 +5,9 @@ namespace Tournaments.Domain.Validators.TournamentModelValidators
 {
 	public class TournamentModelWithIdValidator : TournamentModelBaseValidator<TournamentWithIdModel>
 	{
-        public TournamentModelWithIdValidator()
-        {
+		public TournamentModelWithIdValidator()
+		{
 			RuleFor(tournament => tournament.Id).NotEmpty();
 		}
-    }
+	}
 }

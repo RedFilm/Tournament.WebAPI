@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Tournaments.Domain.Enums;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.TeamModels;
@@ -63,7 +64,7 @@ namespace Tournaments.API.Controllers
 			return Created();
 		}
 
-		[Authorize(Roles = "Administrator, TournamentCreator")]
+		[Authorize(Roles = $"{nameof(IdentityRoles.Administrator)}, {nameof(IdentityRoles.TournamentCreator)}")]
 		[HttpPut("{tournamentId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
@@ -76,7 +77,7 @@ namespace Tournaments.API.Controllers
 			return Ok();
 		}
 
-		[Authorize(Roles = "Administrator, TournamentCreator")]
+		[Authorize(Roles = $"{nameof(IdentityRoles.Administrator)}, {nameof(IdentityRoles.TournamentCreator)}")]
 		[HttpDelete("{tournamentId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ExceptionResponseModel))]

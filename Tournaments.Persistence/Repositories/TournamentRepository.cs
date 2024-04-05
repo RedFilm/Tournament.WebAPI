@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Entities;
-using System.Numerics;
 
 namespace Tournaments.Persistence.Repositories
 {
@@ -83,7 +82,7 @@ namespace Tournaments.Persistence.Repositories
 				.ThenInclude(b => b.Stages)
 				.ThenInclude(s => s.Matches)
 				.FirstOrDefaultAsync(t => t.Id == tournamentId);
-			
+
 			if (tournament is not null)
 				tournament.Bracket = bracket;
 

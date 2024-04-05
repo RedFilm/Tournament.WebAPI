@@ -6,7 +6,7 @@ using Tournaments.Persistence.Repositories;
 
 namespace Tournaments.API.Extensions
 {
-    public static class ApplicationExtensions
+	public static class ApplicationExtensions
 	{
 		public static IServiceCollection AddApplication(this IServiceCollection services)
 		{

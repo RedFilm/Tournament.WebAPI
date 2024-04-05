@@ -6,7 +6,7 @@ using Tournaments.Domain.Models.AuthModels;
 
 namespace Tournaments.API.Controllers
 {
-    [Route("api/[controller]")]
+	[Route("api/[controller]")]
 	[ApiController]
 	public class AuthController : ControllerBase
 	{
@@ -14,16 +14,16 @@ namespace Tournaments.API.Controllers
 		private readonly IValidator<LoginModel> _loginValidator;
 		private readonly IValidator<RegisterModel> _registerValidator;
 
-		public AuthController(IAuthService authService, 
+		public AuthController(IAuthService authService,
 			IValidator<LoginModel> loginValidator,
 			IValidator<RegisterModel> registerValidator)
-        {
-            _authService = authService;
+		{
+			_authService = authService;
 			_loginValidator = loginValidator;
 			_registerValidator = registerValidator;
-        }
+		}
 
-        [HttpPost("Login")]
+		[HttpPost("Login")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticationResultModel))]
 		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]

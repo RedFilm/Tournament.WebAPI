@@ -61,7 +61,7 @@ namespace Tournaments.Application.BracketGeneration
 					break;
 				}
 
-				var previousMatch = stages[firstStageIndex - 1].Matches.Skip(i / 2).FirstOrDefault() 
+				var previousMatch = stages[firstStageIndex - 1].Matches.Skip(i / 2).FirstOrDefault()
 					?? throw new NullReferenceException("Expected match");
 
 				if (previousMatch.Team1Id is not null ^ previousMatch.Team2Id is not null)

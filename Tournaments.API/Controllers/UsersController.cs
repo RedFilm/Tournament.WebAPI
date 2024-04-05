@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Tournaments.Domain.Enums;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
 
@@ -32,7 +33,7 @@ namespace Tournaments.API.Controllers
 			return await _userService.GetUsersAsync(pageNumber, pageSize);
 		}
 
-		[Authorize(Roles = "Administrator")]
+		[Authorize(Roles = nameof(IdentityRoles.Administrator))]
 		[HttpDelete("{userId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ExceptionResponseModel))]

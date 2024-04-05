@@ -9,11 +9,11 @@ namespace Tournaments.Persistence.Repositories
 		private readonly TournamentDbContext _tournamentDbContext;
 
 		public MatchRepository(TournamentDbContext tournamentDbContext)
-        {
+		{
 			_tournamentDbContext = tournamentDbContext;
 		}
 
-        public async Task<Match?> GetMatchByIdAsync(long matchId)
+		public async Task<Match?> GetMatchByIdAsync(long matchId)
 		{
 			return await _tournamentDbContext.Matches.FirstOrDefaultAsync(m => m.MatchId == matchId);
 		}

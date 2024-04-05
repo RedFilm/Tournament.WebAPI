@@ -3,7 +3,7 @@ using Tournaments.Domain.Exceptions.BaseExceptions;
 
 namespace Tournaments.Domain.Exceptions
 {
-    public class AuthenticationFailedException : ExceptionWithStatusCode
+	public class AuthenticationFailedException : ExceptionWithStatusCode
 	{
 		public AuthenticationFailedException(string message) : base(message)
 		{
