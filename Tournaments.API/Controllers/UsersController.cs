@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Tournaments.Domain.Enums;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
@@ -26,11 +27,11 @@ namespace Tournaments.API.Controllers
 		}
 
 		[HttpGet]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserModel>))]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PageModel<UserModel>))]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
-		public async Task<IEnumerable<UserModel>> GetUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+		public async Task<PageModel<UserModel>> GetUsers([FromQuery] PaginationModel model)
 		{
-			return await _userService.GetUsersAsync(pageNumber, pageSize);
+			return await _userService.GetUsersAsync(model);
 		}
 
 		[Authorize(Roles = nameof(IdentityRoles.Administrator))]

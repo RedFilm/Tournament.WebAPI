@@ -5,6 +5,7 @@ using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
+using Tournaments.Domain.Models.TournamentModels;
 
 namespace Tournaments.Application.Services
 {
@@ -29,14 +30,21 @@ namespace Tournaments.Application.Services
 			return _mapper.Map<UserModel>(user);
 		}
 
-		public async Task<IEnumerable<UserModel>> GetUsersAsync(int pageNumber, int pageSize)
+		public async Task<PageModel<UserModel>> GetUsersAsync(PaginationModel model)
 		{
-			if (pageNumber < 0 || pageSize < 0)
-				throw new BadRequestException("Page number and size must be non negative");
-			int skipCount = (pageNumber - 1) * pageSize;
+			var skipCount = (model.PageNumber - 1) * model.PageSize;
 
-			var users = await _userManager.Users.Skip(skipCount).Take(pageSize).ToListAsync();
-			return _mapper.Map<IEnumerable<UserModel>>(users);
+			var users = await _userManager.Users
+				.Skip(skipCount).Take(model.PageSize).ToListAsync();
+			var userModels = _mapper.Map<IEnumerable<UserModel>>(users);
+
+			return new PageModel<UserModel>
+			{
+				PageNumber = model.PageNumber,
+				PageSize = model.PageSize,
+				Items = userModels,
+				ItemsCount = await _userManager.Users.CountAsync()
+			};
 		}
 
 		public async Task<bool> DeleteUserByIdAsync(long userId)

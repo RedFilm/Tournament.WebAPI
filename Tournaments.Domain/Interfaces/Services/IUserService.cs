@@ -14,10 +14,9 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <summary>
 		/// Get all users.
 		/// </summary>
-		/// <param name="pageNumber">Number of the required page</param>
-		/// <param name="pageSize">Users count on the page</param>
-		/// <returns>IEnumerable of UserModel entities</returns>
-		public Task<IEnumerable<UserModel>> GetUsersAsync(int pageNumber, int pageSize);
+		/// <param name="model">Model that contains page number and size</param>
+		/// <returns>Page model that contains list of users, total count, page number and size</returns>
+		public Task<PageModel<UserModel>> GetUsersAsync(PaginationModel model);
 
 		/// <summary>
 		/// Asynchronously remove user by id.
