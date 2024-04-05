@@ -1,4 +1,5 @@
 ﻿using Tournaments.Domain.Entities;
+using Tournaments.Domain.Models;
 
 namespace Tournaments.Domain.Interfaces.Repositories
 {
@@ -28,8 +29,9 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// <summary>
 		/// Asynchronously gets all teams.
 		/// </summary>
+		/// <param name="model">Model that contains page number and size</param>
 		/// <returns>IEnumerable of Team entities</returns>
-		Task<List<Team>> GetTeamsAsync();
+		Task<List<Team>> GetTeamsAsync(PaginationModel model);
 
 		/// <summary>
 		/// Asynchronously adds player to team.
@@ -76,6 +78,12 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// <param name="id">Team id</param>
 		/// <returns>Result of removing. True if entity successfully removed from the database.</returns>
 		Task<bool> DeleteTeamAsync(long id);
+
+		/// <summary>
+		/// Gets total teams count
+		/// </summary>
+		/// <returns>Teams count</returns>
+		Task<int> GetTotalCountAsync();
 
 		/// <summary>
 		/// Asynchronously checks if team exists.

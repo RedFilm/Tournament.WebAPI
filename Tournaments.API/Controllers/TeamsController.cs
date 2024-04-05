@@ -18,11 +18,15 @@ namespace Tournaments.API.Controllers
 	{
 		private readonly ITeamService _teamService;
 		private readonly TeamModelValidator _teamValidator;
+		private readonly IValidator<PaginationModel> _paginationValidator;
 
-		public TeamsController(ITeamService teamService, TeamModelValidator teamValidator)
+		public TeamsController(ITeamService teamService,
+			TeamModelValidator teamValidator,
+			IValidator<PaginationModel> paginationValidator)
 		{
 			_teamService = teamService;
 			_teamValidator = teamValidator;
+			_paginationValidator = paginationValidator;
 		}
 
 		[AllowAnonymous]
@@ -48,12 +52,13 @@ namespace Tournaments.API.Controllers
 		[AllowAnonymous]
 		[HttpGet("GetTeams")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TeamWithIdModel>))]
-		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
-		public async Task<IEnumerable<TeamWithIdModel>> GetTeams()
+		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
+		public async Task<PageModel<TeamWithIdModel>> GetTeams([FromQuery] PaginationModel model)
 		{
-			var teamModels = await _teamService.GetTeamsAsync();
+			await _paginationValidator.ValidateAndThrowAsync(model);
+			var pageModel = await _teamService.GetTeamsAsync(model);
 
-			return teamModels;
+			return pageModel;
 		}
 
 		[HttpGet("{teamId}/Tournaments")]
