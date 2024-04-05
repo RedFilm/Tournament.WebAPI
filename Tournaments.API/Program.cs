@@ -14,12 +14,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-//.AddJsonOptions(options =>
-//{
-//	options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-//	options.JsonSerializerOptions.WriteIndented = true;
-//});
-
 builder.Host.UseSerilog((context, configuration) =>
 	configuration.ReadFrom.Configuration(context.Configuration));
 
