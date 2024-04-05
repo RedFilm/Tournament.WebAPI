@@ -9,9 +9,9 @@ namespace Tournaments.Persistence.Repositories
 		private readonly TournamentDbContext _context;
 
 		public TournamentRepository(TournamentDbContext context)
-		{
-			_context = context;
-		}
+        {
+            _context =	context;
+        }
 
 		/// <inheritdoc />
 		public async Task<bool> AddTournamentAsync(Tournament tournament)
@@ -27,7 +27,7 @@ namespace Tournaments.Persistence.Repositories
 		{
 			var tournament = await _context.Tournaments.FirstOrDefaultAsync(x => x.Id == id);
 
-			if (tournament is null)
+			if (tournament is null) 
 				return false;
 
 			_context.Tournaments.Remove(tournament);
@@ -37,7 +37,7 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
-		public async Task<List<Team>> GetTeamsAsync(long tournamentId)
+		public async Task<IEnumerable<Team>> GetTeamsAsync(long tournamentId)
 		{
 			var tournamentTeams = _context.TournamentTeams
 				.Where(tournamentTeam => tournamentTeam.TournamentId == tournamentId)
@@ -50,12 +50,12 @@ namespace Tournaments.Persistence.Repositories
 		/// <inheritdoc />
 		public async Task<Tournament?> GetTournamentByIdAsync(long id)
 		{
-			var tournament = await _context.Tournaments.Include(t => t.TournamentTeams).FirstOrDefaultAsync(x => x.Id == id);
+			var tournament = await _context.Tournaments.FirstOrDefaultAsync(x => x.Id == id);
 			return tournament;
 		}
-
+		
 		/// <inheritdoc />
-		public async Task<List<Tournament>> GetTournamentsAsync()
+		public async Task<IEnumerable<Tournament>> GetTournamentsAsync()
 		{
 			var tournaments = await _context.Tournaments.AsNoTracking().ToListAsync();
 			return tournaments;
@@ -65,38 +65,15 @@ namespace Tournaments.Persistence.Repositories
 		public async Task<bool> UpdateTournamentAsync(Tournament tournament)
 		{
 			_context.Tournaments.Update(tournament);
-			return await _context.SaveChangesAsync() > 0;
+			var result = await _context.SaveChangesAsync();
+
+			return result > 0;
 		}
 
 		/// <inheritdoc />
 		public async Task<bool> AnyAsync(long tournamentId)
 		{
-			return await _context.Tournaments.AnyAsync(t => t.Id == tournamentId);
-		}
-
-		/// <inheritdoc />
-		public async Task<bool> AddBracketAsync(Bracket bracket, long tournamentId)
-		{
-			var tournament = await _context.Tournaments
-				.Include(t => t.Bracket)
-				.ThenInclude(b => b.Stages)
-				.ThenInclude(s => s.Matches)
-				.FirstOrDefaultAsync(t => t.Id == tournamentId);
-
-			if (tournament is not null)
-				tournament.Bracket = bracket;
-
-			return await _context.SaveChangesAsync() > 0;
-		}
-
-		public async Task<Bracket?> GetBracketAsync(long tournamentId)
-		{
-			var bracket = await _context.Brackets
-				.Include(b => b.Stages)
-				.ThenInclude(s => s.Matches)
-				.FirstOrDefaultAsync(b => b.TournamentId == tournamentId);
-
-			return bracket;
+			return await _context.Tournaments.AsNoTracking().FirstOrDefaultAsync(t => t.Id == tournamentId) is not null;
 		}
 	}
 }

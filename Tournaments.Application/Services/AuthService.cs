@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using Tournaments.Domain.Entities;
 using System.IdentityModel.Tokens.Jwt;
+using Tournaments.Domain.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Options;
@@ -11,7 +12,6 @@ using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Enums;
 using Microsoft.Extensions.Logging;
-using Tournaments.Domain.Models.AuthModels;
 
 namespace Tournaments.Application.Services
 {
@@ -65,24 +65,23 @@ namespace Tournaments.Application.Services
 			if (!result.Succeeded)
 				throw new AuthenticationFailedException("Authentication failed");
 
-			var jwtToken = GenerateTokenAsync(user);
+			var jwtToken = GenerateTokenAsync(model);
 
 			_logger.LogInformation("User has authenticated. User id: {Id}", user.Id);
 
 			return new AuthenticationResultModel { Token = jwtToken.Result };
 		}
 
-		private async Task<string> GenerateTokenAsync(AppUser user)
+		private async Task<string> GenerateTokenAsync(LoginModel model)
 		{
-			var userRoles = await _userManager.GetRolesAsync(user);
+			var user = await _userManager.FindByNameAsync(model.UserName);
 
 			var claims = new List<Claim>()
 			{
-				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-				new Claim(ClaimTypes.Name, user.UserName!),
+				new Claim(ClaimTypes.NameIdentifier, user!.Id.ToString()),
+				new Claim(ClaimTypes.Name, model.UserName),
+				new Claim(ClaimTypes.Role, IdentityRoles.User.ToString())
 			};
-			foreach (var role in userRoles)
-				claims.Add(new Claim(ClaimTypes.Role, role));
 
 			var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key));
 

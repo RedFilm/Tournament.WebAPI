@@ -2,6 +2,6 @@
 {
 	public class ExceptionResponseModel
 	{
-		public IEnumerable<string> Errors { get; set; } = null!;
-	}
+        public IEnumerable<string> Errors { get; set; } = null!;
+    }
 }

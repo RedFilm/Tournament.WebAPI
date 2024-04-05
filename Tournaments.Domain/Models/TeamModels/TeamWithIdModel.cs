@@ -1,4 +1,6 @@
-﻿namespace Tournaments.Domain.Models.TeamModels
+﻿using Tournaments.Domain.Enums.Statuses;
+
+namespace Tournaments.Domain.Models.TeamModels
 {
 	public class TeamWithIdModel : TeamModel
 	{

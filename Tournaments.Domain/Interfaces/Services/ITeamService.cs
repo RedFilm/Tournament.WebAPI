@@ -1,4 +1,5 @@
-﻿using Tournaments.Domain.Exceptions;
+﻿using Tournaments.Domain.Entities;
+using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.TeamModels;
 using Tournaments.Domain.Models.TournamentModels;
@@ -46,9 +47,8 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// Asynchronously update existing team.
 		/// </summary>
 		/// <param name="team">Team model</param>
-		/// <param name="teamId">Team id</param>
 		/// <exception cref="NotFoundException"></exception>
-		Task UpdateTeamAsync(TeamModel team, long teamId);
+		Task UpdateTeamAsync(TeamWithIdModel team);
 
 		/// <summary>
 		/// Asynchronously remove team by id.
@@ -61,23 +61,19 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <summary>
 		/// Asynchronously add player to team.
 		/// </summary>
-		/// <param name="inviterId">Team captain's id</param>
-		/// <param name="playerId">Id of the invited player</param>
-		/// <param name="teamId">Team id</param>
+		/// <param name="model">AddPlayerModel model</param>
 		/// <returns>Result adding. True if player successfully added to the team.</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<bool> AddPlayerToTeamAsync(long teamId, long playerId, long inviterId);
+		Task<bool> AddPlayerToTeamAsync(TeamMemberUpdateModel model);
 
 		/// <summary>
 		/// Asynchronously remove player from team.
 		/// </summary>
-		/// <param name="inviterId">Team captain's id</param>
-		/// <param name="playerId">Id of the invited player</param>
-		/// <param name="teamId">Team id</param>
+		/// <param name="model">TeamMemberUpdateModel model</param>
 		/// <returns>Result removing. True if player successfully removed from the team.</returns>
 		/// <exception cref="NotFoundException"></exception>
 		/// <exception cref="NoContentException"></exception>
-		Task<bool> RemovePlayerFromTeamAsync(long teamId, long playerId, long inviterId);
+		Task<bool> RemovePlayerFromTeamAsync(TeamMemberUpdateModel model);
 
 		/// <summary>
 		/// Asynchronously register team for tournament.

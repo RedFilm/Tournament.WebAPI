@@ -12,9 +12,6 @@ namespace Tournaments.Persistence
 			: base(options) { }
 
 		public DbSet<Team> Teams { get; set; }
-		public DbSet<Match> Matches { get; set; }
-		public DbSet<Stage> Stages { get; set; }
-		public DbSet<Bracket> Brackets { get; set; }
 		public DbSet<Tournament> Tournaments { get; set; }
 		public DbSet<TournamentTeam> TournamentTeams { get; set; }
 

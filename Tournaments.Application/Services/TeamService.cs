@@ -98,61 +98,59 @@ namespace Tournaments.Application.Services
 			if (tournament is null)
 				throw new NotFoundException("Tournament doesn't exist");
 
-			if (tournament.TournamentTeams.Count >= tournament.MaxParticipantCount ||
-				tournament.RegistrationEndDate < DateTime.UtcNow)
-				throw new AlreadyExistsException("Registration is over");
-
-			if (await _tournamentTeamRepository.AnyAsync(model.TournamentId, model.TeamId, model.PlayerIDs))
-				throw new AlreadyExistsException("Team's already been registered");
-
-			if (team.OwnerId != model.OwnerId)
+			if (team.OwnerId != model.UserId)
 				throw new BadRequestException("You must be the creator of the team to register for tournament");
 
-			return await _teamRepository.AddTeamToTournamentAsync(tournament, team, model.PlayerIDs);
+			if (await _tournamentTeamRepository.AnyAsync(model.TournamentId, model.TeamId))
+				throw new AlreadyExistsException("Team's already been registered");
+
+			if (tournament.RegistrationEndDate < DateTime.UtcNow)
+				throw new AlreadyExistsException("Registration is over");
+
+			return await _teamRepository.AddTeamToTournamentAsync(tournament, team);
 		}
 
-		public async Task<bool> AddPlayerToTeamAsync(long teamId, long playerId, long inviterId)
+		public async Task<bool> AddPlayerToTeamAsync(TeamMemberUpdateModel model)
 		{
-			var team = await _teamRepository.GetTeamByIdAsync(teamId);
+			var team = await _teamRepository.GetTeamByIdAsync(model.TeamId);
 			if (team is null)
 				throw new NotFoundException("Team doesn't exist");
 
-			var user = await _userManager.FindByIdAsync(playerId.ToString());
+			var user = await _userManager.FindByIdAsync(model.PlayerId.ToString());
 			if (user is null)
 				throw new NotFoundException("User doesn't exist");
 
-			if (team.OwnerId != inviterId)
+			if (team.OwnerId != model.ExecutorId)
 				throw new BadRequestException("You must be the captain of the team to invite players");
 
-			if (await _teamUserRepository.AnyAsync(teamId, playerId))
+			if (await _teamUserRepository.AnyAsync(model.TeamId, model.PlayerId))
 				throw new AlreadyExistsException("Player's already in team");
 
 			return await _teamRepository.AddPlayerToTeamAsync(user, team);
 		}
 
-		public async Task<bool> RemovePlayerFromTeamAsync(long teamId, long playerId, long inviterId)
+		public async Task<bool> RemovePlayerFromTeamAsync(TeamMemberUpdateModel model)
 		{
-			var team = await _teamRepository.GetTeamByIdAsync(teamId);
+			var team = await _teamRepository.GetTeamByIdAsync(model.TeamId);
 			if (team is null)
 				throw new NotFoundException("Team doesn't exist");
 
-			var player = await _userManager.FindByIdAsync(playerId.ToString());
+			var player = await _userManager.FindByIdAsync(model.PlayerId.ToString());
 			if (player is null)
 				throw new NotFoundException("Player doesn't exist");
 
-			if (team.OwnerId != inviterId)
+			if (team.OwnerId != model.ExecutorId)
 				throw new BadRequestException("You must be the captain of the team to remove players");
 
-			if (!await _teamUserRepository.AnyAsync(teamId, playerId))
+			if (!await _teamUserRepository.AnyAsync(model.TeamId, model.PlayerId))
 				throw new NoContentException("Player's already been removed");
 
-			return await _teamRepository.RemovePlayerFromTeamAsync(player, teamId);
+			return await _teamRepository.RemovePlayerFromTeamAsync(player, model.TeamId);
 		}
 
-		public async Task UpdateTeamAsync(TeamModel teamModel, long teamId)
+		public async Task UpdateTeamAsync(TeamWithIdModel teamModel)
 		{
 			var team = _mapper.Map<Team>(teamModel);
-			team.Id = teamId;
 
 			if (!await _teamRepository.UpdateTeamAsync(team))
 				throw new BadRequestException("Couldn't save changes or team doesn't exist");
