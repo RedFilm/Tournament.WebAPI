@@ -51,7 +51,7 @@ namespace Tournaments.API.Controllers
 
 		[AllowAnonymous]
 		[HttpGet("GetTeams")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TeamWithIdModel>))]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PageModel<TeamWithIdModel>))]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		public async Task<PageModel<TeamWithIdModel>> GetTeams([FromQuery] PaginationModel model)
 		{
