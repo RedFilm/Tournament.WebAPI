@@ -13,5 +13,5 @@ namespace Tournaments.Domain.Options
 		public string Issuer { get; set; } = null!;
 		[Required]
 		public string Audience { get; set; } = null!;
-	}
+    }
 }

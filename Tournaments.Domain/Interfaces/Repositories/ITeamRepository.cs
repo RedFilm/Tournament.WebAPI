@@ -16,20 +16,20 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// </summary>
 		/// <param name="teamId">Team id</param>
 		/// <returns>IEnumerable of Tournament entities</returns>
-		Task<List<Tournament>> GetTournamentsAsync(long teamId);
+		Task<IEnumerable<Tournament>> GetTournamentsAsync(long teamId);
 
 		/// <summary>
 		/// Asynchronously gets players from the team.
 		/// </summary>
 		/// <param name="teamId">Team id</param>
 		/// <returns>All players from the team</returns>
-		Task<List<AppUser>> GetTeamPlayersAsync(long teamId);
+		Task<IEnumerable<AppUser>> GetTeamPlayersAsync(long teamId);
 
 		/// <summary>
 		/// Asynchronously gets all teams.
 		/// </summary>
 		/// <returns>IEnumerable of Team entities</returns>
-		Task<List<Team>> GetTeamsAsync();
+		Task<IEnumerable<Team>> GetTeamsAsync();
 
 		/// <summary>
 		/// Asynchronously adds player to team.
@@ -52,9 +52,8 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// </summary>
 		/// <param name="tournament">Tournament entity</param>
 		/// <param name="team">Team entity</param>
-		/// <param name="playerIds">List of participants</param>
 		/// <returns>Result of adding. True if user successfully added to the team</returns>
-		Task<bool> AddTeamToTournamentAsync(Tournament tournament, Team team, IEnumerable<long> playerIds);
+		Task<bool> AddTeamToTournamentAsync(Tournament tournament, Team team);
 
 		/// <summary>
 		/// Asynchronously adds team entity to the database.

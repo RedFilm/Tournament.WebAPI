@@ -1,5 +1,5 @@
-﻿using Tournaments.Domain.Exceptions;
-using Tournaments.Domain.Models.AuthModels;
+﻿using Tournaments.Domain.Models;
+using Tournaments.Domain.Exceptions;
 
 namespace Tournaments.Domain.Interfaces.Services
 {

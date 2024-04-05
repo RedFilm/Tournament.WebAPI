@@ -1,5 +1,4 @@
-﻿using Tournaments.Application.BracketGeneration;
-using Tournaments.Application.Services;
+﻿using Tournaments.Application.Services;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Persistence.Repositories;
@@ -14,16 +13,10 @@ namespace Tournaments.API.Extensions
 			services.AddScoped<ITeamRepository, TeamRepository>();
 			services.AddScoped<ITeamUserRepository, TeamUserRepository>();
 			services.AddScoped<ITournamentTeamRepository, TournamentTeamRepository>();
-			services.AddScoped<IMatchRepository, MatchRepository>();
 
 			services.AddScoped<IAuthService, AuthService>();
 			services.AddScoped<ITournamentService, TournamentService>();
 			services.AddScoped<ITeamService, TeamService>();
-			services.AddScoped<IBracketService, BracketService>();
-			services.AddScoped<IUserService, UserService>();
-			services.AddScoped<IMatchService, MatchService>();
-
-			services.AddScoped<BracketGenerator>();
 
 			return services;
 		}

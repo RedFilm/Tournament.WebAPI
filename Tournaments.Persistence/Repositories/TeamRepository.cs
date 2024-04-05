@@ -8,10 +8,10 @@ namespace Tournaments.Persistence.Repositories
 	{
 		private readonly TournamentDbContext _context;
 
-		public TeamRepository(TournamentDbContext context)
-		{
-			_context = context;
-		}
+		public TeamRepository(TournamentDbContext contect)
+        {
+            _context = contect;
+        }
 
 		/// <inheritdoc />
 		public async Task<bool> AddPlayerToTeamAsync(AppUser player, Team team)
@@ -39,10 +39,9 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
-		public async Task<bool> AddTeamToTournamentAsync(Tournament tournament, Team team, IEnumerable<long> playerIds)
+		public async Task<bool> AddTeamToTournamentAsync(Tournament tournament, Team team)
 		{
-			foreach (var playerId in playerIds)
-				_context.TournamentTeams.Add(new TournamentTeam { Tournament = tournament, Team = team, PlayerId = playerId });
+			_context.TournamentTeams.Add(new TournamentTeam { Tournament = tournament, Team = team });
 
 			return await _context.SaveChangesAsync() > 0;
 		}
@@ -67,7 +66,7 @@ namespace Tournaments.Persistence.Repositories
 		}
 
 		/// <inheritdoc />
-		public async Task<List<Tournament>> GetTournamentsAsync(long teamId)
+		public async Task<IEnumerable<Tournament>> GetTournamentsAsync(long teamId)
 		{
 			var teamTournaments = _context.TournamentTeams
 				.Where(tournamentTeam => tournamentTeam.TeamId == teamId)
@@ -76,7 +75,7 @@ namespace Tournaments.Persistence.Repositories
 
 			return await teamTournaments.ToListAsync();
 		}
-		public async Task<List<AppUser>> GetTeamPlayersAsync(long teamId)
+		public async Task<IEnumerable<AppUser>> GetTeamPlayersAsync(long teamId)
 		{
 			var team = await _context.Teams.Include(t => t.Players)
 				.AsNoTracking()
@@ -85,7 +84,7 @@ namespace Tournaments.Persistence.Repositories
 			return team!.Players;
 		}
 
-		public async Task<List<Team>> GetTeamsAsync()
+		public async Task<IEnumerable<Team>> GetTeamsAsync()
 		{
 			return await _context.Teams.ToListAsync();
 		}
@@ -100,7 +99,7 @@ namespace Tournaments.Persistence.Repositories
 		/// <inheritdoc />
 		public async Task<bool> AnyAsync(long teamId)
 		{
-			return await _context.Teams.AnyAsync(t => t.Id == teamId);
+			return await _context.Teams.AsNoTracking().FirstOrDefaultAsync(t => t.Id == teamId) is not null;
 		}
 	}
 }
