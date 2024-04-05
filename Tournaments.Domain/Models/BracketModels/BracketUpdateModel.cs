@@ -5,5 +5,5 @@
 		public long TournamentId { get; set; }
 
 		public List<MatchResultModel> Results { get; set; } = null!;
-    }
+	}
 }

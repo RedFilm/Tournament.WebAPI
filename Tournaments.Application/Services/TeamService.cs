@@ -105,16 +105,17 @@ namespace Tournaments.Application.Services
 			if (tournament is null)
 				throw new NotFoundException("Tournament doesn't exist");
 
+			if (tournament.TournamentTeams.Count >= tournament.MaxParticipantCount ||
+				tournament.RegistrationEndDate < DateTime.UtcNow)
+				throw new AlreadyExistsException("Registration is over");
+
+			if (await _tournamentTeamRepository.AnyAsync(model.TournamentId, model.TeamId, model.PlayerIDs))
+				throw new AlreadyExistsException("Team's already been registered");
+
 			if (team.OwnerId != model.OwnerId)
 				throw new BadRequestException("You must be the creator of the team to register for tournament");
 
-			if (await _tournamentTeamRepository.AnyAsync(model.TournamentId, model.TeamId))
-				throw new AlreadyExistsException("Team's already been registered");
-
-			if (tournament.RegistrationEndDate < DateTime.UtcNow)
-				throw new AlreadyExistsException("Registration is over");
-
-			return await _teamRepository.AddTeamToTournamentAsync(tournament, team);
+			return await _teamRepository.AddTeamToTournamentAsync(tournament, team, model.PlayerIDs);
 		}
 
 		public async Task<bool> AddPlayerToTeamAsync(long teamId, long playerId, long inviterId)

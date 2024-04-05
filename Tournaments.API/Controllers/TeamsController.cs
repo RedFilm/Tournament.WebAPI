@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Tournaments.Domain.Entities;
+using Tournaments.Domain.Enums;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.TeamModels;
@@ -13,6 +13,7 @@ namespace Tournaments.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize]
 	public class TeamsController : ControllerBase
 	{
 		private readonly ITeamService _teamService;
@@ -28,6 +29,7 @@ namespace Tournaments.API.Controllers
 			_paginationValidator = paginationValidator;
 		}
 
+		[AllowAnonymous]
 		[HttpGet("{teamId}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TeamModel))]
 		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
@@ -47,6 +49,7 @@ namespace Tournaments.API.Controllers
 			return players;
 		}
 
+		[AllowAnonymous]
 		[HttpGet("GetTeams")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TeamWithIdModel>))]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
@@ -79,6 +82,7 @@ namespace Tournaments.API.Controllers
 			return Created();
 		}
 
+		[Authorize(Roles = $"{nameof(IdentityRoles.Administrator)}, {nameof(IdentityRoles.TeamCreator)}")]
 		[HttpPut("{teamId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
@@ -91,6 +95,7 @@ namespace Tournaments.API.Controllers
 			return Ok();
 		}
 
+		[Authorize(Roles = $"{nameof(IdentityRoles.Administrator)}, {nameof(IdentityRoles.TeamCreator)}")]
 		[HttpDelete("{teamId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ExceptionResponseModel))]
@@ -100,6 +105,7 @@ namespace Tournaments.API.Controllers
 			return Ok();
 		}
 
+		[Authorize(Roles = $"{nameof(IdentityRoles.Administrator)}, {nameof(IdentityRoles.TeamCreator)}")]
 		[HttpPost("{teamId}/Players/{playerId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
@@ -118,6 +124,7 @@ namespace Tournaments.API.Controllers
 			return Ok();
 		}
 
+		[Authorize(Roles = $"{nameof(IdentityRoles.Administrator)}, {nameof(IdentityRoles.TeamCreator)}")]
 		[HttpDelete("{teamId}/Players/{playerId}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(ExceptionResponseModel))]
@@ -136,6 +143,7 @@ namespace Tournaments.API.Controllers
 			return Ok();
 		}
 
+		[Authorize(Roles = $"{nameof(IdentityRoles.Administrator)}, {nameof(IdentityRoles.TeamCreator)}")]
 		[HttpPost("RegisterForTournament")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]

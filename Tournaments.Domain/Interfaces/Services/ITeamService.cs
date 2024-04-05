@@ -1,5 +1,4 @@
-﻿using Tournaments.Domain.Entities;
-using Tournaments.Domain.Exceptions;
+﻿using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.TeamModels;
 using Tournaments.Domain.Models.TournamentModels;

@@ -5,7 +5,7 @@ using Tournaments.Domain.Models.AuthModels;
 
 namespace Tournaments.Domain.Mapping
 {
-    public class UserProfile : Profile
+	public class UserProfile : Profile
 	{
 		public UserProfile()
 		{

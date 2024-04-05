@@ -2,8 +2,8 @@
 {
 	public class MatchResultModel
 	{
-        public int StageNumber { get; set; }
-        public long MatchId { get; set; }
-        public long WinnerId { get; set; }
-    }
+		public int StageNumber { get; set; }
+		public long MatchId { get; set; }
+		public long WinnerId { get; set; }
+	}
 }

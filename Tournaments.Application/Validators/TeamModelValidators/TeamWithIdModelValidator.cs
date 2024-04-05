@@ -5,9 +5,9 @@ namespace Tournaments.Domain.Validators.TeamModelValidators
 {
 	public class TeamWithIdModelValidator : TeamModelBaseValidator<TeamWithIdModel>
 	{
-        public TeamWithIdModelValidator()
-        {
+		public TeamWithIdModelValidator()
+		{
 			RuleFor(team => team.Id).NotEmpty();
 		}
-    }
+	}
 }

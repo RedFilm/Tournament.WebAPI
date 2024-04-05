@@ -8,9 +8,9 @@ namespace Tournaments.Persistence.Repositories
 		private readonly TournamentDbContext _context;
 
 		public TeamUserRepository(TournamentDbContext context)
-        {
-            _context = context;
-        }
+		{
+			_context = context;
+		}
 
 		/// <inheritdoc />
 		public async Task<bool> AnyAsync(long teamId, long userId)
@@ -18,7 +18,7 @@ namespace Tournaments.Persistence.Repositories
 			var team = await _context.Teams.Include(t => t.Players)
 				.AsNoTracking()
 				.FirstOrDefaultAsync(t => t.Id == teamId);
-			 
+
 			return team!.Players.FirstOrDefault(t => t.Id == userId) is not null;
 		}
 	}

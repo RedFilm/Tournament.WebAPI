@@ -5,8 +5,8 @@ namespace Tournaments.Domain.Validators.TournamentModelValidators
 {
 	public class TournamentModelBaseValidator<T> : AbstractValidator<T> where T : TournamentModel
 	{
-        public TournamentModelBaseValidator()
-        {
+		public TournamentModelBaseValidator()
+		{
 			RuleFor(tournament => tournament.OrganizerId).NotEmpty();
 			RuleFor(tournament => tournament.MaxParticipantCount).NotEmpty().GreaterThanOrEqualTo(0).LessThanOrEqualTo(32);
 			RuleFor(tournament => tournament.TournamentName).NotEmpty().MaximumLength(30);
@@ -25,5 +25,5 @@ namespace Tournaments.Domain.Validators.TournamentModelValidators
 			RuleFor(tournament => tournament.TournamentEndDate).NotEmpty()
 				.GreaterThan(tournament => tournament.TournamentStartDate);
 		}
-    }
+	}
 }

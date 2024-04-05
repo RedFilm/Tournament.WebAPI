@@ -17,8 +17,9 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// Asynchronously generate new bracket. If the bracket already exists, replace it with a new one.
 		/// </summary>
 		/// <param name="tournamentId">Tournament id</param>
+		/// <param name="shuffleTeams">Flag indicating whether the commands need to be shuffled</param>
 		/// <returns>New bracket model</returns>
-		Task<BracketModel> GenerateNewBracketAsync(long tournamentId);
+		Task<BracketModel> GenerateNewBracketAsync(long tournamentId, bool shuffleTeams);
 
 		/// <summary>
 		/// Asynchronously update existing bracket based on the results of the matches.

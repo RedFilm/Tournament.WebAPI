@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Entities;
-using System.Numerics;
 using Tournaments.Domain.Models;
 
 namespace Tournaments.Persistence.Repositories
@@ -52,7 +51,7 @@ namespace Tournaments.Persistence.Repositories
 		/// <inheritdoc />
 		public async Task<Tournament?> GetTournamentByIdAsync(long id)
 		{
-			var tournament = await _context.Tournaments.FirstOrDefaultAsync(x => x.Id == id);
+			var tournament = await _context.Tournaments.Include(t => t.TournamentTeams).FirstOrDefaultAsync(x => x.Id == id);
 			return tournament;
 		}
 
@@ -74,7 +73,7 @@ namespace Tournaments.Persistence.Repositories
 		/// <inheritdoc />
 		public async Task<bool> AnyAsync(long tournamentId)
 		{
-			return await _context.Tournaments.AsNoTracking().FirstOrDefaultAsync(t => t.Id == tournamentId) is not null;
+			return await _context.Tournaments.AnyAsync(t => t.Id == tournamentId);
 		}
 
 		/// <inheritdoc />
@@ -85,7 +84,7 @@ namespace Tournaments.Persistence.Repositories
 				.ThenInclude(b => b.Stages)
 				.ThenInclude(s => s.Matches)
 				.FirstOrDefaultAsync(t => t.Id == tournamentId);
-			
+
 			if (tournament is not null)
 				tournament.Bracket = bracket;
 

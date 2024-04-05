@@ -217,6 +217,9 @@ namespace Tournaments.Persistence.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<double>("Rating")
+                        .HasColumnType("double precision");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
@@ -255,7 +258,7 @@ namespace Tournaments.Persistence.Migrations
                     b.HasIndex("TournamentId")
                         .IsUnique();
 
-                    b.ToTable("Brackets", (string)null);
+                    b.ToTable("Brackets");
                 });
 
             modelBuilder.Entity("Tournaments.Domain.Entities.Match", b =>
@@ -291,7 +294,7 @@ namespace Tournaments.Persistence.Migrations
 
                     b.HasIndex("WinnerId");
 
-                    b.ToTable("Matches", (string)null);
+                    b.ToTable("Matches");
                 });
 
             modelBuilder.Entity("Tournaments.Domain.Entities.Stage", b =>
@@ -312,7 +315,7 @@ namespace Tournaments.Persistence.Migrations
 
                     b.HasIndex("BracketId");
 
-                    b.ToTable("Stages", (string)null);
+                    b.ToTable("Stages");
                 });
 
             modelBuilder.Entity("Tournaments.Domain.Entities.Team", b =>
@@ -335,7 +338,7 @@ namespace Tournaments.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teams", (string)null);
+                    b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("Tournaments.Domain.Entities.Tournament", b =>
@@ -353,6 +356,9 @@ namespace Tournaments.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsOfficial")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("MaxParticipantCount")
                         .HasColumnType("integer");
 
@@ -367,6 +373,9 @@ namespace Tournaments.Persistence.Migrations
 
                     b.Property<DateTime>("RegistrationStartDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("TeamPlayersCount")
+                        .HasColumnType("integer");
 
                     b.Property<string>("TournamentDescription")
                         .IsRequired()
@@ -386,7 +395,7 @@ namespace Tournaments.Persistence.Migrations
 
                     b.HasIndex("OrganizerId");
 
-                    b.ToTable("Tournaments", (string)null);
+                    b.ToTable("Tournaments");
                 });
 
             modelBuilder.Entity("Tournaments.Domain.Entities.TournamentTeam", b =>
@@ -400,11 +409,16 @@ namespace Tournaments.Persistence.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.HasKey("TournamentId", "TeamId", "Status");
+                    b.Property<long>("PlayerId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("TournamentId", "TeamId", "Status", "PlayerId");
+
+                    b.HasIndex("PlayerId");
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("TournamentTeams", (string)null);
+                    b.ToTable("TournamentTeams");
                 });
 
             modelBuilder.Entity("AppUserTeam", b =>
@@ -537,6 +551,12 @@ namespace Tournaments.Persistence.Migrations
 
             modelBuilder.Entity("Tournaments.Domain.Entities.TournamentTeam", b =>
                 {
+                    b.HasOne("Tournaments.Domain.Entities.AppUser", "Player")
+                        .WithMany("TournamentTeams")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Tournaments.Domain.Entities.Team", "Team")
                         .WithMany("TournamentTeams")
                         .HasForeignKey("TeamId")
@@ -549,6 +569,8 @@ namespace Tournaments.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Player");
+
                     b.Navigation("Team");
 
                     b.Navigation("Tournament");
@@ -556,6 +578,8 @@ namespace Tournaments.Persistence.Migrations
 
             modelBuilder.Entity("Tournaments.Domain.Entities.AppUser", b =>
                 {
+                    b.Navigation("TournamentTeams");
+
                     b.Navigation("Tournaments");
                 });
 

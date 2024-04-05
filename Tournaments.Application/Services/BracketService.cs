@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Tournaments.Application.BracketGeneration;
 using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
@@ -6,26 +7,31 @@ using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.BracketModels;
-using Tournaments.Persistence.Repositories;
 
 namespace Tournaments.Application.Services
 {
 	public class BracketService : IBracketService
 	{
 		private readonly ITournamentRepository _tournamentRepository;
+		private readonly ITournamentTeamRepository _tournamentTeamRepository;
+		private readonly UserManager<AppUser> _userManager;
 		private readonly BracketGenerator _bracketGenerator;
 		private readonly IMapper _mapper;
 
 		public BracketService(ITournamentRepository tournamentRepository,
+			ITournamentTeamRepository tournamentTeamRepository,
+			UserManager<AppUser> userManager,
 			BracketGenerator bracketGenerator,
 			IMapper mapper)
 		{
 			_tournamentRepository = tournamentRepository;
+			_tournamentTeamRepository = tournamentTeamRepository;
+			_userManager = userManager;
 			_bracketGenerator = bracketGenerator;
 			_mapper = mapper;
 		}
 
-		public async Task<BracketModel> GenerateNewBracketAsync(long tournamentId)
+		public async Task<BracketModel> GenerateNewBracketAsync(long tournamentId, bool shuffleTeams)
 		{
 			if (!await _tournamentRepository.AnyAsync(tournamentId))
 				throw new NotFoundException("Tournament with this id doesn't exist");
@@ -37,7 +43,7 @@ namespace Tournaments.Application.Services
 			if (teams.Count < 2 || teams.Count > 32)
 				throw new BadRequestException("The number of teams in the tournament should be in the range [2;32].");
 
-			var bracket = _bracketGenerator.GenerateNewBracket(teams.ToList(), true);
+			var bracket = _bracketGenerator.GenerateNewBracket(teams.ToList(), shuffleTeams);
 
 			await _tournamentRepository.AddBracketAsync(bracket, tournamentId);
 
@@ -66,7 +72,13 @@ namespace Tournaments.Application.Services
 			if (bracket is null)
 				throw new NotFoundException("Tournament has no bracket yet. Generate a new one");
 
-			var updatedBracket = Update(bracket, results);
+			var updatedBracket = SetResults(bracket, results);
+
+			if (tournament.IsOfficial)
+			{
+				foreach (var result in results)
+					await SetRating(result.WinnerId, result.StageNumber, tournamentId);
+			}
 
 			tournament.Bracket = updatedBracket;
 
@@ -76,34 +88,48 @@ namespace Tournaments.Application.Services
 		}
 
 
-		private Bracket Update(Bracket bracket, IEnumerable<MatchResultModel> matchesResult)
+		private Bracket SetResults(Bracket bracket, IEnumerable<MatchResultModel> matchesResult)
 		{
-			foreach (var t in matchesResult)
+			foreach (var result in matchesResult)
 			{
-				if (t.StageNumber == 0)
-					return bracket;
-
 				var currentStageMatch = bracket.Stages.SelectMany(s => s.Matches)
-					.FirstOrDefault(m => m.MatchId == t.MatchId);
+					.FirstOrDefault(m => m.MatchId == result.MatchId);
 
 				if (currentStageMatch is null)
 					continue;
 
-				currentStageMatch.WinnerId = t.WinnerId;
+				currentStageMatch.WinnerId = result.WinnerId;
 				var nextStageMatchNumber = currentStageMatch.Identifier / 2;
 
-				var nextStageMatch = bracket.Stages.SelectMany(s => s.Matches)
+				var nextStageMatch = bracket.Stages.Where(s => s.StageNumber == result.StageNumber - 1)
+					.SelectMany(s => s.Matches)
 					.FirstOrDefault(m => m.Identifier == nextStageMatchNumber);
 
 				if (nextStageMatch is null)
 					continue;
 
 				if (nextStageMatch.Team1Id is null)
-					nextStageMatch.Team1Id = t.WinnerId;
-				else nextStageMatch.Team2Id ??= t.WinnerId;
+					nextStageMatch.Team1Id = result.WinnerId;
+				else nextStageMatch.Team2Id ??= result.WinnerId;
 			}
 
 			return bracket;
+		}
+
+		private async Task SetRating(long winnerTeamId, int stageNumber, long tournamentId)
+		{
+			var playerIds = await _tournamentTeamRepository
+				.GetTournamentTeamPlayerIdsAsync(tournamentId, winnerTeamId);
+
+			foreach (var playerId in playerIds)
+			{
+				var user = await _userManager.FindByIdAsync(playerId.ToString());
+				if (user is not null)
+				{
+					user.Rating += (100 - stageNumber) * 0.2d;
+					await _userManager.UpdateAsync(user);
+				}
+			}
 		}
 	}
 }
