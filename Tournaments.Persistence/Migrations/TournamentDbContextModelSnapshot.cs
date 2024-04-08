@@ -341,6 +341,41 @@ namespace Tournaments.Persistence.Migrations
                     b.ToTable("Teams");
                 });
 
+            modelBuilder.Entity("Tournaments.Domain.Entities.TeamJoinRequest", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("RecipientId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SenderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("TeamId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipientId");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("TeamJoinRequest");
+                });
+
             modelBuilder.Entity("Tournaments.Domain.Entities.Tournament", b =>
                 {
                     b.Property<long>("Id")
@@ -536,6 +571,33 @@ namespace Tournaments.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Bracket");
+                });
+
+            modelBuilder.Entity("Tournaments.Domain.Entities.TeamJoinRequest", b =>
+                {
+                    b.HasOne("Tournaments.Domain.Entities.AppUser", "Recipient")
+                        .WithMany()
+                        .HasForeignKey("RecipientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tournaments.Domain.Entities.AppUser", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tournaments.Domain.Entities.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipient");
+
+                    b.Navigation("Sender");
+
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("Tournaments.Domain.Entities.Tournament", b =>

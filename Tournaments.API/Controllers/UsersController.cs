@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Tournaments.Domain.Enums;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;

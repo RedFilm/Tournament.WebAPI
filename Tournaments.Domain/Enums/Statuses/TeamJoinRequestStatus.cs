@@ -1,6 +1,6 @@
 ﻿namespace Tournaments.Domain.Enums.Statuses
 {
-	public enum TeamInvitationStatus
+	public enum TeamJoinRequestStatus
 	{
 		Pending,
 		Accepted,
