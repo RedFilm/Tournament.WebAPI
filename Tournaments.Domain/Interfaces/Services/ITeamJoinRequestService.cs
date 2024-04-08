@@ -19,7 +19,7 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <param name="requestId">Join request id</param>
 		/// <returns>Join request model which has this id</returns>
 		/// <exception cref="NotFoundException"></exception>
-		Task<TeamJoinRequestModel> GetRequestByIdAsync(long requestId);
+		Task<TeamJoinRequestWithIdModel> GetRequestByIdAsync(long requestId);
 
 		/// <summary>
 		/// Asynchronously gets all join requests.

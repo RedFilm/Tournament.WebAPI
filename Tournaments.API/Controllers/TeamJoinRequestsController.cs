@@ -16,8 +16,8 @@ namespace Tournaments.API.Controllers
 			_teamJoinRequestService = teamJoinRequestService;
 		}
 
-		[HttpPost("Send")]
-		public async Task<IActionResult> SendJoinRequest([FromBody] TeamJoinRequestModel model)
+		[HttpPost("Create")]
+		public async Task<IActionResult> CreateJoinRequest([FromBody] TeamJoinRequestModel model)
 		{
 			await _teamJoinRequestService.CreateJoinRequestAsync(model);
 			return Ok();
