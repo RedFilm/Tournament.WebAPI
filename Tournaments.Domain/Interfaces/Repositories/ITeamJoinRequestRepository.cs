@@ -24,5 +24,11 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// <param name="model">Model that contains page number and size</param>
 		/// <returns>List of TeamJoinRequest entities</returns>
 		Task<List<TeamJoinRequest>> GetAllAsync(PaginationModel model);
+
+		/// <summary>
+		/// Gets total join requests count.
+		/// </summary>
+		/// <returns>Join requests count</returns>
+		Task<int> GetTotalCountAsync();
 	}
 }

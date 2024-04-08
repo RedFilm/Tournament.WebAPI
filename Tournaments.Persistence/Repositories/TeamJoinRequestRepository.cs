@@ -31,5 +31,10 @@ namespace Tournaments.Persistence.Repositories
 
 			return await _context.TeamJoinRequests.Skip(skipCount).Take(model.PageSize).ToListAsync();
 		}
+
+		public async Task<int> GetTotalCountAsync()
+		{
+			return await _context.TeamJoinRequests.CountAsync();
+		}
 	}
 }
