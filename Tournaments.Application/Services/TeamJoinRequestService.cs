@@ -1,5 +1,6 @@
 ﻿using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
+using Tournaments.Domain.Models.TeamJoinRequestModels;
 
 namespace Tournaments.Application.Services
 {

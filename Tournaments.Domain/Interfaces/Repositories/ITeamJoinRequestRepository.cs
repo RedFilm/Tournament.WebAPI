@@ -1,4 +1,6 @@
-﻿namespace Tournaments.Domain.Interfaces.Repositories
+﻿using Tournaments.Domain.Models.TeamJoinRequestModels;
+
+namespace Tournaments.Domain.Interfaces.Repositories
 {
 	public interface ITeamJoinRequestRepository
 	{

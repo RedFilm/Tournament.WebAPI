@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tournaments.Domain.Interfaces.Services;
+using Tournaments.Domain.Models.TeamJoinRequestModels;
 
 namespace Tournaments.API.Controllers
 {

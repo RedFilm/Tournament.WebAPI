@@ -1,4 +1,5 @@
 ﻿using Tournaments.Domain.Interfaces.Repositories;
+using Tournaments.Domain.Models.TeamJoinRequestModels;
 
 namespace Tournaments.Persistence.Repositories
 {
