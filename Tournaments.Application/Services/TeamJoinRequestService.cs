@@ -8,10 +8,13 @@ namespace Tournaments.Application.Services
 	public class TeamJoinRequestService : ITeamJoinRequestService
 	{
 		private readonly ITeamJoinRequestRepository _teamJoinRequestRepository;
+		private readonly INotificationService _pushNotificationService;
 
-		public TeamJoinRequestService(ITeamJoinRequestRepository teamJoinRequestRepository)
+		public TeamJoinRequestService(ITeamJoinRequestRepository teamJoinRequestRepository,
+			INotificationService pushNotificationService)
 		{
 			_teamJoinRequestRepository = teamJoinRequestRepository;
+			_pushNotificationService = pushNotificationService;
 		}
 
 		public async Task CreateJoinRequestAsync(TeamJoinRequestModel model)

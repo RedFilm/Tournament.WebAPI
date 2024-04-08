@@ -14,6 +14,7 @@ namespace Tournaments.Domain.Entities
 		public AppUser Recipient { get; set; } = null!;
 		public Team Team { get; set; } = null!;
 
+		public DateTimeOffset Created { get; set; }
 		public TeamJoinRequestStatus Status { get; set; }
 	}
 }

@@ -349,6 +349,9 @@ namespace Tournaments.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasColumnType("text");
@@ -373,7 +376,7 @@ namespace Tournaments.Persistence.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("TeamJoinRequest");
+                    b.ToTable("TeamJoinRequests");
                 });
 
             modelBuilder.Entity("Tournaments.Domain.Entities.Tournament", b =>
