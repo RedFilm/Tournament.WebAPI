@@ -26,10 +26,10 @@ namespace Tournaments.Application.Services
 		public async Task CreateJoinRequestAsync(TeamJoinRequestModel model)
 		{
 			var joinRequest = _mapper.Map<TeamJoinRequest>(model);
-			var success = await _teamJoinRequestRepository.AddJoinRequestAsync(joinRequest);
+			var isSuccesfull = await _teamJoinRequestRepository.AddJoinRequestAsync(joinRequest);
 
-			if (!success)
-				throw new BadRequestException("");
+			if (!isSuccesfull)
+				throw new Exception("Couldn't save to the database");
 
 			await _pushNotificationService.SendNotificationAsync(model.RecipientId, model.Message);
 		}

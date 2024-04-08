@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
@@ -12,9 +13,13 @@ namespace Tournaments.API.Controllers
 	public class TeamJoinRequestsController : ControllerBase
 	{
 		private readonly ITeamJoinRequestService _teamJoinRequestService;
-		public TeamJoinRequestsController(ITeamJoinRequestService teamJoinRequestService)
+		private readonly IValidator<TeamJoinRequestModel> _joinRequestValidator;
+
+		public TeamJoinRequestsController(ITeamJoinRequestService teamJoinRequestService,
+			IValidator<TeamJoinRequestModel> joinRequestValidator)
 		{
 			_teamJoinRequestService = teamJoinRequestService;
+			_joinRequestValidator = joinRequestValidator;
 		}
 
 		[HttpPost("Create")]
@@ -23,6 +28,7 @@ namespace Tournaments.API.Controllers
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponseModel))]
 		public async Task<IActionResult> CreateJoinRequest([FromBody] TeamJoinRequestModel model)
 		{
+			await _joinRequestValidator.ValidateAndThrowAsync(model);
 			await _teamJoinRequestService.CreateJoinRequestAsync(model);
 			return Created();
 		}
