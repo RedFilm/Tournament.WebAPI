@@ -7,6 +7,7 @@ using Tournaments.Persistence.Initializers;
 using Microsoft.AspNetCore.Identity;
 using Tournaments.Domain.Validators.AuthValidators;
 using Serilog;
+using Tournaments.Application.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddCustomIdentity();
 builder.Services.AddApplication();
+builder.Services.AddSignalR();
 
 builder.Services.AddValidatorsFromAssemblyContaining<LoginModelValidator>();
 builder.Services.AddAutoMapper(typeof(TournamentProfile).Assembly);
@@ -54,4 +56,5 @@ app.UseExceptionHandlerMiddleware();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<BracketHub>("/api/hubs/brackets");
 app.Run();

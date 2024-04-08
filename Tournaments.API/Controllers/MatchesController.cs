@@ -6,6 +6,8 @@ using Tournaments.Domain.Models;
 namespace Tournaments.API.Controllers
 {
 	[Authorize]
+	[Route("api/[controller]")]
+	[ApiController]
 	public class MatchesController
 	{
 		private readonly IMatchService _matchService;

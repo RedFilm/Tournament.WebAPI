@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Tournaments.Application.BracketGeneration;
+using Tournaments.Application.Hubs;
 using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Repositories;
@@ -16,18 +18,21 @@ namespace Tournaments.Application.Services
 		private readonly ITournamentTeamRepository _tournamentTeamRepository;
 		private readonly UserManager<AppUser> _userManager;
 		private readonly BracketGenerator _bracketGenerator;
+		private readonly IHubContext<BracketHub> _hubContext;
 		private readonly IMapper _mapper;
 
 		public BracketService(ITournamentRepository tournamentRepository,
 			ITournamentTeamRepository tournamentTeamRepository,
 			UserManager<AppUser> userManager,
 			BracketGenerator bracketGenerator,
+			IHubContext<BracketHub> hubContext,
 			IMapper mapper)
 		{
 			_tournamentRepository = tournamentRepository;
 			_tournamentTeamRepository = tournamentTeamRepository;
 			_userManager = userManager;
 			_bracketGenerator = bracketGenerator;
+			_hubContext = hubContext;
 			_mapper = mapper;
 		}
 
@@ -84,9 +89,12 @@ namespace Tournaments.Application.Services
 
 			await _tournamentRepository.UpdateTournamentAsync(tournament);
 
-			return _mapper.Map<BracketModel>(bracket);
-		}
+			var bracketModel = _mapper.Map<BracketModel>(bracket);
 
+			await _hubContext.Clients.Group(bracket.Id.ToString()).SendAsync("OnBracketUpdate", bracketModel);
+
+			return bracketModel;
+		}
 
 		private Bracket SetResults(Bracket bracket, IEnumerable<MatchResultModel> matchesResult)
 		{
