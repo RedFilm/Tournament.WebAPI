@@ -1,5 +1,6 @@
 ﻿using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
+using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.TeamJoinRequestModels;
 
 namespace Tournaments.Application.Services
@@ -13,9 +14,19 @@ namespace Tournaments.Application.Services
 			_teamJoinRequestRepository = teamJoinRequestRepository;
 		}
 
-		public async Task SendJoinRequestAsync(TeamJoinRequestModel model)
+		public async Task CreateJoinRequestAsync(TeamJoinRequestModel model)
 		{
+			throw new NotImplementedException();
+		}
 
+		public async Task<TeamJoinRequestModel> GetRequestByIdAsync(long requestId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public async Task<PageModel<TeamJoinRequestWithIdModel>> GetAllAsync(PaginationModel model)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

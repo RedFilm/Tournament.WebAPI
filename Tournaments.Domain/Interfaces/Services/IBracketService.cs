@@ -1,4 +1,5 @@
-﻿using Tournaments.Domain.Models;
+﻿using Tournaments.Domain.Exceptions;
+using Tournaments.Domain.Models;
 using Tournaments.Domain.Models.BracketModels;
 
 namespace Tournaments.Domain.Interfaces.Services
@@ -8,7 +9,7 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <summary>
 		/// Asynchronously get bracket by id.
 		/// </summary>
-		/// <param name="bracketId">Bracket id</param>
+		/// <param name="tournamentId">Tournament id</param>
 		/// <returns>BracketModel which has this id</returns>
 		/// <exception cref="NotFoundException"></exception>
 		Task<BracketModel> GetBracketAsync(long tournamentId);
