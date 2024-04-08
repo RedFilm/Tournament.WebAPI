@@ -30,7 +30,7 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// Asynchronously gets all teams.
 		/// </summary>
 		/// <param name="model">Model that contains page number and size</param>
-		/// <returns>IEnumerable of Team entities</returns>
+		/// <returns>List of Team entities</returns>
 		Task<List<Team>> GetTeamsAsync(PaginationModel model);
 
 		/// <summary>

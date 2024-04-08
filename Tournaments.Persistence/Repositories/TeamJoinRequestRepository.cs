@@ -1,5 +1,7 @@
-﻿using Tournaments.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Tournaments.Domain.Entities;
 using Tournaments.Domain.Interfaces.Repositories;
+using Tournaments.Domain.Models;
 
 namespace Tournaments.Persistence.Repositories
 {
@@ -11,10 +13,23 @@ namespace Tournaments.Persistence.Repositories
 		{
 			_context = context;
 		}
+
 		public async Task<bool> AddJoinRequestAsync(TeamJoinRequest joinRequest)
 		{
 			await _context.TeamJoinRequests.AddAsync(joinRequest);
 			return await _context.SaveChangesAsync() > 0;
+		}
+
+		public async Task<TeamJoinRequest?> GetRequestByIdAsync(long requestId)
+		{
+			return await _context.TeamJoinRequests.FirstOrDefaultAsync(t => t.Id == requestId);
+		}
+
+		public async Task<List<TeamJoinRequest>> GetAllAsync(PaginationModel model)
+		{
+			var skipCount = (model.PageNumber - 1) * model.PageSize;
+
+			return await _context.TeamJoinRequests.Skip(skipCount).Take(model.PageSize).ToListAsync();
 		}
 	}
 }

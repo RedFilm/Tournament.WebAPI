@@ -16,7 +16,7 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// Asynchronously gets list of all tournaments.
 		/// </summary>
 		/// <param name="model">Model that contains page number and size</param>
-		/// <returns>IEnumerable of Tournament entities</returns>
+		/// <returns>List of Tournament entities</returns>
 		Task<List<Tournament>> GetTournamentsAsync(PaginationModel model);
 
 		/// <summary>

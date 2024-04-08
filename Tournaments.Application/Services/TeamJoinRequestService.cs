@@ -19,7 +19,7 @@ namespace Tournaments.Application.Services
 
 		public async Task CreateJoinRequestAsync(TeamJoinRequestModel model)
 		{
-			throw new NotImplementedException();
+
 		}
 
 		public async Task<TeamJoinRequestModel> GetRequestByIdAsync(long requestId)

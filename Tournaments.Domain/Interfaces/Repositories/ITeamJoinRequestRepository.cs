@@ -1,4 +1,5 @@
 ﻿using Tournaments.Domain.Entities;
+using Tournaments.Domain.Models;
 
 namespace Tournaments.Domain.Interfaces.Repositories
 {
@@ -9,5 +10,19 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// </summary>
 		/// <returns>Result of adding. True if request successfully added</returns>
 		public Task<bool> AddJoinRequestAsync(TeamJoinRequest joinRequest);
+
+		/// <summary>
+		/// Asynchronously gets join request by id.
+		/// </summary>
+		/// <param name="requestId">Join request id</param>
+		/// <returns>Join request entity which has this id</returns>
+		Task<TeamJoinRequest?> GetRequestByIdAsync(long requestId);
+
+		/// <summary>
+		/// Asynchronously gets all join requests.
+		/// </summary>
+		/// <param name="model">Model that contains page number and size</param>
+		/// <returns>List of TeamJoinRequest entities</returns>
+		Task<List<TeamJoinRequest>> GetAllAsync(PaginationModel model);
 	}
 }
