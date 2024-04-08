@@ -1,4 +1,4 @@
-﻿using Tournaments.Domain.Models.TeamJoinRequestModels;
+﻿using Tournaments.Domain.Entities;
 
 namespace Tournaments.Domain.Interfaces.Repositories
 {
@@ -8,6 +8,6 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// Asynchronously adds join request to database.
 		/// </summary>
 		/// <returns>Result of adding. True if request successfully added</returns>
-		public Task<bool> AddJoinRequestAsync(TeamJoinRequestModel model);
+		public Task<bool> AddJoinRequestAsync(TeamJoinRequest joinRequest);
 	}
 }

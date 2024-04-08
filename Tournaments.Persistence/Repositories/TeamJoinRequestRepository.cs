@@ -1,13 +1,20 @@
-﻿using Tournaments.Domain.Interfaces.Repositories;
-using Tournaments.Domain.Models.TeamJoinRequestModels;
+﻿using Tournaments.Domain.Entities;
+using Tournaments.Domain.Interfaces.Repositories;
 
 namespace Tournaments.Persistence.Repositories
 {
 	public class TeamJoinRequestRepository : ITeamJoinRequestRepository
 	{
-		public Task<bool> AddJoinRequestAsync(TeamJoinRequestModel model)
+		private readonly TournamentDbContext _context;
+
+		public TeamJoinRequestRepository(TournamentDbContext context)
 		{
-			throw new NotImplementedException();
+			_context = context;
+		}
+		public async Task<bool> AddJoinRequestAsync(TeamJoinRequest joinRequest)
+		{
+			await _context.TeamJoinRequests.AddAsync(joinRequest);
+			return await _context.SaveChangesAsync() > 0;
 		}
 	}
 }

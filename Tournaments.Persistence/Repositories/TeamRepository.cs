@@ -17,7 +17,7 @@ namespace Tournaments.Persistence.Repositories
 		/// <inheritdoc />
 		public async Task<bool> AddPlayerToTeamAsync(AppUser player, Team team)
 		{
-			team.Players = team.Players ?? new List<AppUser>();
+			team.Players ??= new List<AppUser>();
 			team.Players.Add(player);
 			return await _context.SaveChangesAsync() > 0;
 		}

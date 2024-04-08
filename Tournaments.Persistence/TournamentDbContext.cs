@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Tournaments.Domain.Entities;
+using Tournaments.Domain.Enums.Statuses;
 using Tournaments.Persistence.EntityTypeConfigurations;
 
 namespace Tournaments.Persistence
@@ -17,6 +18,8 @@ namespace Tournaments.Persistence
 		public DbSet<Bracket> Brackets { get; set; }
 		public DbSet<Tournament> Tournaments { get; set; }
 		public DbSet<TournamentTeam> TournamentTeams { get; set; }
+		public DbSet<TeamJoinRequest> TeamJoinRequests { get; set; }
+
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
