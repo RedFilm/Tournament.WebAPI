@@ -91,7 +91,7 @@ namespace Tournaments.Application.Services
 
 			var bracketModel = _mapper.Map<BracketModel>(bracket);
 
-			await _hubContext.Clients.Group(bracket.Id.ToString()).SendAsync("OnBracketUpdate", bracketModel);
+			await _hubContext.Clients.Group($"bracket-{bracket.Id}").SendAsync("OnBracketUpdate", bracketModel);
 
 			return bracketModel;
 		}

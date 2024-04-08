@@ -16,7 +16,7 @@ namespace Tournaments.Application.Hubs
 
 		public async Task SubscribeToBracketUpdate(long bracketId)
 		{
-			await Groups.AddToGroupAsync(Context.ConnectionId, bracketId.ToString());
+			await Groups.AddToGroupAsync(Context.ConnectionId, $"bracket-{bracketId}");
 		}
 	}
 }
