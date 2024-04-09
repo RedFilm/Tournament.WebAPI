@@ -1,12 +1,13 @@
 ﻿using Tournaments.Application.BracketGeneration;
 using Tournaments.Application.Services;
+using Tournaments.Application.Services.Notifications;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Persistence.Repositories;
 
 namespace Tournaments.API.Extensions
 {
-	public static class ApplicationExtensions
+    public static class ApplicationExtensions
 	{
 		public static IServiceCollection AddApplication(this IServiceCollection services)
 		{

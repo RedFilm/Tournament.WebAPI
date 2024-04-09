@@ -57,4 +57,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapHub<BracketHub>("/api/hubs/brackets");
+app.MapHub<NotificationHub>("/api/hubs/notifications");
 app.Run();
