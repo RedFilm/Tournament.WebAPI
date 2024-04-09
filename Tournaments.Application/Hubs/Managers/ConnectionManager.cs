@@ -5,30 +5,35 @@ namespace Tournaments.Application.Hubs.Managers
 {
 	public class ConnectionManager : IConnectionManager
 	{
-		private static ConcurrentDictionary<string, HashSet<string>> userConnectionsMap = new ConcurrentDictionary<string, HashSet<string>>();
+		private static ConcurrentDictionary<long, HashSet<string>> userConnectionsMap = new ConcurrentDictionary<long, HashSet<string>>();
 
-		public IEnumerable<string> OnlineUsers { get; } = userConnectionsMap.Keys;
+		public IEnumerable<long> OnlineUsers { get; } = userConnectionsMap.Keys;
 
-		public void AddConnection(string username, string connectionId)
+		public void AddConnection(long userId, string connectionId)
 		{
-			if (!userConnectionsMap.ContainsKey(username))
-				userConnectionsMap[username] = new HashSet<string>();
+			if (!userConnectionsMap.ContainsKey(userId))
+				userConnectionsMap[userId] = new HashSet<string>();
 
-			userConnectionsMap[username].Add(connectionId);
+			userConnectionsMap[userId].Add(connectionId);
 		}
 
 		public void RemoveConnection(string connectionId)
 		{
-			foreach (var username in userConnectionsMap.Keys)
+			foreach (var userId in userConnectionsMap.Keys)
 			{
-				if (userConnectionsMap[username].Contains(connectionId))
-					userConnectionsMap[username].Remove(connectionId);
+				if (userConnectionsMap[userId].Contains(connectionId))
+					userConnectionsMap[userId].Remove(connectionId);
 			}
 		}
 
-		public HashSet<string> GetConnections(string username)
+		public bool IsUserConnected(long userId)
 		{
-			var connections = userConnectionsMap[username] ??= new HashSet<string>();
+			return userConnectionsMap.ContainsKey(userId);
+		}
+
+		public HashSet<string> GetConnections(long userId)
+		{
+			var connections = userConnectionsMap[userId] ??= new HashSet<string>();
 			return connections;
 		}
 	}

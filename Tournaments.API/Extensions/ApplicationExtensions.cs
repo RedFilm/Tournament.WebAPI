@@ -29,7 +29,7 @@ namespace Tournaments.API.Extensions
 			services.AddScoped<ITeamJoinRequestService, TeamJoinRequestService>();
 			services.AddScoped<INotificationService, PushNotificationService>();
 
-			services.AddScoped<IConnectionManager, ConnectionManager>();
+			services.AddSingleton<IConnectionManager, ConnectionManager>();
 
 			services.AddScoped<BracketGenerator>();
 
