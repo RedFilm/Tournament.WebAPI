@@ -12,9 +12,9 @@ namespace Tournaments.Persistence.EntityTypeConfigurations
 				.WithMany()
 				.HasForeignKey(m => m.SenderId);
 
-			builder.HasOne(m => m.Recipient)
+			builder.HasOne(m => m.Receiver)
 				.WithMany()
-				.HasForeignKey(m => m.RecipientId);
+				.HasForeignKey(m => m.ReceiverId);
 
 			builder.HasOne(m => m.Team)
 				.WithMany()

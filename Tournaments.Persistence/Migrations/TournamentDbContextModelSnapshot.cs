@@ -356,7 +356,7 @@ namespace Tournaments.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("RecipientId")
+                    b.Property<long>("ReceiverId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("SenderId")
@@ -370,7 +370,7 @@ namespace Tournaments.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RecipientId");
+                    b.HasIndex("ReceiverId");
 
                     b.HasIndex("SenderId");
 
@@ -578,9 +578,9 @@ namespace Tournaments.Persistence.Migrations
 
             modelBuilder.Entity("Tournaments.Domain.Entities.TeamJoinRequest", b =>
                 {
-                    b.HasOne("Tournaments.Domain.Entities.AppUser", "Recipient")
+                    b.HasOne("Tournaments.Domain.Entities.AppUser", "Receiver")
                         .WithMany()
-                        .HasForeignKey("RecipientId")
+                        .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -596,7 +596,7 @@ namespace Tournaments.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Recipient");
+                    b.Navigation("Receiver");
 
                     b.Navigation("Sender");
 
