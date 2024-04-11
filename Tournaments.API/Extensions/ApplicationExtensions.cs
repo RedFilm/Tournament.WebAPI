@@ -1,6 +1,4 @@
 ﻿using Tournaments.Application.BracketGeneration;
-using Tournaments.Application.Hubs.Interfaces;
-using Tournaments.Application.Hubs.Managers;
 using Tournaments.Application.Services;
 using Tournaments.Application.Services.Notifications;
 using Tournaments.Domain.Interfaces.Repositories;
@@ -28,8 +26,6 @@ namespace Tournaments.API.Extensions
 			services.AddScoped<IMatchService, MatchService>();
 			services.AddScoped<ITeamJoinRequestService, TeamJoinRequestService>();
 			services.AddScoped<INotificationService, PushNotificationService>();
-
-			services.AddSingleton<IConnectionManager, ConnectionManager>();
 
 			services.AddScoped<BracketGenerator>();
 

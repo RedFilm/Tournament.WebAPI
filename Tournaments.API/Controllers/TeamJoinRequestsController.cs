@@ -47,5 +47,17 @@ namespace Tournaments.API.Controllers
 		{
 			return await _teamJoinRequestService.GetAllAsync(model);
 		}
+
+		[HttpPost("/Accept/{joinRequestId}")]
+		public async Task AcceptRequest([FromBody] PaginationModel model)
+		{
+			return await _teamJoinRequestService.GetAllAsync(model);
+		}
+
+		[HttpPost("/Reject/{joinRequestId}")]
+		public async Task RejectRequest([FromBody] PaginationModel model)
+		{
+			return await _teamJoinRequestService.GetAllAsync(model);
+		}
 	}
 }

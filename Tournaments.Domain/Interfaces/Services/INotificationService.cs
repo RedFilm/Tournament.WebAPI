@@ -5,9 +5,9 @@
 		/// <summary>
 		/// Send notification to specified user.
 		/// </summary>
-		/// <param name="toUserId">Receiver id</param>
+		/// <param name="receiverId">Receiver id</param>
 		/// <param name="message"></param>
 		/// <returns></returns>
-		Task SendNotificationAsync(long toUserId, string message);
+		Task SendNotificationAsync(long receiverId, string message);
 	}
 }
