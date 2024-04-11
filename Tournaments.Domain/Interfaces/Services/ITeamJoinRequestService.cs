@@ -27,5 +27,21 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <param name="model">Model that contains page number and size</param>
 		/// <returns>Page model that contains list of join requests, total count, page number and size</returns>
 		Task<PageModel<TeamJoinRequestWithIdModel>> GetAllAsync(PaginationModel model);
+
+		/// <summary>
+		/// Asynchronously accept team join request.
+		/// </summary>
+		/// <param name="requestId">Team join request id</param>
+		/// <param name="model">Team join request model</param>
+		/// <returns></returns>
+		Task AcceptRequestAsync(long requestId, TeamJoinRequestModel model);
+
+		/// <summary>
+		/// Asynchronously reject team join request.
+		/// </summary>
+		/// <param name="requestId">Team join request id</param>
+		/// <param name="model">Team join request model</param>
+		/// <returns></returns>
+		Task RejectRequestAsync(long requestId, TeamJoinRequestModel model);
 	}
 }

@@ -49,15 +49,19 @@ namespace Tournaments.API.Controllers
 		}
 
 		[HttpPost("/Accept/{joinRequestId}")]
-		public async Task AcceptRequest([FromBody] PaginationModel model)
+		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
+		public async Task<IActionResult> AcceptRequest([FromRoute] long joinRequestId, [FromBody] TeamJoinRequestModel model)
 		{
-			return await _teamJoinRequestService.GetAllAsync(model);
+			await _teamJoinRequestService.AcceptRequestAsync(joinRequestId, model);
+			return Ok();
 		}
 
 		[HttpPost("/Reject/{joinRequestId}")]
-		public async Task RejectRequest([FromBody] PaginationModel model)
+		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ExceptionResponseModel))]
+		public async Task<IActionResult> RejectRequest([FromRoute] long joinRequestId, [FromBody] TeamJoinRequestModel model)
 		{
-			return await _teamJoinRequestService.GetAllAsync(model);
+			await _teamJoinRequestService.RejectRequestAsync(joinRequestId, model);
+			return Ok();
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace Tournaments.Application.Validators
 		public TeamJoinRequestValidator()
 		{
 			RuleFor(t => t.SenderId).NotEmpty();
-			RuleFor(t => t.RecipientId).NotEmpty();
+			RuleFor(t => t.ReceiverId).NotEmpty();
 			RuleFor(t => t.TeamId).NotEmpty();
 			RuleFor(t => t.Message).MaximumLength(128);
 		}

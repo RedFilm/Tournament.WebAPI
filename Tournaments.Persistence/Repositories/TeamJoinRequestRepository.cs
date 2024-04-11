@@ -20,6 +20,12 @@ namespace Tournaments.Persistence.Repositories
 			return await _context.SaveChangesAsync() > 0;
 		}
 
+		public async Task<bool> UpdateRequestAsync(TeamJoinRequest request)
+		{
+			_context.TeamJoinRequests.Update(request);
+			return await _context.SaveChangesAsync() > 0;
+		}
+
 		public async Task<TeamJoinRequest?> GetRequestByIdAsync(long requestId)
 		{
 			return await _context.TeamJoinRequests.FirstOrDefaultAsync(t => t.Id == requestId);

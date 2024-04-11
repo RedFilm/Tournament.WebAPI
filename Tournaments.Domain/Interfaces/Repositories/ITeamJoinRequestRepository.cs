@@ -12,6 +12,13 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		public Task<bool> AddJoinRequestAsync(TeamJoinRequest joinRequest);
 
 		/// <summary>
+		/// Asynchronously update existing request in the database.
+		/// </summary>
+		/// <param name="request">TeamJoinRequest entity</param>
+		/// <returns>Result of updating. True if entity successfully updated in the database.</returns>
+		Task<bool> UpdateRequestAsync(TeamJoinRequest request);
+
+		/// <summary>
 		/// Asynchronously gets join request by id.
 		/// </summary>
 		/// <param name="requestId">Join request id</param>
