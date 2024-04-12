@@ -40,7 +40,7 @@ namespace Tournaments.Application.Services
 			if (!isSuccessful)
 				throw new Exception("Couldn't save to the database");
 
-			await _pushNotificationService.SendNotificationAsync(model.ReceiverId, model.Message);
+			await _pushNotificationService.SendAsync(model.ReceiverId, model.Message);
 		}
 
 		public async Task<TeamJoinRequestWithIdModel> GetRequestByIdAsync(long requestId)
@@ -81,7 +81,7 @@ namespace Tournaments.Application.Services
 
 			await _teamJoinRequestRepository.UpdateRequestAsync(teamJoinRequest);
 
-			await _pushNotificationService.SendNotificationAsync(model.SenderId, model.Message);
+			await _pushNotificationService.SendAsync(model.SenderId, model.Message);
 		}
 
 		public async Task RejectRequestAsync(long requestId, TeamJoinRequestModel model)
@@ -95,7 +95,7 @@ namespace Tournaments.Application.Services
 
 			await _teamJoinRequestRepository.UpdateRequestAsync(teamJoinRequest);
 
-			await _pushNotificationService.SendNotificationAsync(model.SenderId, model.Message);
+			await _pushNotificationService.SendAsync(model.SenderId, model.Message);
 		}
 	}
 }

@@ -297,6 +297,27 @@ namespace Tournaments.Persistence.Migrations
                     b.ToTable("Matches");
                 });
 
+            modelBuilder.Entity("Tournaments.Domain.Entities.Notification", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("Tournaments.Domain.Entities.Stage", b =>
                 {
                     b.Property<long>("Id")
@@ -457,6 +478,24 @@ namespace Tournaments.Persistence.Migrations
                     b.HasIndex("TeamId");
 
                     b.ToTable("TournamentTeams");
+                });
+
+            modelBuilder.Entity("Tournaments.Domain.Entities.UserNotification", b =>
+                {
+                    b.Property<long>("NotificationId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("NotificationId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserNotifications");
                 });
 
             modelBuilder.Entity("AppUserTeam", b =>
@@ -641,16 +680,42 @@ namespace Tournaments.Persistence.Migrations
                     b.Navigation("Tournament");
                 });
 
+            modelBuilder.Entity("Tournaments.Domain.Entities.UserNotification", b =>
+                {
+                    b.HasOne("Tournaments.Domain.Entities.Notification", "Notification")
+                        .WithMany("UserNotifications")
+                        .HasForeignKey("NotificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tournaments.Domain.Entities.AppUser", "User")
+                        .WithMany("UserNotifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Notification");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Tournaments.Domain.Entities.AppUser", b =>
                 {
                     b.Navigation("TournamentTeams");
 
                     b.Navigation("Tournaments");
+
+                    b.Navigation("UserNotifications");
                 });
 
             modelBuilder.Entity("Tournaments.Domain.Entities.Bracket", b =>
                 {
                     b.Navigation("Stages");
+                });
+
+            modelBuilder.Entity("Tournaments.Domain.Entities.Notification", b =>
+                {
+                    b.Navigation("UserNotifications");
                 });
 
             modelBuilder.Entity("Tournaments.Domain.Entities.Stage", b =>

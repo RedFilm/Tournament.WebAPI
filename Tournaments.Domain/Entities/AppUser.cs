@@ -7,6 +7,7 @@ namespace Tournaments.Domain.Entities
 		public List<Team> Teams { get; set; } = null!;
 		public List<Tournament> Tournaments { get; set; } = null!;
 		public List<TournamentTeam> TournamentTeams { get; set; } = null!;
+		public List<UserNotification> UserNotifications { get; set; } = null!;
 
 		public double Rating { get; set; }
 

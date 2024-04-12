@@ -20,7 +20,7 @@ namespace Tournaments.Application.Services.Notifications
 			_userManager = userManager;
 		}
 
-		public async Task SendNotificationAsync(long receiverId, string message)
+		public async Task SendAsync(long receiverId, string message)
 		{
 			if (!await _userManager.Users.AnyAsync(u => u.Id == receiverId))
 				throw new NotFoundException("User not found");

@@ -8,6 +8,6 @@
 		/// <param name="receiverId">Receiver id</param>
 		/// <param name="message"></param>
 		/// <returns></returns>
-		Task SendNotificationAsync(long receiverId, string message);
+		Task SendAsync(long receiverId, string message);
 	}
 }
