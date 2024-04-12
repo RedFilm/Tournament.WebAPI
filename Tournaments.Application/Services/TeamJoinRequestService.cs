@@ -31,6 +31,7 @@ namespace Tournaments.Application.Services
 		{
 			var joinRequest = _mapper.Map<TeamJoinRequest>(model);
 			joinRequest.Status = TeamJoinRequestStatus.Pending;
+			joinRequest.Created = DateTimeOffset.UtcNow;
 			var isSuccessful = await _teamJoinRequestRepository.AddJoinRequestAsync(joinRequest);
 
 			if (!isSuccessful)

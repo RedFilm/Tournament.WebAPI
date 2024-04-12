@@ -37,5 +37,13 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// </summary>
 		/// <returns>Join requests count</returns>
 		Task<int> GetTotalCountAsync();
+
+		/// <summary>
+		/// Asynchronously checks if join request exists.
+		/// </summary>
+		/// <param name="senderId">User id</param>
+		/// <param name="teamId">Team id</param>
+		/// <returns>Result of checking. True if request exists</returns>
+		public Task<bool> AnyAsync(long senderId, long teamId);
 	}
 }

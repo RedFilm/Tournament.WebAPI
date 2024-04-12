@@ -42,5 +42,11 @@ namespace Tournaments.Persistence.Repositories
 		{
 			return await _context.TeamJoinRequests.CountAsync();
 		}
+
+		public async Task<bool> AnyAsync(long senderId, long teamId)
+		{
+			return await _context.TeamJoinRequests.AnyAsync(
+				r => r.SenderId == senderId && r.TeamId == teamId);
+		}
 	}
 }
