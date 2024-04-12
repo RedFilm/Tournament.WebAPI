@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tournaments.Domain.Entities;
+using Tournaments.Domain.Enums.Statuses;
 using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Models;
 
@@ -46,7 +47,9 @@ namespace Tournaments.Persistence.Repositories
 		public async Task<bool> AnyAsync(long senderId, long teamId)
 		{
 			return await _context.TeamJoinRequests.AnyAsync(
-				r => r.SenderId == senderId && r.TeamId == teamId);
+				r => r.SenderId == senderId &&
+					 r.TeamId == teamId &&
+					 r.Status == TeamJoinRequestStatus.Pending);
 		}
 	}
 }

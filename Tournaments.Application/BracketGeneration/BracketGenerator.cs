@@ -1,6 +1,5 @@
 ﻿using System.Runtime.InteropServices;
 using Tournaments.Domain.Entities;
-using Tournaments.Domain.Models;
 
 namespace Tournaments.Application.BracketGeneration
 {

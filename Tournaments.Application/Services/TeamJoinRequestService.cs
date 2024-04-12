@@ -29,6 +29,9 @@ namespace Tournaments.Application.Services
 
 		public async Task CreateJoinRequestAsync(TeamJoinRequestModel model)
 		{
+			if (await _teamJoinRequestRepository.AnyAsync(model.SenderId, model.TeamId))
+				throw new BadRequestException("The request has already been sent.");
+
 			var joinRequest = _mapper.Map<TeamJoinRequest>(model);
 			joinRequest.Status = TeamJoinRequestStatus.Pending;
 			joinRequest.Created = DateTimeOffset.UtcNow;

@@ -5,7 +5,6 @@ using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
-using Tournaments.Domain.Models.TournamentModels;
 
 namespace Tournaments.Application.Services
 {
