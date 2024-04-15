@@ -24,9 +24,9 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// <summary>
 		/// Gets total notifications count for current user
 		/// </summary>
-		/// <param name="isReadOnly">Flag indicating whether only read notifications are needed</param>
+		/// <param name="unreadOnly">Flag indicating whether only unread notifications are needed</param>
 		/// <param name="userId">User id</param>
 		/// <returns>Notifications count</returns>
-		Task<int> GetCountForUserAsync(long userId, bool isReadOnly);
+		Task<int> GetCountForUserAsync(long userId, bool unreadOnly);
 	}
 }

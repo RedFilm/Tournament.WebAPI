@@ -30,15 +30,8 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// </summary>
 		/// <param name="model">Model that contains page number and size</param>
 		/// <param name="userId">User id</param>
+		/// <param name="unreadOnly">Flag indicating whether only unread notifications are needed</param>
 		/// <returns>Page model that contains list of user notifications, total count, page number and size</returns>
-		Task<PageModel<NotificationModel>> GetAllNotificationsAsync(PaginationModel model, long userId);
-
-		/// <summary>
-		/// Asynchronously gets unread user notifications.
-		/// </summary>
-		/// <param name="model">Model that contains page number and size</param>
-		/// <param name="userId">User id</param>
-		/// <returns>Page model that contains list of user notifications, total count, page number and size</returns>
-		Task<PageModel<NotificationModel>> GetUnreadNotificationsAsync(PaginationModel model, long userId);
+		Task<PageModel<NotificationModel>> GetNotificationsAsync(PaginationModel model, long userId, bool unreadOnly);
 	}
 }

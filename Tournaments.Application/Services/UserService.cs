@@ -61,9 +61,14 @@ namespace Tournaments.Application.Services
 			return result.Succeeded;
 		}
 
-		public async Task<PageModel<NotificationModel>> GetAllNotificationsAsync(PaginationModel model, long userId)
+		public async Task<PageModel<NotificationModel>> GetNotificationsAsync(PaginationModel model, long userId, bool unreadOnly)
 		{
-			var notifications = await _notificationRepository.GetAllAsync(model, userId);
+			if (await _userManager.Users.AllAsync(u => u.Id != userId))
+				throw new NotFoundException("User doesn't exist");
+
+			var notifications = unreadOnly
+				? await _notificationRepository.GetUnreadAsync(model, userId)
+				: await _notificationRepository.GetAllAsync(model, userId);
 
 			var notificationModels = _mapper.Map<IEnumerable<NotificationModel>>(notifications);
 
@@ -72,22 +77,7 @@ namespace Tournaments.Application.Services
 				PageNumber = model.PageNumber,
 				PageSize = model.PageSize,
 				Items = notificationModels,
-				ItemsCount = await _notificationRepository.GetCountForUserAsync(userId, isReadOnly: false)
-			};
-		}
-
-		public async Task<PageModel<NotificationModel>> GetUnreadNotificationsAsync(PaginationModel model, long userId)
-		{
-			var notifications = await _notificationRepository.GetUnreadAsync(model, userId);
-
-			var notificationModels = _mapper.Map<IEnumerable<NotificationModel>>(notifications);
-
-			return new PageModel<NotificationModel>
-			{
-				PageNumber = model.PageNumber,
-				PageSize = model.PageSize,
-				Items = notificationModels,
-				ItemsCount = await _notificationRepository.GetCountForUserAsync(userId, isReadOnly: true)
+				ItemsCount = await _notificationRepository.GetCountForUserAsync(userId, unreadOnly)
 			};
 		}
 	}
