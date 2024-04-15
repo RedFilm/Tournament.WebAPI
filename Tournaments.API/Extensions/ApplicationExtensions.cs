@@ -17,6 +17,7 @@ namespace Tournaments.API.Extensions
 			services.AddScoped<ITournamentTeamRepository, TournamentTeamRepository>();
 			services.AddScoped<IMatchRepository, MatchRepository>();
 			services.AddScoped<ITeamJoinRequestRepository, TeamJoinRequestRepository>();
+			services.AddScoped<INotificationRepository, NotificationRepository>();
 
 			services.AddScoped<IAuthService, AuthService>();
 			services.AddScoped<ITournamentService, TournamentService>();

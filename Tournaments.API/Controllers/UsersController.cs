@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tournaments.Domain.Enums;
 using Tournaments.Domain.Interfaces.Services;
@@ -11,10 +12,13 @@ namespace Tournaments.API.Controllers
 	public class UsersController : ControllerBase
 	{
 		private readonly IUserService _userService;
+		private readonly IValidator<PaginationModel> _paginationValidator;
 
-		public UsersController(IUserService userService)
+		public UsersController(IUserService userService,
+			IValidator<PaginationModel> paginationValidator)
 		{
 			_userService = userService;
+			_paginationValidator = paginationValidator;
 		}
 
 		[HttpGet("{userId}")]
@@ -30,6 +34,7 @@ namespace Tournaments.API.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
 		public async Task<PageModel<UserModel>> GetUsers([FromQuery] PaginationModel model)
 		{
+			await _paginationValidator.ValidateAndThrowAsync(model);
 			return await _userService.GetUsersAsync(model);
 		}
 
@@ -41,6 +46,16 @@ namespace Tournaments.API.Controllers
 		{
 			await _userService.DeleteUserByIdAsync(userId);
 			return Ok();
+		}
+
+		[HttpGet("{userId}/Notifications")]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PageModel<NotificationModel>))]
+		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionResponseModel))]
+		public async Task<PageModel<NotificationModel>> GetNotifications([FromQuery] PaginationModel model, [FromQuery] bool unreadOnly, [FromRoute] long userId)
+		{
+			await _paginationValidator.ValidateAndThrowAsync(model);
+
+			return await _userService.GetNotificationsAsync(model, userId, unreadOnly);
 		}
 	}
 }
