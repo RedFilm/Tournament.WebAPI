@@ -14,6 +14,13 @@ namespace Tournaments.Persistence.Repositories
 			_context = context;
 		}
 
+		public async Task<bool> AddAsync(Notification notification, long userId)
+		{
+			_context.UserNotifications.Add(new UserNotification { IsRead = false, Notification = notification, UserId = userId });
+
+			return await _context.SaveChangesAsync() > 0;
+		}
+
 		public async Task<List<Notification>> GetAllAsync(PaginationModel model, long userId)
 		{
 			var skipCount = (model.PageNumber - 1) * model.PageSize;

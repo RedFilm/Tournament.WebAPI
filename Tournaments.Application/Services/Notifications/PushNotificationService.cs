@@ -5,6 +5,7 @@ using Tournaments.Application.Hubs;
 using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
 using Tournaments.Domain.Interfaces.Services;
+using Tournaments.Domain.Models;
 
 namespace Tournaments.Application.Services.Notifications
 {
@@ -20,12 +21,12 @@ namespace Tournaments.Application.Services.Notifications
 			_userManager = userManager;
 		}
 
-		public async Task SendAsync(long receiverId, string message)
+		public async Task SendAsync(NotificationModel notificationModel)
 		{
-			if (!await _userManager.Users.AnyAsync(u => u.Id == receiverId))
-				throw new NotFoundException("User not found");
+			if (!await _userManager.Users.AnyAsync(u => u.Id == notificationModel.ReceiverId))
+				throw new NotFoundException("Receiver not found");
 
-			await _notificationHubContext.Clients.Groups($"user-{receiverId}").SendAsync("ReceiveNotification", message);
+			await _notificationHubContext.Clients.Groups($"user-{notificationModel.ReceiverId}").SendAsync("ReceiveNotification", notificationModel);
 		}
 	}
 }

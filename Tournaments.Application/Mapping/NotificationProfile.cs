@@ -10,7 +10,9 @@ namespace Tournaments.Application.Mapping
 		{
 			CreateMap<Notification, NotificationModel>()
 				.ForMember(dest => dest.IsRead,
-					opt => opt.MapFrom(src => src.UserNotifications.Any(un => un.IsRead)));
+					opt => opt.MapFrom(src => src.UserNotifications.Any(un => un.IsRead)))
+				.ForMember(dest => dest.ReceiverId,
+					opt => opt.MapFrom(src => src.UserNotifications.FirstOrDefault()!.UserId));
 		}
 	}
 }

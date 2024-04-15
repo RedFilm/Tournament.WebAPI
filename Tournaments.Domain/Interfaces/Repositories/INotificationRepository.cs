@@ -6,6 +6,14 @@ namespace Tournaments.Domain.Interfaces.Repositories
 	public interface INotificationRepository
 	{
 		/// <summary>
+		/// Asynchronously adds notification entity to the database.
+		/// </summary>
+		/// <param name="notification">Notification entity</param>
+		/// <param name="userId">Receiver id</param>
+		/// <returns></returns>
+		Task<bool> AddAsync(Notification notification, long userId);
+
+		/// <summary>
 		/// Asynchronously gets all user notifications.
 		/// </summary>
 		/// <param name="model">Model that contains page number and size</param>
