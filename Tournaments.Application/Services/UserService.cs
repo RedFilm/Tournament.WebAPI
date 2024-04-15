@@ -57,5 +57,15 @@ namespace Tournaments.Application.Services
 
 			return result.Succeeded;
 		}
+
+		public Task<PageModel<NotificationModel>> GetAllNotificationsAsync(PaginationModel model, long userId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<PageModel<NotificationModel>> GetUnreadNotificationsAsync(PaginationModel model, long userId)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

@@ -25,5 +25,20 @@ namespace Tournaments.Domain.Interfaces.Services
 		/// <returns>Result of removing. True if user successfully removed.</returns>
 		Task<bool> DeleteUserByIdAsync(long userId);
 
+		/// <summary>
+		/// Asynchronously gets all user notifications.
+		/// </summary>
+		/// <param name="model">Model that contains page number and size</param>
+		/// <param name="userId">User id</param>
+		/// <returns>Page model that contains list of user notifications, total count, page number and size</returns>
+		Task<PageModel<NotificationModel>> GetAllNotificationsAsync(PaginationModel model, long userId);
+
+		/// <summary>
+		/// Asynchronously gets unread user notifications.
+		/// </summary>
+		/// <param name="model">Model that contains page number and size</param>
+		/// <param name="userId">User id</param>
+		/// <returns>Page model that contains list of user notifications, total count, page number and size</returns>
+		Task<PageModel<NotificationModel>> GetUnreadNotificationsAsync(PaginationModel model, long userId);
 	}
 }
