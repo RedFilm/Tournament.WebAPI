@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Tournaments.Domain.Entities;
 using Tournaments.Domain.Exceptions;
+using Tournaments.Domain.Interfaces.Repositories;
 using Tournaments.Domain.Interfaces.Services;
 using Tournaments.Domain.Models;
 
@@ -10,11 +11,13 @@ namespace Tournaments.Application.Services
 {
 	public class UserService : IUserService
 	{
+		private readonly INotificationRepository _notificationRepository;
 		private readonly UserManager<AppUser> _userManager;
 		private readonly IMapper _mapper;
 
-		public UserService(UserManager<AppUser> userManager, IMapper mapper)
+		public UserService(INotificationRepository notificationRepository, UserManager<AppUser> userManager, IMapper mapper)
 		{
+			_notificationRepository = notificationRepository;
 			_userManager = userManager;
 			_mapper = mapper;
 		}
@@ -58,14 +61,34 @@ namespace Tournaments.Application.Services
 			return result.Succeeded;
 		}
 
-		public Task<PageModel<NotificationModel>> GetAllNotificationsAsync(PaginationModel model, long userId)
+		public async Task<PageModel<NotificationModel>> GetAllNotificationsAsync(PaginationModel model, long userId)
 		{
-			throw new NotImplementedException();
+			var notifications = await _notificationRepository.GetAllAsync(model, userId);
+
+			var notificationModels = _mapper.Map<IEnumerable<NotificationModel>>(notifications);
+
+			return new PageModel<NotificationModel>
+			{
+				PageNumber = model.PageNumber,
+				PageSize = model.PageSize,
+				Items = notificationModels,
+				ItemsCount = await _notificationRepository.GetCountForUserAsync(userId, isReadOnly: false)
+			};
 		}
 
-		public Task<PageModel<NotificationModel>> GetUnreadNotificationsAsync(PaginationModel model, long userId)
+		public async Task<PageModel<NotificationModel>> GetUnreadNotificationsAsync(PaginationModel model, long userId)
 		{
-			throw new NotImplementedException();
+			var notifications = await _notificationRepository.GetUnreadAsync(model, userId);
+
+			var notificationModels = _mapper.Map<IEnumerable<NotificationModel>>(notifications);
+
+			return new PageModel<NotificationModel>
+			{
+				PageNumber = model.PageNumber,
+				PageSize = model.PageSize,
+				Items = notificationModels,
+				ItemsCount = await _notificationRepository.GetCountForUserAsync(userId, isReadOnly: true)
+			};
 		}
 	}
 }

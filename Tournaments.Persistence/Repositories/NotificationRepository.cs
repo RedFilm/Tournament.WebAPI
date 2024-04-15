@@ -41,5 +41,13 @@ namespace Tournaments.Persistence.Repositories
 
 			return unreadNotifications;
 		}
+
+		public async Task<int> GetCountForUserAsync(long userId, bool isReadOnly)
+		{
+			if (isReadOnly)
+				return await _context.UserNotifications.CountAsync(un => un.UserId == userId && un.IsRead);
+
+			return await _context.UserNotifications.CountAsync(un => un.UserId == userId);
+		}
 	}
 }

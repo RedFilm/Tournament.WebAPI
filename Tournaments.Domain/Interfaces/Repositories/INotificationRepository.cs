@@ -20,5 +20,13 @@ namespace Tournaments.Domain.Interfaces.Repositories
 		/// <param name="userId">User id</param>
 		/// <returns>List of unread user notifications</returns>
 		Task<List<Notification>> GetUnreadAsync(PaginationModel model, long userId);
+
+		/// <summary>
+		/// Gets total notifications count for current user
+		/// </summary>
+		/// <param name="isReadOnly">Flag indicating whether only read notifications are needed</param>
+		/// <param name="userId">User id</param>
+		/// <returns>Notifications count</returns>
+		Task<int> GetCountForUserAsync(long userId, bool isReadOnly);
 	}
 }

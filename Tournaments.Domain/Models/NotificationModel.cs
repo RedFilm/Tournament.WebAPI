@@ -5,6 +5,6 @@
 		public long Id { get; set; }
 		public string Message { get; set; } = null!;
 		public string Link { get; set; } = null!;
-		public bool IdRead { get; set; }
+		public bool IsRead { get; set; } = false;
 	}
 }
