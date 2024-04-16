@@ -12,19 +12,16 @@ namespace Tournaments.Application.Services
 	public class TeamJoinRequestService : ITeamJoinRequestService
 	{
 		private readonly ITeamJoinRequestRepository _teamJoinRequestRepository;
-		private readonly INotificationRepository _notificationRepository;
 		private readonly INotificationService _pushNotificationService;
 		private readonly IMapper _mapper;
 		private readonly ITeamService _teamService;
 
 		public TeamJoinRequestService(ITeamJoinRequestRepository teamJoinRequestRepository,
-			INotificationRepository notificationRepository,
 			INotificationService pushNotificationService,
 			ITeamService teamService,
 			IMapper mapper)
 		{
 			_teamJoinRequestRepository = teamJoinRequestRepository;
-			_notificationRepository = notificationRepository;
 			_pushNotificationService = pushNotificationService;
 			_teamService = teamService;
 			_mapper = mapper;
@@ -43,7 +40,8 @@ namespace Tournaments.Application.Services
 			if (!isSuccessful)
 				throw new Exception("Couldn't save to the database");
 
-			var notificationModel = await CreateAndSaveNotificationAsync(joinRequest);
+			var notificationModel = await _pushNotificationService.CreateRequestNotificationAsync(joinRequest);
+
 			await _pushNotificationService.SendAsync(notificationModel);
 		}
 
@@ -77,8 +75,8 @@ namespace Tournaments.Application.Services
 			teamJoinRequest.Status = TeamJoinRequestStatus.Accepted;
 			await _teamJoinRequestRepository.UpdateRequestAsync(teamJoinRequest);
 
-			teamJoinRequest.Message = GetNotificationMessage(TeamJoinRequestStatus.Accepted);
-			var notificationModel = await CreateAndSaveNotificationAsync(teamJoinRequest);
+			var notificationModel = await _pushNotificationService.CreateStatusNotificationAsync(teamJoinRequest, TeamJoinRequestStatus.Accepted);
+
 			await _pushNotificationService.SendAsync(notificationModel);
 		}
 
@@ -89,8 +87,8 @@ namespace Tournaments.Application.Services
 			teamJoinRequest.Status = TeamJoinRequestStatus.Rejected;
 			await _teamJoinRequestRepository.UpdateRequestAsync(teamJoinRequest);
 
-			teamJoinRequest.Message = GetNotificationMessage(TeamJoinRequestStatus.Rejected);
-			var notificationModel = await CreateAndSaveNotificationAsync(teamJoinRequest);
+			var notificationModel = await _pushNotificationService.CreateStatusNotificationAsync(teamJoinRequest, TeamJoinRequestStatus.Rejected);
+
 			await _pushNotificationService.SendAsync(notificationModel);
 		}
 
@@ -101,31 +99,6 @@ namespace Tournaments.Application.Services
 			if (teamJoinRequest is null)
 				throw new NotFoundException("Request doesn't exist.");
 			return teamJoinRequest;
-		}
-
-		private async Task<NotificationModel> CreateAndSaveNotificationAsync(TeamJoinRequest joinRequest)
-		{
-			var notification = new Notification
-			{
-				Link = $"api/TeamJoinRequests/{joinRequest.Id}",
-				Message = joinRequest.Message,
-			};
-
-			await _notificationRepository.AddAsync(notification, joinRequest.ReceiverId);
-			return _mapper.Map<NotificationModel>(notification);
-		}
-
-		private string GetNotificationMessage(TeamJoinRequestStatus status)
-		{
-			switch (status)
-			{
-				case TeamJoinRequestStatus.Accepted:
-					return "Your join request has been accepted!";
-				case TeamJoinRequestStatus.Rejected:
-					return "Your join request has been rejected.";
-				default:
-					return "Your join request status has been updated.";
-			}
 		}
 	}
 }

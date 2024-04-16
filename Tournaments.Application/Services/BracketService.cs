@@ -38,10 +38,10 @@ namespace Tournaments.Application.Services
 
 		public async Task<BracketModel> GenerateNewBracketAsync(long tournamentId, bool shuffleTeams)
 		{
-			if (!await _tournamentRepository.AnyAsync(tournamentId))
-				throw new NotFoundException("Tournament with this id doesn't exist");
-
 			var tournament = await _tournamentRepository.GetTournamentByIdAsync(tournamentId);
+
+			if (tournament is null)
+				throw new NotFoundException("Tournament with this id doesn't exist");
 
 			var teams = await _tournamentRepository.GetTeamsAsync(tournamentId);
 
